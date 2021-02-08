@@ -60,5 +60,161 @@ policyData <- policyData %>%
          field = str_to_title(field),
          field = factor(field))
   
+# we have a few cases where an article type was initially classified as PPPR by the primary and secondary coder, but TEH has decided it does not meet our operational definition of PPPR
+## we excluded these cases below
+## we exclude two cases of "Responses" as they involve "a response to a Letter to the Editor" and our operational definition does not count responses to PPPR as PPPR themselves
+## we exclude a case of "Opinionated Articles" as their purpose appears to be to "summarize a research finding" rather than provide critique
+## we exclude a case of "Catalysis" as they don't seem to be a way for anyone to comment on published articles. Instead it seems to be a forum for discussion where a target article is written and then others can provide reactions - and those reactions are commissioned.
+## we exclude a case of Clinical Implications of Basic Research because it does not appear to allow for critique of articles, only discussion of their clinical implications
+
+
+## apply exclusions
+toExclude <- c("Responses", "Opinionated Articles", "Catalysis", "Clinical Implications of Basic Research")
+policyData <- policyData %>% 
+  mutate(PPPR_description = ifelse(PPPR_name %in% toExclude, NA, PPPR_description),
+         wordLimits = ifelse(PPPR_name %in% toExclude, NA, wordLimits),
+         timeLimits = ifelse(PPPR_name %in% toExclude, NA, timeLimits),
+         referenceLimits = ifelse(PPPR_name %in% toExclude, NA, referenceLimits),
+         peerReviewed = ifelse(PPPR_name %in% toExclude, NA, peerReviewed),
+         PPPR_name = ifelse(PPPR_name %in% toExclude, NA, PPPR_name))
+
+
+
+# harmonize PPPR names
+## current the PPPR names are copied verbatim from the journal websites
+## but many of them are basically the same name with small grammatical differences (e.g., letters, letter to the editor etc.)
+## firstly, we will standardize names that grammatically similar
+## we will then examine conceptual similarity and see if we can summarise the types into a few high level categories
+## a guiding assumption here is that we can capture most types with three categories (but we will deviate from this if necessary): 
+## letters to the editor (or 'correspondence') - very short PPPR articles
+## commentary articles - longer PPPR articles
+## below the line comments - informal (non-article) on journal websites
+
+tmp <- policyData %>%
+  filter(anyPPPR == "YES",
+         !is.na(PPPR_name)) %>%
+  select(PPPR_name, PPPR_description)
+write_csv(tmp, 'tmp.csv')
+
+## grammatical harmonization
+policyData <- policyData %>%
+  mutate(PPPR_category = case_when(
+    PPPR_name %in% c(
+      'Below the line comments ("Comments")',
+      '(Below the line comments) Rapid Responses',
+      'comments [below the line]',
+      'Below the Line Comment',
+      'Comments [below the line]',
+      'below the line comments',
+      'Below the Line Comments',
+      '(Below the line) Comments',
+      'Comment [below the line]',
+      'Responses (below the line comments)',
+      '(below the line) Comments',
+      'Comments (below the lines)',
+      '(Below the line) Comments',
+      'Reader Comments [below the line]',
+      '(Below the line) Reader comments',
+      'Below the line comments ("Comments")',
+      'eLetters [below the line]',
+      'eLetters [below the line style commenting]',
+      'Comments (Below the line comments)',
+      '	(Below the line) comments',
+      'Below the line comment',
+      '	(Below the line) comments	',
+      'comments (below the line)',
+      '(Below the line) eLetters',
+      '(Below the line) comments'
+    ) ~ "Below the line comments",
+    PPPR_name %in% c(
+      'Correspondence/Rebuttal',
+      'Letter to the Editor',
+      'Letters to the Editor',
+      'Letters to the editor',
+      'Letter to the editor',
+      'Letters to the Editors',
+      'Letters to Editors',
+      'Correspondence',
+      'correspondence',
+      'Correspondences',
+      'Letters (Correspondence)',
+      'Letters',
+      'Correspondence or Comments',
+      'Letters: Comments',
+      'Opinion letters / editorials',
+      'Opinion letters / editorials',
+      'Letters to the Editor(s):',
+      'Correspondence and eLetters',
+      'Correspondence: Letters to the Editor',
+      'Scientific Correspondence',
+      'Correspondence (peer-reviewed)',
+      'Correspondence (not peer-reviewed)',      
+      'Letter / Letters to the editor',
+      'Correspondence/Comment',
+      'letters to the editor',
+      'Correspondence (Letters)',
+      'Communications and Letters to the Editor',
+      'Comment Correspondences',
+      'Letters to the Editor ("Letter to the Editor")',
+      'Correspondence and Replies',
+      'Letters to the Editor (Comment Letter)',
+      'Letters to the Editor ("Correspondence")',
+      'Letters to the Editor ("Correspondences")',
+      'Letters to the Editor (correspondence)',
+      'Letters & Commentaries',
+      'Correpondence',
+      'Reader Comments',
+      'Letter'
+    ) ~ "Letters to the editor",
+    PPPR_name %in% c(
+      'Commentary ("Responses or Commentaries")',
+      'Commentary',
+      'Comments',
+      'Comment',
+      'comment',
+      'Comment/Reply',
+      'Comment and Reply',
+      'Comment and Reply.',
+      'Comments and Replies',
+      'Commentaries and rejoinders',
+      'Commentaries',
+      'Commentaries and Views',
+      'Peer-reviewed comments',
+      'Comment and Reply Exchange',
+      'Commentary ("Commentaries")',
+      'Technical Comments',
+      'Comments paper',
+      'Commentary ("Comment")',
+      'Commentary ("Comments")',
+      'Commentary ("Comments on Published Papers")',
+      'Comments Papers and Communications',
+      'Transactions Comments or Corrections',
+      'Comments/Replies',
+      'commentaries'
+    ) ~ "Commentary",
+    PPPR_name %in% c(
+      'Commentary ("Matters Arising")',
+      'Editorial',
+      'Discussion',
+      'Discussion Forum',
+      'News and Views',
+      'Previews',
+      'Essay',
+      'Matters Arising',
+      'Forum papers',
+      'Research Advance',
+      'Replications and Corrigenda',
+      'Research note',
+      'Disputes & Debates',
+      'Update articles',
+      'Perspectives'
+    ) ~ "Other",
+    TRUE ~ "Not categorised"
+  ))
+
+
+policyData %>% filter(!is.na(PPPR_name)) %>% count(PPPR_category)
+
+
 # save the processed data 
 save(policyData, file = here('data', 'processed', 'data_policy.RData'))
