@@ -9,3 +9,5 @@ researchFiles/
 materials/
 analysis/rawToPrimaryData.R
 data/raw/
+analysis/preliminaryAnalysis.Rmd
+analysis/preliminaryAnalysis.html
