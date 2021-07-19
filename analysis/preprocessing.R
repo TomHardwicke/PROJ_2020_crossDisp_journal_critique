@@ -7,7 +7,7 @@ journalData <- read_csv(here('data','primary','dataJournal.csv'))
 # munging
 
 policyData <- policyData %>%
-  select(-Timestamp, journal = `Enter the name of the journal:`)
+  rename(journal = `Enter the name of the journal:`)
 
 journalData <- journalData %>%
   rename(journal = `Full Journal Title`)
