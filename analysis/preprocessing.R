@@ -1,13 +1,13 @@
 # this script performs various pre-processing steps on the primary data
 
 # load the primary data
-policyData <- read_csv(here('data','primary','data_policy.csv'))
-journalData <- read_csv(here('data','primary','data_journal.csv'))
+policyData <- read_csv(here('data','primary','dataPolicy.csv'))
+journalData <- read_csv(here('data','primary','dataJournal.csv'))
 
 # munging
 
 policyData <- policyData %>%
-  rename(journal = `Enter the name of the journal:`)
+  select(-Timestamp, journal = `Enter the name of the journal:`)
 
 journalData <- journalData %>%
   rename(journal = `Full Journal Title`)
@@ -55,12 +55,11 @@ policyData <- policyData %>%
   select(-`Are there any other types of PPPR in this journal?`) %>%
   mutate(field = fct_recode(field, # adjust field names for presentation purposes
                             "PSYCHIATRY/PSYCHOLOGY" = "PSYCHIATRY_PSYCHOLOGY",
-                            "SOCIAL SCIENCES" = "SOCIAL SCIENCES, GENERAL",
                             "ENVIRONMENT/ECOLOGY" = "ENVIRONMENT_ECOLOGY"),
          field = str_to_title(field),
          field = factor(field))
 
-# we have a few cases where an article type was initially classified as PPPR by the primary and secondary coder, but TEH has decided it does not meet our operational definition of PPPR
+# we have a few cases where an article type was initially classified as PPPR by the primary and secondary coder, but following team discussion we have decided that they do not meet our operational definition of PPPR
 ## we excluded these cases below
 ## we exclude two cases of "Responses" as they involve "a response to a Letter to the Editor" and our operational definition does not count responses to PPPR as PPPR themselves
 ## we exclude a case of "Opinionated Articles" as their purpose appears to be to "summarize a research finding" rather than provide critique
@@ -70,7 +69,7 @@ policyData <- policyData %>%
 ## we exclude two cases of "Editorials" because they are primarily commissioned
 
 ## apply exclusions
-toExclude <- c("Responses", "Opinionated Articles", "Catalysis", "Clinical Implications of Basic Research", "Previews", "Editorial")
+toExclude <- c("Responses", "Opinionated Articles", "Catalysis", "Essay", "Research note", "Clinical Implications of Basic Research", "Previews", "Editorial")
 policyData <- policyData %>% 
   mutate(PPPR_description = ifelse(PPPR_name %in% toExclude, NA, PPPR_description),
          wordLimits = ifelse(PPPR_name %in% toExclude, NA, wordLimits),
@@ -88,7 +87,7 @@ policyData <- policyData %>%
        peerReviewed = ifelse(str_detect(PPPR_description, 'commissioned by the editor'), NA, peerReviewed),
        PPPR_description = ifelse(str_detect(PPPR_description, 'commissioned by the editor'), NA, PPPR_description))
 
-## also exclude the "comment" PPPR type recorded for "Particle and Fibre Toxicology" - format cannot be identified on website
+## also exclude the "comment" article type recorded for "Particle and Fibre Toxicology" - format cannot be identified on website
 policyData <- policyData %>% 
   mutate(PPPR_description = ifelse(PPPR_name == 'Comment' & journal == 'Particle and Fibre Toxicology', NA, PPPR_description),
          wordLimits = ifelse(PPPR_name == 'Comment' & journal == 'Particle and Fibre Toxicology', NA, wordLimits),
@@ -97,15 +96,22 @@ policyData <- policyData %>%
          peerReviewed = ifelse(PPPR_name == 'Comment' & journal == 'Particle and Fibre Toxicology', NA, peerReviewed),
          PPPR_name = ifelse(PPPR_name == 'Comment' & journal == 'Particle and Fibre Toxicology', NA, PPPR_name))
 
-## also exclude Nature "Correspondence" articles types as the description says that 'Correspondence pieces are not technical comments on peer-reviewed research papers. Please submit these instead to Matters Arising.'
-
+## also exclude the "commentary" article type for Journal of the Academy of Nutrition and Dietetics
 policyData <- policyData %>% 
-  mutate(PPPR_name = ifelse(str_detect(PPPR_description, 'Correspondence pieces are not technical comments'), NA, PPPR_name),
-         wordLimits = ifelse(str_detect(PPPR_description, 'Correspondence pieces are not technical comments'), NA, wordLimits),
-         timeLimits = ifelse(str_detect(PPPR_description, 'Correspondence pieces are not technical comments'), NA, timeLimits),
-         referenceLimits = ifelse(str_detect(PPPR_description, 'Correspondence pieces are not technical comments'), NA, referenceLimits),
-         peerReviewed = ifelse(str_detect(PPPR_description, 'Correspondence pieces are not technical comments'), NA, peerReviewed),
-         PPPR_description = ifelse(str_detect(PPPR_description, 'Correspondence pieces are not technical comments'), NA, PPPR_description))
+  mutate(PPPR_description = ifelse(PPPR_name == 'Commentary' & journal == 'Journal of the Academy of Nutrition and Dietetics', NA, PPPR_description),
+         wordLimits = ifelse(PPPR_name == 'Commentary' & journal == 'Journal of the Academy of Nutrition and Dietetics', NA, wordLimits),
+         timeLimits = ifelse(PPPR_name == 'Commentary' & journal == 'Journal of the Academy of Nutrition and Dietetics', NA, timeLimits),
+         referenceLimits = ifelse(PPPR_name == 'Commentary' & journal == 'Journal of the Academy of Nutrition and Dietetics', NA, referenceLimits),
+         peerReviewed = ifelse(PPPR_name == 'Commentary' & journal == 'Journal of the Academy of Nutrition and Dietetics', NA, peerReviewed),
+         PPPR_name = ifelse(PPPR_name == 'Commentary' & journal == 'Journal of the Academy of Nutrition and Dietetics', NA, PPPR_name))
+
+# after exclusions, make sure that journals with no PPPR have 'NO' in the anyPPPR column
+policyData <- policyData %>%
+  mutate(anyPPPR = ifelse(journal %in% c(
+  "Cellular & Molecular Immunology",
+  "JOURNAL OF CHILD PSYCHOLOGY AND PSYCHIATRY",
+  "JOURNAL OF INTERNATIONAL BUSINESS STUDIES",
+  "Nanophotonics"), "NO", anyPPPR))
 
 # harmonize PPPR names
 ## currently the PPPR names are copied verbatim from the journal websites
@@ -336,7 +342,7 @@ policyData <- policyData %>%
 # harmonize time limits
 ## we will convert everything to weeks
 
-monthToWeek <- 4 # number to multiply months by to get weeks
+monthToWeek <- 4.35 # number to multiply months by to get weeks
 yearToWeek <- 52 # number to multiply years by to get weeks 
 
 policyData <- policyData %>%
@@ -477,4 +483,4 @@ policyData <- policyData %>%
          peerReviewed = factor(peerReviewed, levels = c('NOT STATED', 'NO', "Editor discretion", "YES")))
 
 # save the processed data 
-save(policyData, file = here('data', 'processed', 'data_policy.RData'))
+save(policyData, file = here('data', 'processed', 'dataPolicy.RData'))
