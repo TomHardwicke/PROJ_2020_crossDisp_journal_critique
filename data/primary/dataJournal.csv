@@ -35,7 +35,7 @@ Rank,Full Journal Title,Journal Impact Factor,ESI_field,COPE (T = member; F = no
 17,LANCET ONCOLOGY,36.421,CLINICAL MEDICINE,TRUE,https://www.thelancet.com/journals/lanonc/home,https://www.thelancet.com/what-we-publish,https://osf.io/gtkbq/
 34,JOURNAL OF CLINICAL ONCOLOGY,26.36,CLINICAL MEDICINE,FALSE,https://ascopubs.org/journal/jco,https://ascopubs.org/jco/site/ifc/determine-my-article-type.xhtml,https://osf.io/4zjd9/
 43,Cancer Discovery,24.373,CLINICAL MEDICINE,TRUE,https://cancerdiscovery.aacrjournals.org,https://cancerdiscovery.aacrjournals.org/site/misc/journal_ifora.xhtml,https://perma.cc/3Z7B-EDWX
-46,BMJ-British Medical Journal,23.562,CLINICAL MEDICINE,TRUE,https://www.bmj.com,https://www.bmj.com/about-bmj/resources-authors/article-types,https://perma.cc/776T-353C
+46,BMJ-British Medical Journal,23.562,CLINICAL MEDICINE,FALSE,https://www.bmj.com,https://www.bmj.com/about-bmj/resources-authors/article-types,https://perma.cc/776T-353C
 47,EUROPEAN HEART JOURNAL,23.425,CLINICAL MEDICINE,TRUE,https://academic.oup.com/eurheartj,https://academic.oup.com/eurheartj/pages/General_Instructions#2.1,https://perma.cc/8VR4-XEYZ
 60,Lancet Respiratory Medicine,21.466,CLINICAL MEDICINE,TRUE,https://www.thelancet.com/journals/lanres/home,https://www.thelancet.com/what-we-publish,https://osf.io/gtkbq/
 64,JAMA Oncology,20.871,CLINICAL MEDICINE,FALSE,https://jamanetwork.com/journals/jamaoncology,https://jamanetwork.com/journals/jamaoncology/pages/instructions-for-authors#,https://perma.cc/BXS7-FWNV
@@ -59,7 +59,7 @@ Rank,Full Journal Title,Journal Impact Factor,ESI_field,COPE (T = member; F = no
 313,Acta Crystallographica Section C-Structural Chemistry,8.678,CHEMISTRY,TRUE,https://journals.iucr.org/c/,https://journals.iucr.org/c/services/notesforauthors.html,https://perma.cc/3MGX-7E4S
 318,GREEN CHEMISTRY,8.586,CHEMISTRY,TRUE,https://www.rsc.org/journals-books-databases/about-journals/green-chemistry/,https://www.rsc.org/journals-books-databases/about-journals/green-chemistry/,https://perma.cc/R9PS-V5BT
 344,BIOSENSORS & BIOELECTRONICS,8.173,CHEMISTRY,TRUE,https://www.journals.elsevier.com/biosensors-and-bioelectronics,https://www.elsevier.com/journals/biosensors-and-bioelectronics/0956-5663/guide-for-authors#2001,https://perma.cc/F5TD-M2JV
-15,NATURE MATERIALS,39.235,MATERIALS SCIENCE,TRUE,https://www.nature.com/nmat/,https://www.nature.com/nmat/about/content,https://osf.io/9wn6j/
+15,"NATURE MATERIALS",39.235,MATERIALS SCIENCE,TRUE,https://www.nature.com/nmat/,https://www.nature.com/nmat/about/content,https://osf.io/9wn6j/
 16,Nature Nanotechnology,37.49,MATERIALS SCIENCE,TRUE,https://www.nature.com/nnano/,https://www.nature.com/nnano/about/content,https://perma.cc/EWQ2-7N8D
 41,Materials Today,24.537,MATERIALS SCIENCE,FALSE,https://www.materialstoday.com,https://www.elsevier.com/wps/find/journaldescription.cws_home/601189?generatepdf=true,https://osf.io/5jdbw/
 56,ADVANCED MATERIALS,21.95,MATERIALS SCIENCE,FALSE,https://onlinelibrary.wiley.com/journal/15214095,https://wol-prod-cdn.literatumonline.com/pb-assets/assets/15214095/2089_Guide_for_Authors_ADMA-1562584882563.pdf,https://perma.cc/44JG-SZHU
@@ -105,7 +105,7 @@ Rank,Full Journal Title,Journal Impact Factor,ESI_field,COPE (T = member; F = no
 523,PROGRESS IN PHOTOVOLTAICS,6.456,ENGINEERING,TRUE,https://onlinelibrary.wiley.com/journal/1099159x,F,NA
 528,JOURNAL OF HAZARDOUS MATERIALS,6.434,ENGINEERING,TRUE,https://www.journals.elsevier.com/journal-of-hazardous-materials,https://www.elsevier.com/journals/journal-of-hazardous-materials/0304-3894/guide-for-authors#2001,https://perma.cc/GDT3-PZQT
 37,LANCET INFECTIOUS DISEASES,25.148,IMMUNOLOGY,TRUE,https://www.thelancet.com/journals/laninf/issue/current,https://els-jbs-prod-cdn.literatumonline.com/pb/assets/raw/Lancet/authors/tlid-info-for-authors-1570012985267.pdf,https://perma.cc/JN5D-476A
-59,NATURE IMMUNOLOGY,21.809,IMMUNOLOGY,TRUE,https://www.nature.com/ni/,https://www.nature.com/ni/about/content,https://perma.cc/442R-UV2M
+59,"NATURE IMMUNOLOGY",21.809,IMMUNOLOGY,TRUE,https://www.nature.com/ni/,https://www.nature.com/ni/about/content,https://perma.cc/442R-UV2M
 75,IMMUNITY,19.734,IMMUNOLOGY,TRUE,https://www.sciencedirect.com/journal/immunity,https://www.cell.com/immunity/article-types,https://osf.io/49z6g/
 157,JOURNAL OF ALLERGY AND CLINICAL IMMUNOLOGY,13.258,IMMUNOLOGY,TRUE,https://www.jacionline.org,https://www.jacionline.org/content/authorinfo#idp1627072,https://osf.io/2jmg6/
 208,Lancet HIV,11.355,IMMUNOLOGY,FALSE,https://www.thelancet.com/journals/lanhiv/home,https://www.thelancet.com/what-we-publish,https://osf.io/db5nv/
@@ -119,7 +119,7 @@ Rank,Full Journal Title,Journal Impact Factor,ESI_field,COPE (T = member; F = no
 431,Eurosurveillance,7.127,IMMUNOLOGY,FALSE,https://www.eurosurveillance.org,https://www.eurosurveillance.org/for-authors,https://perma.cc/8N4D-F947
 449,Journal of Allergy and Clinical Immunology-In Practice,6.966,IMMUNOLOGY,TRUE,https://www.jaci-inpractice.org,https://www.jaci-inpractice.org/content/authorinfo#idp1454368,https://osf.io/n7edw/
 592,ALLERGY,6.048,IMMUNOLOGY,TRUE,https://onlinelibrary.wiley.com/journal/13989995,https://onlinelibrary.wiley.com/page/journal/13989995/homepage/forauthors.html#manuscript,https://perma.cc/AX8Z-MJCW
-11,NATURE,41.577,Multidisciplinary,TRUE,https://www.nature.com,https://www.nature.com/nature/for-authors/other-subs,https://perma.cc/SK7N-VV39
+11,"NATURE",41.577,Multidisciplinary,TRUE,https://www.nature.com,https://www.nature.com/nature/for-authors/other-subs,https://perma.cc/SK7N-VV39
 13,SCIENCE,41.058,Multidisciplinary,TRUE,https://www.sciencemag.org,https://www.sciencemag.org/authors/science-information-authors,https://perma.cc/YQE5-RGQE
 176,Nature Communications,12.353,Multidisciplinary,TRUE,https://www.nature.com/ncomms/,https://www.nature.com/ncomms/submit/content-types,https://perma.cc/2ZZV-CMF8
 199,Science Advances,11.511,Multidisciplinary,FALSE,https://advances.sciencemag.org,https://advances.sciencemag.org/content/information-authors,https://perma.cc/D5PG-N4DC
@@ -134,13 +134,13 @@ Rank,Full Journal Title,Journal Impact Factor,ESI_field,COPE (T = member; F = no
 1311,Scientific Reports,4.122,Multidisciplinary,TRUE,https://www.nature.com/srep/,https://www.nature.com/srep/author-instructions/matters-arising,https://perma.cc/9XVE-DATH
 2055,Journal of the Royal Society Interface,3.355,Multidisciplinary,TRUE,https://royalsocietypublishing.org/journal/rsif,https://royalsocietypublishing.org/rsif/for-authors#question1,https://osf.io/9gn3c/
 2979,PLoS One,2.766,Multidisciplinary,TRUE,https://journals.plos.org/plosone/,https://journals.plos.org/plosone/s/journal-information#loc-scope,https://perma.cc/HB5E-FXL5
-22,NATURE MEDICINE,32.621,MOLECULAR BIOLOGY & GENETICS,TRUE,https://www.nature.com/nm/,https://www.nature.com/nm/about/content,https://osf.io/zrmjd/
+22,"NATURE MEDICINE",32.621,MOLECULAR BIOLOGY & GENETICS,TRUE,https://www.nature.com/nm/,https://www.nature.com/nm/about/content,https://osf.io/zrmjd/
 25,CELL,31.398,MOLECULAR BIOLOGY & GENETICS,TRUE,https://www.cell.com,https://www.cell.com/cell/article-types,https://osf.io/zpbhe/
-31,NATURE GENETICS,27.125,MOLECULAR BIOLOGY & GENETICS,TRUE,https://www.nature.com/ng/,https://www.nature.com/ng/about/content,https://osf.io/5bvwh/
+31,"NATURE GENETICS",27.125,MOLECULAR BIOLOGY & GENETICS,TRUE,https://www.nature.com/ng/,https://www.nature.com/ng/about/content,https://osf.io/5bvwh/
 49,Cell Stem Cell,23.29,MOLECULAR BIOLOGY & GENETICS,FALSE,https://www.cell.com/cell-stem-cell/home,https://www.cell.com/cell-stem-cell/article-types,https://osf.io/3dfm4/; https://osf.io/2d4nr/; https://osf.io/fgv4p/; https://osf.io/8fve3/;  https://osf.io/h9xpr/; https://osf.io/bhx6r/; https://osf.io/93fzm/; https://osf.io/8mey4/; https://osf.io/uspgm/
 50,CANCER CELL,22.844,MOLECULAR BIOLOGY & GENETICS,TRUE,https://www.cell.com/cancer-cell/home,https://www.cell.com/cancer-cell/article-types,https://osf.io/rjtkb/
 67,Cell Metabolism,20.565,MOLECULAR BIOLOGY & GENETICS,TRUE,https://www.cell.com/cell-metabolism/home,https://www.cell.com/cell-metabolism/article-types,https://osf.io/k9y5a/; https://osf.io/msbu9/; https://osf.io/gdn85/
-80,NATURE CELL BIOLOGY,19.064,MOLECULAR BIOLOGY & GENETICS,TRUE,https://www.nature.com/ncb/,https://www.nature.com/ncb/about/content,https://osf.io/z26uc/
+80,"NATURE CELL BIOLOGY",19.064,MOLECULAR BIOLOGY & GENETICS,TRUE,https://www.nature.com/ncb/,https://www.nature.com/ncb/about/content,https://osf.io/z26uc/
 108,CELL RESEARCH,15.393,MOLECULAR BIOLOGY & GENETICS,TRUE,https://www.nature.com/cr/,https://www.nature.com/documents/cr-gta.pdf,https://perma.cc/C4AC-XBQK
 130,MOLECULAR CELL,14.248,MOLECULAR BIOLOGY & GENETICS,TRUE,https://www.cell.com/molecular-cell/home,https://www.cell.com/molecular-cell/article-types,https://osf.io/ehwfk/; https://osf.io/2wznb/; https://osf.io/yxzm5/; https://osf.io/p2tqd/
 161,GENOME BIOLOGY,13.214,MOLECULAR BIOLOGY & GENETICS,TRUE,https://genomebiology.biomedcentral.com,https://genomebiology.biomedcentral.com/submission-guidelines,https://perma.cc/AN3Z-92SP
@@ -156,7 +156,7 @@ Rank,Full Journal Title,Journal Impact Factor,ESI_field,COPE (T = member; F = no
 145,Light-Science & Applications,13.625,PHYSICS,TRUE,https://www.nature.com/lsa/,https://www.nature.com/documents/lsa-gta.pdf,https://perma.cc/D47W-D6JZ
 166,Applied Physics Reviews,12.894,PHYSICS,TRUE,https://aip.scitation.org/journal/are,https://aip.scitation.org/are/info/focus,https://perma.cc/2WKH-U88M
 173,Advanced Science,12.441,PHYSICS,FALSE,https://onlinelibrary.wiley.com/journal/21983844,https://onlinelibrary.wiley.com/pb-assets/assets/21983844/2749_Guide_for_Authors_ADVS-1561969175230.pdf,https://perma.cc/J87W-X6GM
-183,NANO LETTERS,12.08,PHYSICS,TRUE,https://pubs.acs.org/journal/nalefd,http://pubsapp.acs.org/paragonplus/submission/nalefd/nalefd_authguide.pdf?,https://perma.cc/48L2-JLLH
+183,"NANO LETTERS",12.08,PHYSICS,TRUE,https://pubs.acs.org/journal/nalefd,http://pubsapp.acs.org/paragonplus/submission/nalefd/nalefd_authguide.pdf?,https://perma.cc/48L2-JLLH
 275,npj Quantum Information,9.206,PHYSICS,TRUE,https://www.nature.com/npjqi/,https://www.nature.com/npjqi/about/content-types,https://perma.cc/5R57-2F49
 321,Laser & Photonics Reviews,8.529,PHYSICS,FALSE,https://onlinelibrary.wiley.com/journal/18638899,https://onlinelibrary.wiley.com/pb-assets/assets/18638899/LPR_Instructions_to_Authors-1510014605000.pdf,https://perma.cc/42RG-AX67
 357,Nano Research,7.994,PHYSICS,TRUE,https://link.springer.com/journal/12274,F,NA
@@ -164,11 +164,11 @@ Rank,Full Journal Title,Journal Impact Factor,ESI_field,COPE (T = member; F = no
 415,Nanoscale,7.233,PHYSICS,TRUE,https://www.rsc.org/journals-books-databases/about-journals/nanoscale/,https://www.rsc.org/journals-books-databases/about-journals/nanoscale/,https://perma.cc/TX8R-A8XU
 455,ACS Photonics,6.88,PHYSICS,TRUE,https://pubs.acs.org/journal/apchd5,http://pubsapp.acs.org/paragonplus/submission/apchd5/apchd5_authguide.pdf?,https://perma.cc/MZ2M-TUFL
 604,Nanophotonics,6.014,PHYSICS,FALSE,https://www.degruyter.com/view/j/nanoph?lang=en,https://www.degruyter.com/view/supplement/s21928614_Instructions_for_Authors.pdf,https://perma.cc/P3RS-6YEB
-19,NATURE BIOTECHNOLOGY,35.724,BIOLOGY & BIOCHEMISTRY,TRUE,https://www.nature.com/nbt/,https://www.nature.com/nbt/about/content,https://osf.io/y8jha/
-32,NATURE METHODS,26.919,BIOLOGY & BIOCHEMISTRY,TRUE,https://www.nature.com/nmeth/,https://www.nature.com/nmeth/about/content,https://osf.io/rvuxd/
+19,"NATURE BIOTECHNOLOGY",35.724,BIOLOGY & BIOCHEMISTRY,TRUE,https://www.nature.com/nbt/,https://www.nature.com/nbt/about/content,https://osf.io/y8jha/
+32,"NATURE METHODS",26.919,BIOLOGY & BIOCHEMISTRY,TRUE,https://www.nature.com/nmeth/,https://www.nature.com/nmeth/about/content,https://osf.io/rvuxd/
 94,Science Translational Medicine,16.71,BIOLOGY & BIOCHEMISTRY,FALSE,https://stm.sciencemag.org,https://stm.sciencemag.org/content/information-authors#categories-of-manuscripts,https://perma.cc/H5Q3-RJTP
 140,Nature Chemical Biology,13.843,BIOLOGY & BIOCHEMISTRY,TRUE,https://www.nature.com/nchembio/,https://www.nature.com/nchembio/about/content,https://perma.cc/X628-SXSW
-152,NATURE STRUCTURAL & MOLECULAR BIOLOGY,13.333,BIOLOGY & BIOCHEMISTRY,TRUE,https://www.nature.com/nsmb/,https://www.nature.com/nsmb/about/content,https://osf.io/mrt9d/
+152,"NATURE STRUCTURAL & MOLECULAR BIOLOGY",13.333,BIOLOGY & BIOCHEMISTRY,TRUE,https://www.nature.com/nsmb/,https://www.nature.com/nsmb/about/content,https://osf.io/mrt9d/
 174,Nature Protocols,12.423,BIOLOGY & BIOCHEMISTRY,TRUE,https://www.nature.com/nprot/,https://www.nature.com/nprot/about/content-types,https://perma.cc/5TZ3-AAY5
 175,Bone Research,12.354,BIOLOGY & BIOCHEMISTRY,TRUE,https://www.nature.com/boneres/,https://www.nature.com/documents/boneres-gta.pdf,https://perma.cc/S6VM-GNG9
 195,JOURNAL OF PINEAL RESEARCH,11.613,BIOLOGY & BIOCHEMISTRY,TRUE,https://onlinelibrary.wiley.com/journal/1600079x,https://onlinelibrary.wiley.com/page/journal/1600079x/homepage/forauthors.html#Man,https://perma.cc/52AU-7N3H
@@ -180,7 +180,7 @@ Rank,Full Journal Title,Journal Impact Factor,ESI_field,COPE (T = member; F = no
 376,METABOLIC ENGINEERING,7.674,BIOLOGY & BIOCHEMISTRY,TRUE,https://www.journals.elsevier.com/metabolic-engineering,https://www.elsevier.com/journals/metabolic-engineering/1096-7176/guide-for-authors#,https://perma.cc/9257-SZVM
 380,eLife,7.616,BIOLOGY & BIOCHEMISTRY,TRUE,https://elifesciences.org/?gclid=EAIaIQobChMIs9fAg-jG5QIVBuR3Ch0Jsgt2EAAYASAAEgITQPD_BwE,https://submit.elifesciences.org/html/elife_author_instructions.html#types,https://perma.cc/XJ62-JVBD
 30,LANCET NEUROLOGY,27.144,NEUROSCIENCE & BEHAVIOR,TRUE,https://www.thelancet.com/journals/laneur/issue/current,https://els-jbs-prod-cdn.literatumonline.com/pb/assets/raw/Lancet/authors/tlid-info-for-authors-1570012985267.pdf,https://perma.cc/4GTC-TPB2
-73,NATURE NEUROSCIENCE,19.912,NEUROSCIENCE & BEHAVIOR,TRUE,https://www.nature.com/neuro/,https://www.nature.com/neuro/about/content,https://perma.cc/9E36-VUMZ
+73,"NATURE NEUROSCIENCE",19.912,NEUROSCIENCE & BEHAVIOR,TRUE,https://www.nature.com/neuro/,https://www.nature.com/neuro/about/content,https://perma.cc/9E36-VUMZ
 101,ACTA NEUROPATHOLOGICA,15.876,NEUROSCIENCE & BEHAVIOR,TRUE,https://www.springer.com/journal/401,https://www.springer.com/journal/401/submission-guidelines#Instructions%20for%20Authors_Types%20of%20papers,https://perma.cc/PB8S-SCS2
 128,NEURON,14.319,NEUROSCIENCE & BEHAVIOR,TRUE,https://www.cell.com/neuron/home,https://www.cell.com/neuron/article-types,https://osf.io/v957s/; https://osf.io/8g4jb/; https://osf.io/kzpv4/
 133,PROGRESS IN NEUROBIOLOGY,14.163,NEUROSCIENCE & BEHAVIOR,FALSE,https://www.journals.elsevier.com/progress-in-neurobiology,https://www.elsevier.com/wps/find/journaldescription.cws_home/412?generatepdf=true,https://perma.cc/3HXX-NPPU

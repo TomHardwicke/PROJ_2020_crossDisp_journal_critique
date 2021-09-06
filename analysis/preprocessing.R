@@ -1,8 +1,14 @@
 # this script performs various pre-processing steps on the primary data
 
+library(validate) # for testing
+library(tidylog) # inline munging reports
+
 # load the primary data
 policyData <- read_csv(here('data','primary','dataPolicy.csv'))
 journalData <- read_csv(here('data','primary','dataJournal.csv'))
+
+# extract list of journal names
+journals <- journalData$`Full Journal Title`
 
 # munging
 
@@ -482,5 +488,47 @@ policyData <- policyData %>%
          ),
          peerReviewed = factor(peerReviewed, levels = c('NOT STATED', 'NO', "Editor discretion", "YES")))
 
+# practice data
+practiceData <- read_csv(here('data','primary','dataPractice.csv'))
+
+# munging
+practiceData <- practiceData %>% 
+  rename(article_id = id, isPPPR = `Is article itself PPPR`, linkedPPPR = `Is article linked to PPPR`) %>% # rename columns
+  filter(exclusion != "EXTRA") %>% # remove any extra coding we did
+  mutate(across(c(exclusion, isPPPR, linkedPPPR), as.logical)) %>%# make columns 'logical' type
+  mutate(journal = str_replace_all(article_id, "[:digit:]", ""), # extract journal name by removing numbers from article id
+         journal = str_replace_all(journal, "_", " "), # and removing underscores
+         journal = str_trim(journal)) %>%# and removing whitespace from end of string
+  select(journal, article_id, everything()) %>% # reorder columns
+  filter(journal != "Lancet HIV") # TEMPORARILY remove journal whilst coding is finalised
+
+# quality checks
+
+# define validation rules
+rules <- validator(
+  is.logical(exclusion), # column should be logical type
+  is.logical(isPPPR), # column should be logical type
+  is.logical(linkedPPPR), # column should be logical type
+  journal %in% journals, # all journals should also appear in the other datasets with same naming conventions
+  if (exclusion == T) !is.na(`exclusion explanation`), # if article excluded, should be an explanation
+  if (exclusion == T) is.na(isPPPR) & is.na(linkedPPPR), # if article excluded, should be nothing in isPPPR and linkedPPPR
+  if (exclusion == F) !is.na(isPPPR), # if article not excluded, should be coding in isPPPR
+  if (isPPPR == T) is.na(linkedPPPR), # if isPPPR is TRUE then should be nothing in linkedPPPR
+  if (isPPPR == F) !is.na(linkedPPPR)) # if isPPPR is FALSE then should be something in linkedPPPR
+
+# check data against validation rules
+out <- confront(practiceData, rules)
+summary(out) # view details about any validation errors
+
+# for every journal we should have exactly ten articles that have T/F in the linked PPPR column
+journal_n <- practiceData %>% 
+  filter(exclusion == F, isPPPR == F) %>% # remove the excluded articles and articles identified as themselves being PPPR
+  count(journal)
+
+rule <- validator(n == 10)
+out  <- confront(journal_n , rule)
+summary(out)
+
 # save the processed data 
 save(policyData, file = here('data', 'processed', 'dataPolicy.RData'))
+save(practiceData, file = here('data', 'processed', 'dataPractice.RData'))
