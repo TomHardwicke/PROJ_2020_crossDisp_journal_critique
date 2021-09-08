@@ -1,7 +1,5 @@
 # this script performs various pre-processing steps on the primary data
-
-library(validate) # for testing
-library(tidylog) # inline munging reports
+# we'll do the Stage 1 (PPPR Policy) data first and then the Stage 2 (PPPR in Practice) data.
 
 # load the primary data
 policyData <- read_csv(here('data','primary','dataPolicy.csv'))
@@ -17,6 +15,11 @@ policyData <- policyData %>%
 
 journalData <- journalData %>%
   rename(journal = `Full Journal Title`)
+
+# check journal names are the same in both data frames
+rule <- validator(journal %in% journalData$journal)
+out  <- confront(policyData, rule)
+summary(out)
 
 # merge data frames
 policyData <- left_join(policyData, journalData, by = 'journal')
@@ -251,8 +254,7 @@ policyData <- policyData %>%
 
 policyData %>% filter(!is.na(PPPR_name)) %>% count(wordLimits)
 
-# WE MAY WANT TO GET JOURNAL SPECIFIC ESTIMATES FOR THE BELOW?
-# FOR NOW WE WILL ASSUME 1 PAGE IS 500 WORDS. SO PAGE COUNTS ARE CONVERTED TO WORD COUNTS BY MULTIPLYING BY 500
+# WE WILL ASSUME 1 PAGE IS 500 WORDS. SO PAGE COUNTS ARE CONVERTED TO WORD COUNTS BY MULTIPLYING BY 500
 # WE WILL ALSO ASSUME THAT THERE ARE, ON AVERAGE, 6 CHARACTERS IN A WORD (roughly based on our last paper). SO CHARACTER COUNTS ARE CONVERTED TO WORD COUNTS BY DIVIDING BY 6
 
 pageToWord <- 500
@@ -499,8 +501,8 @@ practiceData <- practiceData %>%
   mutate(journal = str_replace_all(article_id, "[:digit:]", ""), # extract journal name by removing numbers from article id
          journal = str_replace_all(journal, "_", " "), # and removing underscores
          journal = str_trim(journal)) %>%# and removing whitespace from end of string
-  select(journal, article_id, everything()) %>% # reorder columns
-  filter(journal != "Lancet HIV") # TEMPORARILY remove journal whilst coding is finalised
+  select(journal, article_id, everything()) # reorder columns
+
 
 # quality checks
 
