@@ -9,7 +9,7 @@ load(here('data','processed','dataPolicy.Rdata'))
 
 # get list of journals that offer PPPR
 ppprJournals <- policyData %>%
-  filter(anyPPPR == 'YES') %>%
+  filter(anyPPPR == T) %>%
   count(journal, PPPR_name) %>%
   filter(!is.na(PPPR_name)) %>%
   group_by(journal) %>% 
