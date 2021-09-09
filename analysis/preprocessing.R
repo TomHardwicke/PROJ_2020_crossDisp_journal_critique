@@ -122,6 +122,14 @@ policyData <- policyData %>%
   "JOURNAL OF INTERNATIONAL BUSINESS STUDIES",
   "Nanophotonics"), "NO", anyPPPR))
 
+# change column types
+policyData <- policyData %>%
+  mutate(anyPPPR = recode(anyPPPR, "NO" = F, "YES" = T),
+         anyPPPR = as.logical(anyPPPR),
+         coders = as.factor(coders),
+         journal = as.factor(journal),
+         field = as.factor(field))
+
 # harmonize PPPR names
 ## currently the PPPR names are copied verbatim from the journal websites
 ## but many of them are basically the same name with small grammatical differences (e.g., letters, letter to the editor etc.)
@@ -140,6 +148,7 @@ policyData <- policyData %>%
       '(Below the line comments) Rapid Responses',
       'comments [below the line]',
       'Below the Line Comment',
+      'Below the line comments',
       'Comments [below the line]',
       'below the line comments',
       'Below the Line Comments',
@@ -227,10 +236,11 @@ policyData <- policyData %>%
       'Comments Papers and Communications',
       'Transactions Comments or Corrections',
       'Comments/Replies',
+      'Scientific Commentaries',
       'commentaries'
     ) ~ "Commentary article",
     PPPR_name %in% c(
-      'Editorial',
+      'Annotations',
       'Discussion',
       'Discussion Forum',
       'News and Views',
@@ -266,6 +276,8 @@ policyData <- policyData %>%
          wordLimits = case_when(
            wordLimits == 'not more than 1000 words and 2 pages' ~ as.character(2*pageToWord),
            wordLimits == '3 journal pages' ~ as.character(3*pageToWord),
+           wordLimits == '10 pages' ~ as.character(10*pageToWord),
+           wordLimits == '45000 characters (from Research Articles information)' ~ as.character(45000/charToWord),
            wordLimits == 'max 500 words' ~ '500',
            wordLimits == '600 words' ~ '600',
            wordLimits == 'NOT STATED, Note: Text is submitted via a text box of unknown size.' ~ 'NOT STATED',
@@ -280,7 +292,6 @@ policyData <- policyData %>%
            wordLimits == '1000 words' ~ '1000',
            wordLimits == 'no more than 1000' ~ '1000',
            wordLimits == '2000 to 3000' ~ '3000',
-           wordLimits == '4500 characters (from Research Articles information)' ~ as.character(4500/charToWord),
            wordLimits == '1,000 words max' ~ '1000',
            wordLimits == '500 words' ~ '500',
            wordLimits == 'up to 750 words' ~ '750',
@@ -359,8 +370,8 @@ policyData <- policyData %>%
          timeLimits = case_when(
            timeLimits == '6 months' ~ as.character(6*monthToWeek),
            timeLimits == 'UNCLEAR (provide detail below), preferably in the last 18-24 months' ~ as.character(24*monthToWeek),
+           timeLimits == "Anyone can submit a comment any time after publication, but only those submitted within 4 weeks of an article’s publication will be considered for print publication... One month after publication, editors review all posted comments and select some for publication in the Letters section of the print version of Annals." ~ '4',
            timeLimits == '6 weeks' ~ '6',
-           timeLimits == 'Anyone can submit a comment any time after publication, but only those submitted within 4 weeks of an article publication will be considered for print publication... One month after publication, editors review all posted comments and select some for publication in the Letters section of the print version of Annals.' ~ 'Limit not clearly specified',
            timeLimits == "UNCLEAR (provide detail below), says must pertain to articles 'recently published' in the journal" ~ 'Limit not clearly specified',
            timeLimits == 'UNCLEAR (provide detail below),  recently published' ~ 'Limit not clearly specified',
            timeLimits == 'UNCLEAR (provide detail below),  relating to recent articles' ~ 'Limit not clearly specified',
@@ -395,6 +406,8 @@ policyData <- policyData %>%
            timeLimits == 'within the past month or so' ~ as.character(1*monthToWeek),
            timeLimits == 'Letters linked to items published in the journal must reach us within 8 weeks of publication of the original item (for items published Online First, this means within 8 weeks of its online publication).' ~ '8',
            timeLimits == '8 weeks' ~ '8',
+           timeLimits == 'OTHER (provide detail), We may reject comments because they… Are submitted a long time after article publication.' ~ 'Limit not clearly specified',
+           timeLimits == 'UNCLEAR (provide detail below), It says Appropriate topics include comments on recently published manuscripts' ~ 'Limit not clearly specified',
            timeLimits == 'within 8 weeks after original paper was published' ~ '8',
            timeLimits == "UNCLEAR (provide detail below), concerning recently published information in Mucosal Immunology." ~ 'Limit not clearly specified',
            timeLimits == "UNCLEAR (provide detail below), The editors will decide how to proceed on the basis of the potential interest to readers, importance and timeliness of the contribution." ~ 'Limit not clearly specified',
@@ -503,7 +516,6 @@ practiceData <- practiceData %>%
          journal = str_trim(journal)) %>%# and removing whitespace from end of string
   select(journal, article_id, everything()) # reorder columns
 
-
 # quality checks
 
 # define validation rules
@@ -511,12 +523,12 @@ rules <- validator(
   is.logical(exclusion), # column should be logical type
   is.logical(isPPPR), # column should be logical type
   is.logical(linkedPPPR), # column should be logical type
-  journal %in% journals, # all journals should also appear in the other datasets with same naming conventions
+  journal %in% journals, # all journals should follow same naming conventions as other datasets
   if (exclusion == T) !is.na(`exclusion explanation`), # if article excluded, should be an explanation
   if (exclusion == T) is.na(isPPPR) & is.na(linkedPPPR), # if article excluded, should be nothing in isPPPR and linkedPPPR
   if (exclusion == F) !is.na(isPPPR), # if article not excluded, should be coding in isPPPR
   if (isPPPR == T) is.na(linkedPPPR), # if isPPPR is TRUE then should be nothing in linkedPPPR
-  if (isPPPR == F) !is.na(linkedPPPR)) # if isPPPR is FALSE then should be something in linkedPPPR
+  if (isPPPR == F) !is.na(linkedPPPR))
 
 # check data against validation rules
 out <- confront(practiceData, rules)
@@ -525,6 +537,7 @@ summary(out) # view details about any validation errors
 # for every journal we should have exactly ten articles that have T/F in the linked PPPR column
 journal_n <- practiceData %>% 
   filter(exclusion == F, isPPPR == F) %>% # remove the excluded articles and articles identified as themselves being PPPR
+  filter(journal == "WILDLIFE MONOGRAPHS") %>% # do not check the journal that only published 6 articles in 2018
   count(journal)
 
 rule <- validator(n == 10)
