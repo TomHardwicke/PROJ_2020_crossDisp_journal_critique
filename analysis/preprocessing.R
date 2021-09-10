@@ -1,15 +1,11 @@
 # this script performs various pre-processing steps on the primary data
 # we'll do the Stage 1 (PPPR Policy) data first and then the Stage 2 (PPPR in Practice) data.
 
-# load the primary data
+# load the stage 1 primary data
 policyData <- read_csv(here('data','primary','dataPolicy.csv'))
 journalData <- read_csv(here('data','primary','dataJournal.csv'))
 
-# extract list of journal names
-journals <- journalData$`Full Journal Title`
-
-# munging
-
+# prepare to merge datasets by homogenizing column names for journal
 policyData <- policyData %>%
   rename(journal = `Enter the name of the journal:`)
 
@@ -17,12 +13,11 @@ journalData <- journalData %>%
   rename(journal = `Full Journal Title`)
 
 # check journal names are the same in both data frames
-rule <- validator(journal %in% journalData$journal)
-out  <- confront(policyData, rule)
-summary(out)
+stopifnot(policyData$journal %in% journalData$journal)
 
 # merge data frames
 policyData <- left_join(policyData, journalData, by = 'journal')
+rm(journalData) # remove the journalData dataframe
 
 # change variable names to make them easier to work with
 policyData <- policyData %>%
@@ -31,28 +26,34 @@ policyData <- policyData %>%
          rank = Rank,
          jif = `Journal Impact Factor`,
          field = ESI_field,
-         cope = `COPE (T = member; F = not a member)`
-  )
-
-# filter data
+         cope = `COPE (T = member; F = not a member)`)
+         
+# select only the dual coding
 policyData <- policyData %>%
   filter(coders %in% c( # select only the double coded entries
     'LT/RTT','LT/TEH','LT/JEK',
     'SAH/RTT','SAH/TEH','SAH/JEK',
     'TB/RTT','TB/TEH','TB/JEK'))
 
+stopifnot(nrow(policyData) == 330) # test there are 330 rows (journals)
+
+## Not run:
+# visual diagnostics
+# skim(policyData)
+## End(**Not run**)
+
 # tidy data
 
-# switch from wide to long format (i.e., switch to one row per PPPR)
+# switch from wide to long format (i.e., switch to one row per PPPR instead of one row per journal)
 policyData <- policyData %>%
   rename_all( ~ str_replace(.,'[.]', '_')) %>% # change dots to underscores to work with subsequent code
   pivot_longer( # pivot to long format
     cols = c(-coders,-journal,-anyPPPR,-rank,-jif,-field,-cope,-journalHomepage,-originalLink_articleTypes,-permaLink_articleTypes),
     names_to = c("PPPR_type", ".value"), 
     names_sep = "_ "
-  ) 
+  )
 
-# rename columns
+# rename columns to make them easier to work with
 policyData <- policyData %>%
   rename(
     PPPR_name = `Enter the name of the PPPR type offered by the journal:`,
@@ -61,14 +62,27 @@ policyData <- policyData %>%
     timeLimits = `Are there any time limits for submission of this type of PPPR?`,
     referenceLimits = `Are there any reference limits for this type of PPPR?`,
     peerReviewed = `Is this type of PPPR peer reviewed?`) %>%
-  select(-`Are there any other types of PPPR in this journal?`) %>%
-  mutate(field = fct_recode(field, # adjust field names for presentation purposes
-                            "PSYCHIATRY/PSYCHOLOGY" = "PSYCHIATRY_PSYCHOLOGY",
-                            "ENVIRONMENT/ECOLOGY" = "ENVIRONMENT_ECOLOGY"),
-         field = str_to_title(field),
-         field = factor(field))
+  select(-`Are there any other types of PPPR in this journal?`) # drop column we don't need
 
-# we have a few cases where an article type was initially classified as PPPR by the primary and secondary coder, but following team discussion we have decided that they do not meet our operational definition of PPPR
+# adjust field names for presentation purposes
+policyData <- policyData %>%
+mutate(field = fct_recode(field, 
+  "PSYCHIATRY/PSYCHOLOGY" = "PSYCHIATRY_PSYCHOLOGY",
+  "ENVIRONMENT/ECOLOGY" = "ENVIRONMENT_ECOLOGY",
+  "MULTIDISCIPLINARY" = "Multidisciplinary"))
+
+# tests
+stopifnot(policyData$anyPPPR %in% c("YES", "NO")) # anyPPPR should be YES or NO
+
+# change column types
+policyData <- policyData %>%
+  mutate(anyPPPR = recode(anyPPPR, "NO" = F, "YES" = T),
+         anyPPPR = as.logical(anyPPPR),
+         coders = as.factor(coders),
+         journal = as.factor(journal))
+
+# exclusions
+## we have a few cases where an article type was initially classified as PPPR by the primary and secondary coder, but following team discussion we have decided that they do not meet our operational definition of PPPR
 ## we excluded these cases below
 ## we exclude two cases of "Responses" as they involve "a response to a Letter to the Editor" and our operational definition does not count responses to PPPR as PPPR themselves
 ## we exclude a case of "Opinionated Articles" as their purpose appears to be to "summarize a research finding" rather than provide critique
@@ -114,21 +128,13 @@ policyData <- policyData %>%
          peerReviewed = ifelse(PPPR_name == 'Commentary' & journal == 'Journal of the Academy of Nutrition and Dietetics', NA, peerReviewed),
          PPPR_name = ifelse(PPPR_name == 'Commentary' & journal == 'Journal of the Academy of Nutrition and Dietetics', NA, PPPR_name))
 
-# after exclusions, make sure that journals with no PPPR have 'NO' in the anyPPPR column
+# after exclusions, make sure that journals with no PPPR have FALSE in the anyPPPR column
 policyData <- policyData %>%
   mutate(anyPPPR = ifelse(journal %in% c(
   "Cellular & Molecular Immunology",
   "JOURNAL OF CHILD PSYCHOLOGY AND PSYCHIATRY",
   "JOURNAL OF INTERNATIONAL BUSINESS STUDIES",
-  "Nanophotonics"), "NO", anyPPPR))
-
-# change column types
-policyData <- policyData %>%
-  mutate(anyPPPR = recode(anyPPPR, "NO" = F, "YES" = T),
-         anyPPPR = as.logical(anyPPPR),
-         coders = as.factor(coders),
-         journal = as.factor(journal),
-         field = as.factor(field))
+  "Nanophotonics"), F, anyPPPR))
 
 # harmonize PPPR names
 ## currently the PPPR names are copied verbatim from the journal websites
@@ -503,6 +509,9 @@ policyData <- policyData %>%
          ),
          peerReviewed = factor(peerReviewed, levels = c('NOT STATED', 'NO', "Editor discretion", "YES")))
 
+# save the processed data 
+save(policyData, file = here('data', 'processed', 'dataPolicy.RData'))
+
 # practice data
 practiceData <- read_csv(here('data','primary','dataPractice.csv'))
 
@@ -523,7 +532,6 @@ rules <- validator(
   is.logical(exclusion), # column should be logical type
   is.logical(isPPPR), # column should be logical type
   is.logical(linkedPPPR), # column should be logical type
-  journal %in% journals, # all journals should follow same naming conventions as other datasets
   if (exclusion == T) !is.na(`exclusion explanation`), # if article excluded, should be an explanation
   if (exclusion == T) is.na(isPPPR) & is.na(linkedPPPR), # if article excluded, should be nothing in isPPPR and linkedPPPR
   if (exclusion == F) !is.na(isPPPR), # if article not excluded, should be coding in isPPPR
@@ -545,5 +553,4 @@ out  <- confront(journal_n , rule)
 summary(out)
 
 # save the processed data 
-save(policyData, file = here('data', 'processed', 'dataPolicy.RData'))
 save(practiceData, file = here('data', 'processed', 'dataPractice.RData'))
