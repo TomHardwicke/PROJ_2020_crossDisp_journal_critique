@@ -526,9 +526,8 @@ practiceData <- practiceData %>%
   select(journal, article_id, everything()) # reorder columns
 
 # quality checks
-
-# define validation rules
-rules <- validator(
+practiceData %>%
+  check_that(
   is.logical(exclusion), # column should be logical type
   is.logical(isPPPR), # column should be logical type
   is.logical(linkedPPPR), # column should be logical type
@@ -536,7 +535,8 @@ rules <- validator(
   if (exclusion == T) is.na(isPPPR) & is.na(linkedPPPR), # if article excluded, should be nothing in isPPPR and linkedPPPR
   if (exclusion == F) !is.na(isPPPR), # if article not excluded, should be coding in isPPPR
   if (isPPPR == T) is.na(linkedPPPR), # if isPPPR is TRUE then should be nothing in linkedPPPR
-  if (isPPPR == F) !is.na(linkedPPPR))
+  if (isPPPR == F) !is.na(linkedPPPR)) %>%
+  summary()
 
 # check data against validation rules
 out <- confront(practiceData, rules)
