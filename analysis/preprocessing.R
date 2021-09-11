@@ -1,6 +1,8 @@
 # this script performs various pre-processing steps on the primary data
 # we'll do the Stage 1 (PPPR Policy) data first and then the Stage 2 (PPPR in Practice) data.
 
+library(skimr) # for visual diagnostics
+
 # load the stage 1 primary data
 policyData <- read_csv(here('data','primary','dataPolicy.csv'))
 journalData <- read_csv(here('data','primary','dataJournal.csv'))
@@ -37,10 +39,10 @@ policyData <- policyData %>%
 
 stopifnot(nrow(policyData) == 330) # test there are 330 rows (journals)
 
-## Not run:
+## Start Not Run:
 # visual diagnostics
 # skim(policyData)
-## End(**Not run**)
+## End Not Run
 
 # tidy data
 
@@ -526,31 +528,36 @@ practiceData <- practiceData %>%
   select(journal, article_id, everything()) # reorder columns
 
 # quality checks
-practiceData %>%
+test_results <-practiceData %>%
   check_that(
-  is.logical(exclusion), # column should be logical type
-  is.logical(isPPPR), # column should be logical type
-  is.logical(linkedPPPR), # column should be logical type
-  if (exclusion == T) !is.na(`exclusion explanation`), # if article excluded, should be an explanation
-  if (exclusion == T) is.na(isPPPR) & is.na(linkedPPPR), # if article excluded, should be nothing in isPPPR and linkedPPPR
-  if (exclusion == F) !is.na(isPPPR), # if article not excluded, should be coding in isPPPR
-  if (isPPPR == T) is.na(linkedPPPR), # if isPPPR is TRUE then should be nothing in linkedPPPR
-  if (isPPPR == F) !is.na(linkedPPPR)) %>%
+    is.logical(exclusion), # column should be logical type
+    is.logical(isPPPR), # column should be logical type
+    is.logical(linkedPPPR), # column should be logical type
+    if (exclusion == T) !is.na(`exclusion explanation`), # if article excluded, should be an explanation
+    if (exclusion == T) is.na(isPPPR) & is.na(linkedPPPR), # if article excluded, should be nothing in isPPPR and linkedPPPR
+    if (exclusion == F) !is.na(isPPPR), # if article not excluded, should be coding in isPPPR
+    if (isPPPR == T) is.na(linkedPPPR) # if isPPPR is TRUE then should be nothing in linkedPPPR
+  ) %>%
+  summary() 
+
+stopifnot(sum(test_results$fails)==0) # stop code if any tests failed
+  
+# for every journal we should have exactly ten articles that have T/F in the linked PPPR column
+test_results <- practiceData %>% 
+  filter(exclusion == F, isPPPR == F) %>% # remove the excluded articles and articles identified as themselves being PPPR
+  filter(journal != "WILDLIFE MONOGRAPHS") %>% # do not check the journal that only published 6 articles in 2018
+  count(journal) %>%
+  check_that(
+    n == 10
+  ) %>% 
   summary()
 
-# check data against validation rules
-out <- confront(practiceData, rules)
-summary(out) # view details about any validation errors
+stopifnot(sum(test_results$fails)==0) # stop code if any tests failed
 
-# for every journal we should have exactly ten articles that have T/F in the linked PPPR column
-journal_n <- practiceData %>% 
-  filter(exclusion == F, isPPPR == F) %>% # remove the excluded articles and articles identified as themselves being PPPR
-  filter(journal == "WILDLIFE MONOGRAPHS") %>% # do not check the journal that only published 6 articles in 2018
-  count(journal)
-
-rule <- validator(n == 10)
-out  <- confront(journal_n , rule)
-summary(out)
+## Start Not Run:
+# visual diagnostics
+# skim(practiceData)
+## End Not Run
 
 # save the processed data 
 save(practiceData, file = here('data', 'processed', 'dataPractice.RData'))
