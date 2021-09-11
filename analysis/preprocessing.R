@@ -148,7 +148,7 @@ policyData <- policyData %>%
 ## commentary articles - longer PPPR articles
 ## below the line comments - informal (non-article) on journal websites
 
-## grammatical harmonization
+## grammatical harmonization of PPPR names
 policyData <- policyData %>%
   mutate(PPPR_name_harmonized = case_when(
     PPPR_name %in% c(
@@ -254,7 +254,6 @@ policyData <- policyData %>%
       'News and Views',
       'Previews',
       'Essay',
-      'Matters Arising',
       'Forum papers',
       'Research Advance',
       'Replications and Corrigenda',
@@ -265,6 +264,17 @@ policyData <- policyData %>%
     ) ~ "Other",
     TRUE ~ "Not categorised"
   ))
+
+# conceptual harmonization of PPPR names
+policyData <- policyData %>%
+  mutate(
+    PPPR_name_harmonized = case_when(
+      # The Matters Arising format has a word limit more consistent with a commentary article, and journals offering it typically
+      # also offer a "correspondence" format which is like a letter to the editor.
+      PPPR_name %in% c("Matters Arising") ~ "Commentary article", 
+      TRUE ~ PPPR_name_harmonized # if not listed above then keep current harmonized name
+      )
+    )
 
 # harmonize words limits
 ## the way that word limits were stated in journals and the way that data was recorded by our coders was not standardized. For example, some journals provided limits in terms of pages rather than words and some codes entered "500" meaning "500 words" whereas others entered "500 words".
