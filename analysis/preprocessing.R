@@ -83,61 +83,6 @@ policyData <- policyData %>%
          coders = as.factor(coders),
          journal = as.factor(journal))
 
-# exclusions
-## we have a few cases where an article type was initially classified as PPPR by the primary and secondary coder, but following team discussion we have decided that they do not meet our operational definition of PPPR
-## we excluded these cases below
-## we exclude two cases of "Responses" as they involve "a response to a Letter to the Editor" and our operational definition does not count responses to PPPR as PPPR themselves
-## we exclude a case of "Opinionated Articles" as their purpose appears to be to "summarize a research finding" rather than provide critique
-## we exclude a case of "Catalysis" as they don't seem to be a way for anyone to comment on published articles. Instead it seems to be a forum for discussion where a target article is written and then others can provide reactions - and those reactions are commissioned.
-## we exclude a case of "Clinical Implications of Basic Research" because it does not appear to allow for critique of articles, only discussion of their clinical implications
-## we exclude two cases of "Previews" because they are primarily for providing 'context' (not critique) about papers reported in the same issue (and thus, not *post* publication). They are also primarily commissioned. 
-## we exclude two cases of "Editorials" because they are primarily commissioned
-
-## apply exclusions
-toExclude <- c("Responses", "Opinionated Articles", "Catalysis", "Essay", "Research note", "Clinical Implications of Basic Research", "Previews", "Editorial")
-policyData <- policyData %>% 
-  mutate(PPPR_description = ifelse(PPPR_name %in% toExclude, NA, PPPR_description),
-         wordLimits = ifelse(PPPR_name %in% toExclude, NA, wordLimits),
-         timeLimits = ifelse(PPPR_name %in% toExclude, NA, timeLimits),
-         referenceLimits = ifelse(PPPR_name %in% toExclude, NA, referenceLimits),
-         peerReviewed = ifelse(PPPR_name %in% toExclude, NA, peerReviewed),
-         PPPR_name = ifelse(PPPR_name %in% toExclude, NA, PPPR_name))
-
-## also exclude one case of "News and Views" with "may always be invited/commissioned by the editor" in the description because it appears to be a venue for writing commissioned articles about articles appearing in the same journal issue, and so does not meet our definition of PPPR
-policyData <- policyData %>% 
-  mutate(PPPR_name = ifelse(str_detect(PPPR_description, 'commissioned by the editor'), NA, PPPR_name),
-       wordLimits = ifelse(str_detect(PPPR_description, 'commissioned by the editor'), NA, wordLimits),
-       timeLimits = ifelse(str_detect(PPPR_description, 'commissioned by the editor'), NA, timeLimits),
-       referenceLimits = ifelse(str_detect(PPPR_description, 'commissioned by the editor'), NA, referenceLimits),
-       peerReviewed = ifelse(str_detect(PPPR_description, 'commissioned by the editor'), NA, peerReviewed),
-       PPPR_description = ifelse(str_detect(PPPR_description, 'commissioned by the editor'), NA, PPPR_description))
-
-## also exclude the "comment" article type recorded for "Particle and Fibre Toxicology" - format cannot be identified on website
-policyData <- policyData %>% 
-  mutate(PPPR_description = ifelse(PPPR_name == 'Comment' & journal == 'Particle and Fibre Toxicology', NA, PPPR_description),
-         wordLimits = ifelse(PPPR_name == 'Comment' & journal == 'Particle and Fibre Toxicology', NA, wordLimits),
-         timeLimits = ifelse(PPPR_name == 'Comment' & journal == 'Particle and Fibre Toxicology', NA, timeLimits),
-         referenceLimits = ifelse(PPPR_name == 'Comment' & journal == 'Particle and Fibre Toxicology', NA, referenceLimits),
-         peerReviewed = ifelse(PPPR_name == 'Comment' & journal == 'Particle and Fibre Toxicology', NA, peerReviewed),
-         PPPR_name = ifelse(PPPR_name == 'Comment' & journal == 'Particle and Fibre Toxicology', NA, PPPR_name))
-
-## also exclude the "commentary" article type for Journal of the Academy of Nutrition and Dietetics
-policyData <- policyData %>% 
-  mutate(PPPR_description = ifelse(PPPR_name == 'Commentary' & journal == 'Journal of the Academy of Nutrition and Dietetics', NA, PPPR_description),
-         wordLimits = ifelse(PPPR_name == 'Commentary' & journal == 'Journal of the Academy of Nutrition and Dietetics', NA, wordLimits),
-         timeLimits = ifelse(PPPR_name == 'Commentary' & journal == 'Journal of the Academy of Nutrition and Dietetics', NA, timeLimits),
-         referenceLimits = ifelse(PPPR_name == 'Commentary' & journal == 'Journal of the Academy of Nutrition and Dietetics', NA, referenceLimits),
-         peerReviewed = ifelse(PPPR_name == 'Commentary' & journal == 'Journal of the Academy of Nutrition and Dietetics', NA, peerReviewed),
-         PPPR_name = ifelse(PPPR_name == 'Commentary' & journal == 'Journal of the Academy of Nutrition and Dietetics', NA, PPPR_name))
-
-# after exclusions, make sure that journals with no PPPR have FALSE in the anyPPPR column
-policyData <- policyData %>%
-  mutate(anyPPPR = ifelse(journal %in% c(
-  "Cellular & Molecular Immunology",
-  "JOURNAL OF CHILD PSYCHOLOGY AND PSYCHIATRY",
-  "JOURNAL OF INTERNATIONAL BUSINESS STUDIES",
-  "Nanophotonics"), F, anyPPPR))
-
 # harmonize PPPR names
 ## currently the PPPR names are copied verbatim from the journal websites
 ## but many of them are basically the same name with small grammatical differences (e.g., letters, letter to the editor etc.)
