@@ -1,7 +1,7 @@
 # this script performs various pre-processing steps on the primary data
 # we'll do the Stage 1 (PPPR Policy) data first and then the Stage 2 (PPPR in Practice) data.
 
-library(skimr) # for visual diagnostics
+# library(skimr) # for visual diagnostics (not required unless coding interactively)
 
 # load the stage 1 primary data
 policyData <- read_csv(here('data','primary','dataPolicy.csv'))
@@ -19,7 +19,6 @@ stopifnot(policyData$journal %in% journalData$journal)
 
 # merge data frames
 policyData <- left_join(policyData, journalData, by = 'journal')
-rm(journalData) # remove the journalData dataframe
 
 # change variable names to make them easier to work with
 policyData <- policyData %>%
@@ -69,8 +68,8 @@ policyData <- policyData %>%
 # adjust field names for presentation purposes
 policyData <- policyData %>%
 mutate(field = fct_recode(field, 
-  "PSYCHIATRY/PSYCHOLOGY" = "PSYCHIATRY_PSYCHOLOGY",
-  "ENVIRONMENT/ECOLOGY" = "ENVIRONMENT_ECOLOGY",
+  "PSYCHIATRY & PSYCHOLOGY" = "PSYCHIATRY_PSYCHOLOGY",
+  "ENVIRONMENT & ECOLOGY" = "ENVIRONMENT_ECOLOGY",
   "MULTIDISCIPLINARY" = "Multidisciplinary"))
 
 # tests
@@ -89,9 +88,9 @@ policyData <- policyData %>%
 ## firstly, we will standardize names that grammatically similar
 ## we will then examine conceptual similarity and see if we can summarise the types into a few high level categories
 ## a guiding assumption here is that we can capture most types with three categories (but we will deviate from this if necessary): 
-## letters to the editor (or 'correspondence') - very short PPPR articles
-## commentary articles - longer PPPR articles
-## below the line comments - informal (non-article) on journal websites
+## letters (or 'correspondence') - very short PPPR articles
+## commentaries - longer PPPR articles
+## web comments - informal (non-article) on journal websites (referred to in our coding as 'below the line comments')
 
 ## grammatical harmonization of PPPR names
 policyData <- policyData %>%
@@ -122,8 +121,10 @@ policyData <- policyData %>%
       '	(Below the line) comments	',
       'comments (below the line)',
       '(Below the line) eLetters',
-      '(Below the line) comments'
-    ) ~ "Below the line comments",
+      'Correspondence/Comment', # european heart journal - has a separate letter format; these are more like web comments
+      '(Below the line) comments',
+      'Annotations'
+    ) ~ "Web comments",
     PPPR_name %in% c(
       'Correspondence/Rebuttal',
       'Letter to the Editor',
@@ -148,7 +149,6 @@ policyData <- policyData %>%
       'Correspondence (peer-reviewed)',
       'Correspondence (not peer-reviewed)',      
       'Letter / Letters to the editor',
-      'Correspondence/Comment',
       'letters to the editor',
       'Correspondence (Letters)',
       'Communications and Letters to the Editor',
@@ -162,9 +162,10 @@ policyData <- policyData %>%
       'Letters & Commentaries',
       'Correpondence',
       'Reader Comments',
+      'Disputes & Debates',
       'Discussion Forum', # NB - the description describes these as 'letters'
       'Letter'
-    ) ~ "Letters to the editor",
+    ) ~ "Letters",
     PPPR_name %in% c(
       'Commentary ("Responses or Commentaries")',
       'Commentary',
@@ -191,9 +192,8 @@ policyData <- policyData %>%
       'Comments/Replies',
       'Scientific Commentaries',
       'commentaries'
-    ) ~ "Commentary article",
+    ) ~ "Commentaries",
     PPPR_name %in% c(
-      'Annotations',
       'Discussion',
       'Discussion Forum',
       'News and Views',
@@ -203,7 +203,6 @@ policyData <- policyData %>%
       'Research Advance',
       'Replications and Corrigenda',
       'Research note',
-      'Disputes & Debates',
       'Update articles',
       'Perspectives'
     ) ~ "Other",
@@ -216,16 +215,19 @@ policyData <- policyData %>%
     PPPR_name_harmonized = case_when(
       # The Matters Arising format has a word limit more consistent with a commentary article, and journals offering it typically
       # also offer a "correspondence" format which is like a letter to the editor.
-      PPPR_name %in% c("Matters Arising") ~ "Commentary article", 
+      PPPR_name %in% c("Matters Arising") ~ "Commentaries", 
       TRUE ~ PPPR_name_harmonized # if not listed above then keep current harmonized name
       )
     )
 
+# set factor order
+policyData <- policyData %>%
+  mutate(PPPR_name_harmonized = factor(PPPR_name_harmonized, levels =
+    c("Letters", "Commentaries", "Web comments", "Other", "Not categorised")))
+
 # harmonize words limits
 ## the way that word limits were stated in journals and the way that data was recorded by our coders was not standardized. For example, some journals provided limits in terms of pages rather than words and some codes entered "500" meaning "500 words" whereas others entered "500 words".
 ## the code below will attempt to harmonzise data entry in this column to align entries with the same core meaning
-
-policyData %>% filter(!is.na(PPPR_name)) %>% count(wordLimits)
 
 # WE WILL ASSUME 1 PAGE IS 500 WORDS. SO PAGE COUNTS ARE CONVERTED TO WORD COUNTS BY MULTIPLYING BY 500
 # WE WILL ALSO ASSUME THAT THERE ARE, ON AVERAGE, 6 CHARACTERS IN A WORD (roughly based on our last paper). SO CHARACTER COUNTS ARE CONVERTED TO WORD COUNTS BY DIVIDING BY 6
@@ -467,14 +469,15 @@ policyData <- policyData %>%
          peerReviewed = factor(peerReviewed, levels = c('NOT STATED', 'NO', "Editor discretion", "YES")))
 
 # save the processed data 
-save(policyData, file = here('data', 'processed', 'dataPolicy.RData'))
+d_policy <- policyData
+save(d_policy, file = here('data', 'processed', 'dataPolicy.RData'))
 
-# practice data
-practiceData <- read_csv(here('data','primary','dataPractice.csv'))
+# practice freq data
+practiceFreqData <- read_csv(here('data','primary','dataPracticeFreq.csv'))
 
 # munging
-practiceData <- practiceData %>% 
-  rename(article_id = id, isPPPR = `Is article itself PPPR`, linkedPPPR = `Is article linked to PPPR`) %>% # rename columns
+practiceFreqData <- practiceFreqData %>% 
+  rename(article_id = id, isPPPR = `Is article itself PPPR`, linkedPPPR = `Is article linked to PPPR`, exclusion_explanation = `exclusion explanation`) %>% # rename columns
   filter(exclusion != "EXTRA") %>% # remove any extra coding we did
   mutate(across(c(exclusion, isPPPR, linkedPPPR), as.logical)) %>%# make columns 'logical' type
   mutate(journal = str_replace_all(article_id, "[:digit:]", ""), # extract journal name by removing numbers from article id
@@ -482,13 +485,16 @@ practiceData <- practiceData %>%
          journal = str_trim(journal)) %>%# and removing whitespace from end of string
   select(journal, article_id, everything()) # reorder columns
 
+# add ESI fields
+practiceFreqData <- left_join(practiceFreqData, journalData %>% select(journal, ESI_field), by = 'journal') # add ESI field
+
 # quality checks
-test_results <-practiceData %>%
+test_results <- practiceFreqData %>%
   check_that(
     is.logical(exclusion), # column should be logical type
     is.logical(isPPPR), # column should be logical type
     is.logical(linkedPPPR), # column should be logical type
-    if (exclusion == T) !is.na(`exclusion explanation`), # if article excluded, should be an explanation
+    if (exclusion == T) !is.na(exclusion_explanation), # if article excluded, should be an explanation
     if (exclusion == T) is.na(isPPPR) & is.na(linkedPPPR), # if article excluded, should be nothing in isPPPR and linkedPPPR
     if (exclusion == F) !is.na(isPPPR), # if article not excluded, should be coding in isPPPR
     if (isPPPR == T) is.na(linkedPPPR) # if isPPPR is TRUE then should be nothing in linkedPPPR
@@ -498,7 +504,7 @@ test_results <-practiceData %>%
 stopifnot(sum(test_results$fails)==0) # stop code if any tests failed
   
 # for every journal we should have exactly ten articles that have T/F in the linked PPPR column
-test_results <- practiceData %>% 
+test_results <- practiceFreqData %>% 
   filter(exclusion == F, isPPPR == F) %>% # remove the excluded articles and articles identified as themselves being PPPR
   filter(journal != "WILDLIFE MONOGRAPHS") %>% # do not check the journal that only published 6 articles in 2018
   count(journal) %>%
@@ -515,4 +521,56 @@ stopifnot(sum(test_results$fails)==0) # stop code if any tests failed
 ## End Not Run
 
 # save the processed data 
-save(practiceData, file = here('data', 'processed', 'dataPractice.RData'))
+d_freq <- practiceFreqData
+save(d_freq, file = here('data', 'processed', 'dataPracticeFreq.RData'))
+
+# practice assess data
+practiceAssessData <- read_csv(here('data','primary','dataPracticeAssess.csv'))
+
+practiceAssessData <- practiceAssessData %>%
+  mutate(journal = str_replace_all(article_id, "[:digit:]", ""), # extract journal name by removing numbers from article id
+         journal = str_replace_all(journal, "_", " "), # and removing underscores
+         journal = str_trim(journal), # and removing whitespace from end of string
+         timeTillPub = difftime(pub_date_pppr,pub_date_original, units = "days")) %>% 
+  rename(open_access_org = `Is the original article open access?`,
+         open_access_pppr = `Is the PPPR open access?`,
+         data_shared_org = `Does original article share data?`,
+         anonymous_pppr = `Are PPPR authors anonymous?`,
+         coi_state_pppr = `Does the PPPR include a conflict of interest statement?`,
+         coi_actual_pppr = `Do PPPR authors state that there may be a conflict of interest?`,
+         words_pppr = `How many words are included in the PPPR (in main text, excluding references, etc)?`,
+         issue_design = `What does the PPPR address? (Design)`,
+         issue_implementation = `What does the PPPR address? (Implementation)`,
+         issue_analysis = `What does the PPPR address? (Analysis)`,
+         issue_reporting = `What does the PPPR address? (Reporting)`,
+         issue_interpretation = `What does the PPPR address? (Interpretation)`,
+         issue_other = `What does the PPPR address? (Other)`,
+         analysis_original_data = `Does the PPPR include analysis of original article data?`,
+         analysis_new_data = `Does the PPPR include analysis of new data?`,
+         correction = `Did PPPR trigger correction?`,
+         reply_exists = `Have the original authors replied?`,
+         reply_claim_unchanged = `Do original authors assert their core claims remain unchanged?`,
+         reply_new_data = `Did reply involve collection of new data?`,
+         reply_new_analysis = `Did reply involve new analyses?`) %>%
+  select(coder, journal, article_id, article_doi, everything()) # reorder columns
+
+# add ESI fields
+practiceAssessData <- left_join(practiceAssessData, journalData %>% select(journal, ESI_field), by = 'journal') # add ESI field
+
+# quality checks
+colNames <- practiceAssessData %>% select(everything(), -coi_actual_pppr, -starts_with('reply_')) %>% names() # define columns that can contain missing data
+                                          
+test_results <- practiceAssessData %>% 
+  check_that(
+    !is.na(colNames), # check these columns have no missing data
+    if (coi_state_pppr == T) !is.na(coi_actual_pppr), # if there's a coi statement then coi_actual_pppr should contain data
+    if (reply_exists == T) !all_complete(reply_claim_unchanged, reply_new_date, reply_new_analysis) # if there's an author reply then the other reply_ columns should contain data
+  ) %>% 
+  summary()
+
+stopifnot(sum(test_results$fails)==0) # stop  if any tests failed
+
+# save the processed data 
+d_assess <- practiceAssessData
+save(d_assess, file = here('data', 'processed', 'dataPracticeAssess.RData'))
+
