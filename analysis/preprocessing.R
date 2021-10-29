@@ -123,6 +123,7 @@ policyData <- policyData %>%
       '(Below the line) eLetters',
       'Correspondence/Comment', # european heart journal - has a separate letter format; these are more like web comments
       '(Below the line) comments',
+      'Correspondence and eLetters',
       'Annotations'
     ) ~ "Web comments",
     PPPR_name %in% c(
@@ -143,7 +144,6 @@ policyData <- policyData %>%
       'Opinion letters / editorials',
       'Opinion letters / editorials',
       'Letters to the Editor(s):',
-      'Correspondence and eLetters',
       'Correspondence: Letters to the Editor',
       'Scientific Correspondence',
       'Correspondence (peer-reviewed)',
