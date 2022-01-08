@@ -472,17 +472,18 @@ policyData <- policyData %>%
 d_policy <- policyData
 save(d_policy, file = here('data', 'processed', 'dataPolicy.RData'))
 
-# practice freq data
+# stage 2 practice freq data
 practiceFreqData <- read_csv(here('data','primary','dataPracticeFreq.csv'))
 
 # munging
 practiceFreqData <- practiceFreqData %>% 
-  rename(article_id = id, isPPPR = `Is article itself PPPR`, linkedPPPR = `Is article linked to PPPR`, exclusion_explanation = `exclusion explanation`) %>% # rename columns
+  rename(article_id = id, isPPPR = `Is article itself PPPR`, linkedPPPR = `Is article linked to PPPR`, exclusion_explanation = `exclusion explanation`, exchange_duplicate = `exchange duplicate`) %>% # rename columns
   filter(exclusion != "EXTRA") %>% # remove any extra coding we did
   mutate(across(c(exclusion, isPPPR, linkedPPPR), as.logical)) %>%# make columns 'logical' type
   mutate(journal = str_replace_all(article_id, "[:digit:]", ""), # extract journal name by removing numbers from article id
          journal = str_replace_all(journal, "_", " "), # and removing underscores
-         journal = str_trim(journal)) %>%# and removing whitespace from end of string
+         journal = str_trim(journal), # and removing whitespace from end of string
+         exchange_duplicate = replace_na(exchange_duplicate, 'FALSE')) %>%  
   select(journal, article_id, everything()) # reorder columns
 
 # add ESI fields
