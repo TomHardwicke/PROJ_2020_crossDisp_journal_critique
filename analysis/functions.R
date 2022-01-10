@@ -12,7 +12,7 @@ firstUp <- function(x) {
 
 # function to calculate 95% Wilson CIs on single proportions (using prop.test) then output them in a string with a point estimate as percentages
 percentCI <- function(successes, total) {
-  percent <- round((successes/total)*100,1)
+  percent <- round((successes/total)*100,0)
   CI <- round(prop.test(successes,total)$conf.int*100, 1)
   CIstring <- paste0(percent,'%, CI [', CI[1], ',', CI[2], ']')
   return(CIstring)
