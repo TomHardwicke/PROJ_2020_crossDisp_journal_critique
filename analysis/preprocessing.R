@@ -484,6 +484,7 @@ practiceFreqData <- practiceFreqData %>%
          journal = str_replace_all(journal, "_", " "), # and removing underscores
          journal = str_trim(journal), # and removing whitespace from end of string
          exchange_duplicate = replace_na(exchange_duplicate, 'FALSE')) %>%  
+  filter(exchange_duplicate != 'B') %>% # remove any exchange duplicates. An exchange duplicate is when we have multiple parts of the same PPPR exchange represented in the data. Here we retain only one part of each of those exchanges.
   select(journal, article_id, everything()) # reorder columns
 
 # add ESI fields
