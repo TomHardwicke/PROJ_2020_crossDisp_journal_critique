@@ -11,4 +11,6 @@ analysis/rawToPrimaryData.R
 data/raw/
 analysis/preliminaryAnalysis.Rmd
 analysis/preliminaryAnalysis.html
-manuscript/
+manuscript/manuscript_files/
+manuscript/figs/
+manuscript/manuscript.gdoc

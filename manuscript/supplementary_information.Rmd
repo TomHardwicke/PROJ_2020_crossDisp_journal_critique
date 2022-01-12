@@ -1,0 +1,155 @@
+# Supplementary Information D: Harmonizing PPPR names {#si_d}
+
+Note how many names were homogenized and any that were more than just grammatical (e.g., correspondence, matters arising).
+
+Also discuss the 'other' types. Note that we encountered other examples of articles types called 'news and views' and 'perspectives' (or other variations on 'opinion piece') but we *did not* consider them to meet our operational definition of PPPR because they did not appear allow for critique of articles previously published by the journal. By contrast, the descriptions for the cases below explicitly mention that they can be used for this purpose.
+
+For each PPPR type offered by a journal, we recorded the verbatim name given to it by the journal. Many of these names were very similar but with slightly different naming conventions (e.g., "letters", "letter to the editor", etc.). To address this, I went through all of the verbatim names and reclassified them to a smaller subset of 'harmonized' names as follows:
+
+
+```{r}
+d_policy %>% filter(PPPR_name_harmonized == 'Other') %>%
+  count(PPPR_name, PPPR_description) %>% 
+  arrange(desc(n)) %>% 
+  kable()
+```
+
+# Supplementary Information E: Peer review
+
+Table \@ref(tab:tab-peer-review)
+
+```{r tab-peer-review}
+d_policy %>% 
+  filter(!is.na(PPPR_name)) %>% 
+  count(PPPR_name_harmonized, peerReviewed, .drop=F) %>%
+  group_by(PPPR_name_harmonized) %>%
+  mutate(
+    prop = n/sum(n), # add proportions
+    percent = round(prop*100,0),
+    report_stat = paste0(n, ' (', percent, '%)')) %>%
+  pivot_wider(id_cols = PPPR_name_harmonized, names_from = peerReviewed, values_from = report_stat) %>%
+  mutate(
+    PPPR_name_harmonized = factor(PPPR_name_harmonized, levels = c("Letters", "Commentaries", "Web comments", "Other"))) %>%
+  select(`PPPR type` = PPPR_name_harmonized, Yes = YES, `Editor discretion`, No = NO, `Not stated` = `NOT STATED`) %>%
+  arrange(`PPPR type`) %>%
+  kable(caption = 'Number of different PPPR types that are subject to external peer review. The denominator for percentages is the total number of each PPPR type.')
+```
+
+# Supplementary Information F. Journal characteristics
+
+```{r journal-characteristics-table}
+journalCharacteristics %>%
+  kable(caption = "Characteristics of journals in each of 22 scientific fields (n = 15) and in all fields combined (n = 330).")
+```
+
+# Supplementary Information G. How many journals offer PPPR? Tabular data.
+
+```{r}
+d_policy %>% 
+  filter(!is.na(PPPR_name)) %>% 
+  count(PPPR_category = PPPR_name_harmonized, field) %>%
+  bind_rows(
+    d_policy %>%
+      filter(PPPR_type == 'A') %>% # only need the first entry for each journal
+      count(field, anyPPPR) %>%
+      filter(anyPPPR == T) %>%
+      select(-anyPPPR) %>%
+      mutate(PPPR_category = 'Any PPPR')
+  ) %>%
+mutate(
+  PPPR_category = factor(PPPR_category,  levels = c("Other", "Web comments", "Commentaries", "Letters", "Any PPPR")),
+  field = str_to_title(field)) %>%
+           pivot_wider(id_cols = field, names_from = PPPR_category, values_from = n) %>%
+  mutate(across(Letters:`Any PPPR`, ~replace_na(.x, 0))) %>%
+  arrange(field) %>%
+  adorn_totals(where = 'row', name = 'All domains') %>%
+  select(field, `Any PPPR`, everything()) %>%
+  mutate(`Any PPPR` = ifelse(field == "All domains", paste0(`Any PPPR`,' (',round((`Any PPPR`/330)*100,0),'%)'), paste0(`Any PPPR`,' (',round((`Any PPPR`/15)*100,0),'%)'))) %>%
+  kable()
+```
+
+# Supplementary Information H. Journal-level data on PPPR offered
+
+```{r}
+# journal level data
+journal_level_limits <- d_policy %>% 
+  filter(!is.na(PPPR_name)) %>% 
+  mutate(wordLimits = fct_recode(wordLimits, "Not specified" = "NOT STATED", "Unlimited" = "NO"),
+         timeLimits = fct_recode(timeLimits, "Not specified" = "NOT STATED", "Unlimited" = "NO")) %>%
+  select(journal,PPPR_name_harmonized,wordLimits,timeLimits) %>%
+  pivot_wider(
+    id_cols = journal, 
+    names_from = PPPR_name_harmonized, 
+    values_from = c(wordLimits,timeLimits)) %>%
+  select(journal,
+         Let_len = wordLimits_Letters,
+         Let_tim = timeLimits_Letters,
+         Com_len = wordLimits_Commentaries,
+         Com_tim = timeLimits_Commentaries,
+         Web_len = `wordLimits_Web comments`,
+         Web_tim = `timeLimits_Web comments`,
+         Oth_len = wordLimits_Other,
+         Oth_tim = timeLimits_Other) 
+
+journal_level_limits %>% 
+  right_join(d_policy_journal %>% select(journal,field,jif), by = 'journal') %>% # add in the journals that do not offer pppr
+  arrange(field,desc(jif)) %>% # order by field and jif
+  select(-field, -jif) %>%
+  mutate(journal = str_to_title(journal),
+         across(Let_len:Oth_tim, as.character),
+         across(Let_len:Oth_tim, ~replace_na(.x, 'x'))) %>%
+  kable()
+
+
+
+  # pack_rows("Agricultural Sciences", 1,15) %>%
+  # pack_rows("Biology & Biochemistry", 16,30) %>%
+  # pack_rows("Chemistry", 31,45) %>%
+  # pack_rows("Clinical Medicine", 46,60) %>%
+  # pack_rows("Computer Science", 61,75) %>%
+  # pack_rows("Economics & Business", 76,90) %>%
+  # pack_rows("Engineering" , 91,105) %>%
+  # pack_rows("Environment & Ecology" , 106,120) %>%
+  # pack_rows("Geosciences", 121,135) %>%
+  # pack_rows("Immunology" , 136,150) %>%
+  # pack_rows("Materials Science", 151,165) %>%
+  # pack_rows("Mathematics" , 166,180) %>%
+  # pack_rows("Microbiology", 181,195) %>%
+  # pack_rows("Molecular Biology & Genetics", 196,220) %>%
+  # pack_rows("Multidisciplinary" , 211,225) %>%
+  # pack_rows("Neuroscience & Behavior", 226,240) %>%
+  # pack_rows("Pharmacology & Toxicology" , 241,255) %>%
+  # pack_rows("Physics", 256,270) %>%
+  # pack_rows("Plant & Animal Science", 271,285) %>%
+  # pack_rows("Psychiatry & Psychology" , 286,300) %>%
+  # pack_rows("Social Sciences" , 301,315) %>%
+  # pack_rows("Space Science" , 316,330)
+
+```
+
+# Supplementary Information J: How prevalent is PPPR in practice? Tabular data.
+
+```{r tab-practice-prev}
+field_prev_all_wide <- field_prev_all %>%
+  pivot_wider(id_cols = field, names_from = estimate_type, values_from = prevalence) %>%
+  mutate(field = recode(field, "ALL FIELDS" = "OVERALL"))
+
+field_prev %>% 
+  select(field, primary, secondary) %>%
+  arrange(desc(primary), desc(secondary)) %>%
+  mutate(field = str_to_title(field)) %>%
+  rename(domain = field) %>%
+  kable(caption = 'Primary and secondary prevalence estimates for the use of PPPR in practice across domains and in all domains combined. Domains are in descending order by primary estimate.')
+```
+
+```{r tab-practice-prev-primary-journals}
+d_freq %>% filter(linkedPPPR == T) %>% count(journal, ESI_field) %>% arrange (desc(n)) %>% mutate(journal = str_to_title(journal), ESI_field = str_to_title(ESI_field)) %>% rename(Journal = journal, 'Scientific domain' = ESI_field) %>% kable(caption = 'Number of articles linked to PPPR (n) by journal')
+```
+
+```{r tab-practice-prev-secondary-journals}
+d_freq_secondary %>% group_by(journal) %>%
+  filter(isPPPR == T) %>% count(journal, ESI_field) %>% arrange (desc(n)) %>% 
+  mutate(journal = str_to_title(journal), ESI_field = str_to_title(ESI_field)) %>% 
+  rename(Journal = journal, 'Scientific domain' = ESI_field) %>% 
+  kable(caption = 'Number of articles that were classified as PPPR (n) amongst the first ten eligible articles for each journal (six for Wildlife Monographs). Journals not shown had zero articles in our sample classified PPPR.')
+```

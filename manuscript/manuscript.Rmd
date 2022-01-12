@@ -1,0 +1,1186 @@
+---
+title             : "Avenues for critical discourse at influential scientific journals: A cross-disciplinary assessment of post-publication peer review policies and practice"
+shorttitle        : "Post-publication peer review"
+
+author:
+  - name: 'Tom E. Hardwicke'
+    affiliation: '1'
+    corresponding: yes
+    email: 'tom.hardwicke@uva.nl'
+    address: 'Department of Psychology, University of Amsterdam, Nieuwe Achtergracht 129-B, 1018 WT Amsterdam'
+  - name: 'Robert T. Thibault'
+    affiliation: '2,8'
+  - name: 'Jessica E. Kosie'
+    affiliation: '4'
+  - name: 'Loukia Tzavella'
+    affiliation: '7'
+  - name: 'Theiss Bendixen'
+    affiliation: '3'
+  - name: 'Vivian E. Köneke'
+    affiliation: '5'
+  - name: 'John P. A. Ioannidis'
+    affiliation: '6,9'
+
+affiliation:
+  - id: '1'
+    institution: 'Department of Psychology, University of Amsterdam'
+  - id: '2'
+    institution: 'Meta-Research Innovation Center at Stanford (METRICS), Stanford University'
+  - id: '3'
+    institution: 'Department of the Study of Religion, Aarhus University'
+  - id: '4'
+    institution: 'Department of Psychology, Princeton University'
+  - id: '5'
+    institution: 'Charité – Universitätsmedizin Berlin'
+  - id: '6'
+    institution: 'Meta-Research Innovation Center at Stanford (METRICS)'
+  - id: '7'
+    institution: 'School of Psychology, Cardiff University'
+  - id: '8'
+    institution: 'School of Psychological Science, Univeristy of Bristol'
+  - id: '9'
+    institution: 'Meta-Research Innovation Center Berlin (METRIC-B), QUEST Center for Transforming Biomedical Research, Berlin Institute of Health, Charité – Universitätsmedizin Berlin AND Departments of Medicine, Epidemiology and Population Health, Biomedical Data Science, and Statistics, Stanford University'
+
+authornote: ''
+  
+abstract: |
+  Critical scrutiny of published scientific research, often called post-publication peer review (PPPR), can highlight errors, limitations, or alternative interpretations that were not adequately addressed during traditional peer review. Currently, there is little empirical data documenting how academic journals handle this important aspect of scientific self-correction. We conducted a systematic and cross-disciplinary assessment of PPPR policies and practice amongst 330 influential journals operating across 22 scientific disciplines. 123 (37%) journals did not offer any options for submitting PPPR. 207 (63%) journals offered PPPR options such as letters, commentaries, or web comments, but often imposed limits on length (median 1000 words) and time-to-submit (median 12 weeks). The most restrictive limits were 175 words and 2 weeks. Amongst PPPR-offering journals, we found that 1.9% (95% CI [1.4, 2.6]) of a random sample of 2066 research articles published in 2018 were the subject of at least one PPPR. A detailed examination of 58 PPPRs found, for example, that the majority (76%) received an author reply. The majority of those replies (93%) asserted that the authors’ original claims were unchanged. Clinical Medicine stood out as the domain with the most active PPPR culture, with journals most frequently providing PPPR options and publishing the most PPPR, but also imposing the strictest length and time-to-submit limits. Overall, our findings suggest that influential academic journals often pose serious barriers to the cultivation, documentation, and dissemination of PPPR. We propose several policy changes that journals could adopt to promote a richer culture of post-publication critique.
+  
+keywords          : "peer review, post-publication peer review, letter to the editor, meta-research, journal policy, self-correction, scientific criticism"
+
+bibliography      : ["references.bib"]
+
+floatsintext      : yes
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : yes
+mask              : no
+draft             : no
+always_allow_html: true
+
+documentclass     : "apa6"
+classoption       : "man"
+output            : 
+  papaja::apa6_pdf:
+    includes:
+        after_body: "supplementary_information.tex"
+---
+
+```{r setup, include = FALSE}
+library(papaja) # article template
+library(kableExtra) # for tables
+library(knitr) # for literate programming
+library(tidyverse) # for data munging
+library(janitor) # for data munging
+library(tidylog) # for inline code feedback
+library(here) # for finding files
+library(validate) # for data validation and testing
+library(ggthemr) # for ggplot theme
+library(ggrepel) # for ggplot text labels
+library(scales) # to wrap text on axis labels
+library(ggdist) # for plotting distributions
+library(patchwork) # for multipanel plot layouts
+library(ggbeeswarm) # for dotplots
+```
+
+```{r load-functions}
+source(here('analysis','functions.R')) # load custom functions
+```
+
+```{r perform-preprocessing}
+# loads raw data, performs preprocessing, saves processed data files
+source(here('analysis','preprocessing.R'))
+```
+
+```{r load-processed-data}
+# loads the processed data files
+load(here('data','processed','dataPolicy.RData'))
+load(here('data','processed','dataPracticeFreq.RData'))
+load(here('data','processed','dataPracticeAssess.RData'))
+```
+
+```{r set-defaults}
+set.seed(42) # Seed for random number generation
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+options(knitr.table.format = "latex")
+ggthemr('fresh') # set ggplot theme
+```
+
+# Introduction
+Poor quality research frequently survives peer review and permeates through to the academic literature (Altman, 1994; Hardwicke, Serghiou, et al., 2020; Ioannidis, 2005; Nosek et al., 2021; Van Calster et al., 2021). This highlights the importance of facilitating ongoing critical scrutiny of published research. Post-publication critique can highlight errors, limitations, or alternative interpretations that were not adequately addressed during traditional peer review and help research consumers to make informed judgements about the utility and validity of published scientific claims (Altman, 2005; Bastian, 2014).
+
+Currently, critical discourse about research is fragmented across the scientific ecosystem, ranging from conversations between colleagues, social media exchanges (e.g., blogs, Twitter), and purpose-built online commenting platforms (e.g., PubPeer), to letters or commentaries published in academic journals. These modes of critical discourse have been collectively referred to as ‘post-publication peer review’ (PPPR; Altman, 2002; Bastian, 2014; Winker, 2015). In the present study, we were specifically interested in examining journal-based PPPR (for our operational definition, see Box 1).
+
+Journals may exert considerable control over the cultivation, documentation, and dissemination of PPPR; however, little empirical data is available to systematically evaluate how they handle this important aspect of scientific self-correction. Prior PPPR studies were narrow in scope, mainly limited to medical journals, and now outdated (Altman, 2002; Von Elm et al., 2009; Winker, 2013). The present study sought to provide a systematic, cross-disciplinary, and more contemporary assessment of journal PPPR policies (Study One) and practice (Study Two) amongst 330 highly influential journals operating across 22 scientific disciplines. Our goal is to provide a stratum of empirical evidence to inform debates about how scientific critique should be optimally handled in the scientific ecosystem.
+
+## Box 1. What is post-publication peer review (PPPR)?
+
+PPPR can refer to many forms of critical discourse about published research (Altman, 2002; Bastian, 2014; Winker, 2015). In this study, we focused only on PPPR handled by academic journals according to the following operational definition: 
+
+>> Any journal-based avenue for sharing peer-initiated critical discourse related to specific research articles previously published in the same journal.
+
+For scientific discourse to constitute PPPR under this definition, it had to meet the following specific criteria:
+
+(a) Journal-based. The mode of sharing critical discourse had to be directly or indirectly controlled by the journal. Online commenting systems developed by 3rd party services (e.g., Disqus), still counted as PPPR if the journal was responsible for operating them.
+
+(b) Shared. The critique had to be accessible to the journal’s readership, rather than, for example, handled privately within the editorial team. Critical discourse published behind a paywall still counted as PPPR as long as it was visible to the journal’s typical readership.
+
+(c) Peer-initiated. It had to be possible for independent researchers to make unsolicited submissions; commissioned articles and/or editorials did not count as PPPR.
+
+(d) Critical discourse. PPPR had to allow for critical content. Exclusively positive or neutral content (e.g., news or ‘spotlight’ articles) did not count as PPPR.
+
+(e) Related to specific research articles previously published in the journal. The target of PPPR had to be specific research already published in the same journal, rather than research published elsewhere, or articles about general scientific topics or general methodological issues. Systematic reviews and meta-analyses did not count as PPPR.
+
+# Study One
+
+## Methods
+
+### Design
+
+This was an observational study with a cross-sectional design. We recorded the name and description of any PPPR options offered by journals, limits imposed on PPPR in terms of length (e.g., number of words), time-to-submit (e.g., weeks since publication of the target article), or number of references, and whether PPPRs are sent for independent external peer-review[^1]. We also obtained 2017 Journal Impact Factors and identified whether journals were members of the Committee on Publication Ethics (COPE). For more detail about variables measured in Study One, see Supplementary Information B.
+
+[^1]: We operationally defined 'independent external peer review' as reviews solicited from individuals who were not (a) members of the editorial team or (b) authors of the original article.
+
+### Sample
+
+The sample consisted of 330 highly influential academic journals operating broadly across science. Specifically, we used Clarivate Journal Citation Reports (https://jcr.clarivate.com) to identify the 15 most highly ranked journals by 2017 Journal Impact Factor in each of 22 high-level scientific domains (defined by Clarivate Essential Science Indicators: https://perma.cc/MD4V-A5X5). We did not include journals that only published reviews. The sample size was chosen based on a precision analysis which is documented in our preregistered protocol (https://osf.io/hjvnw/).
+
+### Procedure
+
+1. Between November, 2019 and January, 2020, we identified and preserved the ‘article types’ section of the author submission guidelines on each journal’s website (Supplementary Information C).
+
+2. Between February and August 2020, data extraction for each journal was performed independently by two authors using a Google Form (https://osf.io/bkvnw/) and instruction sheet (https://osf.io/5fmhb/). Authors were randomly assigned to 110 journals each as either first coders (SAH, TB, LT) or second coders (RTT, JEK, TEH) using the ‘sample’ function in R.
+
+3. Coding was predominantly based on the preserved ‘article types’ documentation to ensure stability and reproducibility (live journal websites can be updated). It was only necessary to examine live journal websites to check for web-based commenting systems. When an ‘article types’ section was not found in step 1, each coder conducted an additional check of the live website and examined the most recently published issue of the journal to see if they could identify any examples of PPPR.
+
+4. Any coding differences were resolved through discussion between the assigned coders, with arbitration by an additional coder if necessary. If coding differences highlighted ambiguities in the extraction instructions, we discussed as a team, amended the instructions, and adjusted any relevant prior coding to ensure alignment.
+
+5. If an article type seemed like it might be PPPR, but the description was insufficient to judge, coders checked several published articles of this type to determine whether any met our operational definition of PPPR (Box 1).
+
+6. Because journals used various naming conventions for similar types of PPPR and various units to specify limits (e.g., characters, words, or pages for length limits), we harmonized PPPR names to three types (‘letters [to the editor]’, ‘commentaries’, and ‘web comments’) and transformed units to words (length limits) and weeks (time-to-submit limits). Letters and commentaries were types of articles submitted through the regular manuscript submission system, whereas web comments were submitted via an online interface on the target article webpage. For details, see Supplementary Information D.
+
+
+## Results
+
+### Journal characteristics
+
+```{r journal-characteristics}
+# d_policy has one row per PPPR. For some computations we are interested in the journal level data.
+
+# below we create a df with one row per journal
+d_policy_journal <- d_policy %>% 
+  group_by(journal) %>% # get the journal level data
+  filter(row_number()==1) %>% # we only need the first row for each journal %>%
+  ungroup()
+
+journalCharacteristics <- d_policy_journal %>% 
+  group_by(field) %>% 
+  summarise(Median_jif = round(median(jif),2),
+            Min_jif = round(min(jif),2),
+            Max_jif = round(max(jif),2),
+            COPE_Signatories = sum(cope)) %>%
+  ungroup() %>%
+  bind_rows( # add overall summary
+    d_policy_journal %>% 
+      summarise(Median_jif = round(median(jif),2),
+                Min_jif = round(min(jif),2),
+                Max_jif = round(max(jif),2),
+                COPE_Signatories = sum(cope)) %>%
+      mutate(field = 'ALL DOMAINS')
+  ) %>%
+  mutate(field = str_to_title(field)) %>%
+  rename("Scientific domain" = "field")
+  
+# for in text reporting
+allFieldChar <- journalCharacteristics %>% filter(`Scientific domain` == 'All Domains')
+```
+
+Across all 22 scientific fields (n = 330 journals), the median 2017 Journal Impact Factor was `r allFieldChar %>% pull(Median_jif)` (range `r allFieldChar %>% pull(Min_jif)` - `r allFieldChar %>% pull(Max_jif)`) and `r allFieldChar %>% mutate(COPE_report = paste0(COPE_Signatories, ' (', round((COPE_Signatories/330)*100,0),'%)')) %>% pull(COPE_report)` journals were signatories of COPE. Characteristics data for each scientific domain are available in Supplementary Table \@ref(tab:journal-characteristics-table).
+
+### How many journals offer PPPR?
+
+```{r}
+policySummary <- d_policy %>%
+  filter(PPPR_type == 'A') %>% # only need the first entry for each journal
+  group_by(field, anyPPPR) %>%
+  summarise(n = n()) %>%
+  mutate(N = sum(n)) %>%
+  filter(anyPPPR == T) %>%
+  adorn_totals(where = 'row', name = 'ALL DOMAINS', "n", "N") %>%
+  select(-anyPPPR) %>%
+  mutate(prop = n/N, # add proportions
+         percent = round(n/N*100,0), # add percentages
+         type = ifelse(field == "ALL DOMAINS", 'overall', 'field'), # define individual fields or overall
+         field = reorder(field, prop), # reorder fields by proportion
+         field = fct_relevel(field, 'ALL DOMAINS')) # ensure 'ALL FIELDS' is first field
+```
+
+```{r}
+# how many journals offered more than one form of PPPR
+
+# for journals with PPPR - how many types
+PPPRsPerJournal <- 
+  bind_rows(
+    d_policy %>%
+      filter(!is.na(PPPR_name)) %>% # remove rows that do not contain PPPR
+      count(journal),
+    # journals with no PPPR - indicate zero types
+    d_policy %>%
+      filter(anyPPPR == 'NO') %>%
+      count(journal) %>%
+      mutate(n = 0)
+    ) %>% count(n) 
+
+# overall frequency of journals offering PPPR, plus highest and lowest fields
+journalsOfferingAnyPPPR <- policySummary %>% filter(field == "ALL DOMAINS") %>% mutate(freqReport = paste0(n,' (',percent,'%)'))
+high_field_PPPR <- policySummary %>% filter(percent == max(percent)) %>% mutate(freqReport = paste0(n,' (',percent,'%)'))
+low_field_PPPR <- policySummary %>% filter(percent == min(percent)) %>% mutate(freqReport = paste0(n,' (',percent,'%)'))
+
+journalsOfferingNoPPPR <- paste0(journalsOfferingAnyPPPR$N - journalsOfferingAnyPPPR$n,' (',round(((journalsOfferingAnyPPPR$N-journalsOfferingAnyPPPR$n)/journalsOfferingAnyPPPR$N)*100,0),'%)')
+
+# how many PPPRs offerred per journal
+journalsOfferingOnePPPR <- PPPRsPerJournal %>% filter(n == 1) %>% pull(nn)
+journalsOfferingTwoPPPR <- PPPRsPerJournal %>% filter(n == 2) %>% pull(nn)
+journalsOfferingThreePPPR <- PPPRsPerJournal %>% filter(n == 3) %>% pull(nn)
+```
+
+```{r cope}
+pppr_cope <- d_policy_journal %>% 
+  count(anyPPPR, cope) %>%
+  mutate(percent = round(n/sum(n)*100,0),
+         report = paste0(n,' (',percent,'%)'))
+
+no_pppr_cope <- pppr_cope %>% 
+  filter(anyPPPR == F, cope == T) %>% 
+  pull(n)
+
+pppr_cope <- pppr_cope %>% 
+  filter(anyPPPR == T, cope == T) %>% 
+  pull(n)
+```
+
+Figure \@ref(fig:fig-policy-freq) shows the number of journals offering any form of PPPR, and different types of PPPR, across 22 scientific domains (for equivalent tabular data, see Supplementary Table F1). Of `r journalsOfferingAnyPPPR$n` journals that offered PPPR, `r pppr_cope` were members of COPE. Of `r journalsOfferingAnyPPPR$N - journalsOfferingAnyPPPR$n` journals that did not offer PPPR, `r no_pppr_cope` were members of COPE. 
+
+Journals offering PPPR were most common in `r str_to_title(high_field_PPPR$field)` (n = `r high_field_PPPR$n`, `r high_field_PPPR$percent`%) and least common in `r str_to_title(low_field_PPPR$field)` (n = `r low_field_PPPR$n`, `r low_field_PPPR$percent`%). Overall, `r journalsOfferingOnePPPR` journals offered one PPPR option, `r journalsOfferingTwoPPPR` journals offered two PPPR options, and `r journalsOfferingThreePPPR` journals offered three PPPR options, equating to a total of `r d_policy %>% filter(!is.na(PPPR_name)) %>% nrow()` individual PPPR options across journals.
+
+```{r}
+PPPR_names_summary <- d_policy %>% filter(!is.na(PPPR_name)) %>% count(PPPR_name_harmonized)
+
+letters_n <- PPPR_names_summary %>% filter(PPPR_name_harmonized == "Letters") %>% pull(n)
+
+commentaries_n <- PPPR_names_summary %>% filter(PPPR_name_harmonized == "Commentaries") %>% pull(n)
+
+web_comments_n <- PPPR_names_summary %>% filter(PPPR_name_harmonized == "Web comments") %>% pull(n)
+
+other_n <- PPPR_names_summary %>% filter(PPPR_name_harmonized == "Other") %>% pull(n)
+```
+After harmonizing PPPR names, there were `r letters_n` journals offering letters, `r commentaries_n` journals offering commentaries, and `r web_comments_n` journals offering web comments. `r other_n` journals offered other miscellaneous types of PPPR such as ‘Forum papers’ and ‘Update articles’. At least two journals (The British Journal of Psychiatry and The BMJ) offered a hybrid type of PPPR whereby selected web comments (known as ‘eLetters’ and ‘Rapid Responses’ respectively) were chosen by editors to be subsequently (re-)published in the journal print edition as letters. To avoid double counting this data, we classified them only as web comments. There were no cases where multiple PPPR types offered by the same journal were classified with the same harmonized label. A complete list of journals and the PPPR they offered is available in  Supplementary Table G1.
+
+```{r}
+# define colours
+purple <- "#C2A5CF"
+green <- "#ACD39E"
+
+PPPR_category_plotter <- function(d){
+   ggplot(d, aes(y = PPPR_category, x = n, label = ifelse(var_type == "Any PPPR",paste0(round((n/15)*100,0),'%'),''), colour = var_type)) +
+    geom_segment(aes(x=0, xend=n, y=PPPR_category, yend=PPPR_category)) +
+    geom_point(aes(size = var_type)) +
+    geom_text(color="black", size = 2.5) +
+    scale_colour_manual(values = c(purple, green), guide = 'none') +
+    scale_size_manual(values = c(8,2), guide = 'none') +
+    scale_x_continuous(limits = c(0,17), breaks = seq(0,15,5)) +
+    xlab(expression(paste('journals (',italic('n'),')'))) +
+    ggtitle(str_wrap(d$field, 18)) +
+    theme(
+      panel.grid.major.y = element_blank(),
+      axis.title.y = element_blank(),
+      axis.title.x = element_blank(),
+      plot.title = element_text(size = 7))
+}
+
+PPPR_category_plotter_allFields <- function(d){
+   ggplot(d, aes(y = PPPR_category, x = n, label = 
+     ifelse(var_type == "Any PPPR",paste0(round((n/330)*100,0),'%'),''), 
+     colour = var_type)) +
+    geom_segment(aes(x=0, xend=n, y=PPPR_category, yend=PPPR_category)) +
+    geom_point(aes(size = var_type)) +
+    geom_text(color="black", size = 2.5) +
+    scale_colour_manual(values = c(purple, green), guide = 'none') +
+    scale_size_manual(values = c(8,2), guide = 'none') +
+    scale_x_continuous(limits = c(0,225), breaks = seq(0,225,25)) +
+    ggtitle(d$field) +
+    theme(
+      panel.grid.major.y = element_blank(),
+      axis.title.y = element_blank(),
+      axis.title.x = element_blank(),
+      plot.title = element_text(size = 7))
+}
+
+thisData <- d_policy %>% 
+  filter(!is.na(PPPR_name)) %>% 
+  mutate(PPPR_category = factor(PPPR_name_harmonized)) %>%
+  count(PPPR_category, field, .drop = F) %>%
+  bind_rows(
+    d_policy %>%
+      filter(PPPR_type == 'A') %>% # only need the first entry for each journal
+      count(field, anyPPPR) %>%
+      filter(anyPPPR == T) %>%
+      select(-anyPPPR) %>%
+      mutate(PPPR_category = 'Any PPPR')
+  ) %>%
+  mutate(PPPR_category = factor(PPPR_category, levels = c("Other", "Web comments", "Commentaries", "Letters", "Any PPPR")),
+         var_type = ifelse(PPPR_category == "Any PPPR", "Any PPPR", "Other"),
+         field = factor(field, levels = rev(levels(policySummary$field)[2:23]))) # reorder levels by proportion offering any PPPR
+
+allfieldsPlot <- thisData %>% group_by(PPPR_category, var_type) %>% summarise(n = sum(n)) %>% mutate(field = 'ALL DOMAINS') %>% ungroup() %>% PPPR_category_plotter_allFields()
+
+all_field_plots <- thisData %>% group_split(field) %>%
+               map(~PPPR_category_plotter(.))
+
+layout <- '
+AAABC
+DEFGH
+IJKLM
+OPQRS
+TUVWX
+'
+#Plot
+megaPlot <- wrap_plots(
+  A = allfieldsPlot, 
+  B = all_field_plots[[1]],
+  C=all_field_plots[[2]],
+  D=all_field_plots[[3]], 
+  E=all_field_plots[[4]], 
+  F=all_field_plots[[5]], 
+  G=all_field_plots[[6]], 
+  H=all_field_plots[[7]], 
+  I=all_field_plots[[8]], 
+  J=all_field_plots[[9]],
+  K=all_field_plots[[10]],
+  L=all_field_plots[[11]],
+  M=all_field_plots[[12]],
+  O=all_field_plots[[13]],
+  P=all_field_plots[[14]],
+  Q=all_field_plots[[15]],
+  R=all_field_plots[[16]],
+  S=all_field_plots[[17]],
+  T=all_field_plots[[18]],
+  U=all_field_plots[[19]],
+  V=all_field_plots[[20]],
+  W=all_field_plots[[21]],
+  X=all_field_plots[[22]],
+  design = layout) & 
+  theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) # Remove axis labels from all
+
+# Replace axis labels in first column plots
+megaPlot[[1]] <- megaPlot[[1]] + theme(axis.text.y = element_text(), axis.ticks.y = element_line())
+megaPlot[[4]] <- megaPlot[[4]] + theme(axis.text.y = element_text(), axis.ticks.y = element_line())
+megaPlot[[9]] <- megaPlot[[9]] + theme(axis.text.y = element_text(), axis.ticks.y = element_line())
+megaPlot[[14]] <- megaPlot[[14]] + theme(axis.text.y = element_text(), axis.ticks.y = element_line())
+megaPlot[[19]] <- megaPlot[[19]] + theme(axis.text.y = element_text(), axis.ticks.y = element_line())
+megaPlot[[21]] <- megaPlot[[21]] + theme(axis.title.x = element_text()) # restore x axis title to bottom middle plot
+```
+
+```{r fig-policy-freq, fig.width = 7.5, fig.height = 10, fig.path = 'figs/', fig.cap = 'Number and percentage of journals offering any PPPR options (purple) and the number of specific PPPR options (green) available in all scientific domains (top-left panel) and in each scientific domain (other panels). Note that individual journals can offer multiple PPPR options.'}
+megaPlot
+```
+
+### What limits did journals place on PPPR?
+
+```{r}
+# prepare in text stats reports for limits
+
+generateLimitReport <- function(d){
+  d %>%
+    filter(!is.na(PPPR_name), limits %notin% c('Qualitative limit','NOT STATED', 'NO')) %>%
+  mutate(limits = as.numeric(limits)) %>%
+  summarise(
+    md = median(limits),
+    iqr = IQR(limits),
+    min = min(limits),
+    max = max(limits)
+  ) %>%
+  mutate(stat_report = paste0('median = ',md,', IQR = ',iqr,', min = ',min,', max = ',max)) %>% 
+    pull(stat_report)
+}
+
+length_limits_report <- d_policy %>%
+  mutate(limits = wordLimits) %>%
+  generateLimitReport()
+
+time_limits_report <- d_policy %>%
+  mutate(limits = timeLimits) %>%
+  generateLimitReport()
+
+ref_limits_report <- d_policy %>%
+  mutate(limits = referenceLimits) %>%
+  generateLimitReport()
+```
+
+Table 1 shows how often journal policies imposed limits on PPPR in terms of length, time-to-submit, or number of references. Limits were sometimes expressed quantitatively, but sometimes they were qualitative and more ambiguous, for example, stating that PPPR should be ‘concise’ or address ‘recently published’ articles. Often there was no information at all about a particular limit. Occasionally policies explicitly asserted that there was no limit. This happened `r d_policy %>% filter(wordLimits == 'NO') %>% nrow()` time for length limits, `r d_policy %>% filter(timeLimits == 'NO') %>% nrow()` times for time-to-submit limits, and `r d_policy %>% filter(referenceLimits == 'NO') %>% nrow()` times for reference limits. The full distribution of quantitative length limits and time-to-submit limits is displayed in Figure 2 and limits imposed by individual journals are available in Supplementary Table G1. Table 1 also shows whether PPPR was subject to independent external peer review (for details see Supplementary Table H1).
+
+```{r}
+numericColour <- '#A0CAD8' # 'mistyrose2' # set colour for numeric limits
+nonnumericColour <- 'grey85' # set colour for other data
+
+# define function to make limit category plot (lollipop plot for all data)
+limitCategoriesPlot <- function(d, thisTitle){
+    d %>% 
+      mutate(
+        limits = case_when(
+          limits %notin% c('Qualitative limit','NOT STATED', 'NO') ~ 'Quant', # classify all numeric length limits under same category
+          limits == 'Qualitative limit' ~ 'Qual',
+          limits == 'NOT STATED' ~ 'Not stated',
+          limits == 'NO' ~ 'None',
+          TRUE ~ NA_character_
+          ),
+        limits = factor(limits, levels = c('Quant', 'Qual', 'None', 'Not stated')),
+        type = ifelse(limits == 'Quant', 'Quant', 'Other') # this is used to have a different colour for numeric limit data
+        ) %>% 
+    count(limits, type) %>%
+    ggplot(aes(x = limits, y = n, label = n, fill = type)) +
+    geom_col(colour = 'grey10') +
+    geom_text(aes(y = n + 18), color="black", size = 3) +
+    ylab(expression(paste('PPPRs (',italic('n'),')'))) +
+    scale_y_continuous(expand = c(0, 0), limits = c(0,200), breaks = seq(0,200,100)) +
+    scale_fill_manual(values = c(nonnumericColour,numericColour), guide = 'none') +
+    theme(axis.title.y = element_text(size = 10),
+          axis.title.x = element_blank(),
+          axis.line = element_line(colour = 'grey10'),
+          axis.ticks = element_line(colour = 'grey10'),
+          panel.grid = element_blank(),
+          plot.title = element_text(size = 11))
+}
+
+# define function to make limit numeric plot (histogram + box plot)
+limitNumericPlot <- function(d, thisBinWidth, thisBoxWidth){
+  d %>% 
+    filter(limits %notin% c('Qualitative limit','NOT STATED', 'NO')) %>%
+    mutate(limits = as.numeric(limits)) %>%
+    ggplot(aes(x = limits)) +
+    geom_histogram(
+      #aes(fill = PPPR_name_harmonized), 
+      position = position_stack(reverse = TRUE),
+      alpha = .65,
+      binwidth = thisBinWidth,
+      colour = 'grey10') +
+    geom_boxplot(
+      aes(y = -thisBoxWidth),
+      fill = NA,
+      width = thisBoxWidth,
+      outlier.shape = NA,
+      alpha = 1,
+      colour = 'grey10') +
+    expand_limits(x = 0) +
+    ylab('PPPRs (n)') +
+    theme(
+      axis.line = element_blank(),
+      axis.ticks = element_line(colour = 'grey10'),
+      panel.grid.major.y = element_blank())
+}
+```
+
+```{r}
+# word limit categories plot
+p1 <- d_policy %>% 
+  filter(!is.na(PPPR_name)) %>%
+  rename(limits = wordLimits) %>%
+  limitCategoriesPlot('Length limits') +
+  ggtitle('A1: Any length limits?')
+
+# word limit numeric plot
+p2 <- d_policy %>% 
+  filter(!is.na(PPPR_name)) %>%
+  rename(limits = wordLimits) %>%
+  limitNumericPlot(thisBinWidth = 100, thisBoxWidth = 4.5) + 
+  xlab('length limits (words)') +
+  scale_x_continuous(expand = c(0, 0), breaks = seq(0,10000,1000)) + 
+  scale_y_continuous(expand = c(0, 0), limits = c(-8,35), breaks = seq(0,30,10)) +
+  geom_segment(aes(x = 0, y = 0, xend = 0, yend = 30), size = 0.5, colour = 'grey10') +
+  theme(legend.position = c(0.90, 0.85),
+        legend.title = element_blank()) +
+  ggtitle('A2: Quantiative length limits')
+
+# time limit categories plot
+p3 <- d_policy %>% 
+  filter(!is.na(PPPR_name)) %>%
+  rename(limits = timeLimits) %>%
+  limitCategoriesPlot('Time limits') +
+  ggtitle('B1: Any time-to-submit limits?')
+
+# time limit numeric plot
+wkToMth <- 4.35 # ratio to convert week units to month units
+p4 <- d_policy %>% 
+  filter(!is.na(PPPR_name)) %>%
+  rename(limits = timeLimits) %>%
+  limitNumericPlot(thisBinWidth = 2, thisBoxWidth = 2) + 
+  xlab('time-to-submit limits (months)') +
+  scale_x_continuous(expand = c(0, 0), breaks = c(0,3*wkToMth,6*wkToMth,9*wkToMth,12*wkToMth,15*wkToMth,18*wkToMth,21*wkToMth,24*wkToMth), labels = c('0','3','6','9','12','15','18','21','24')) +
+  scale_y_continuous(expand = c(0, 0), limits = c(-4,15), breaks = seq(0,15,5)) +
+  geom_segment(aes(x = 0, y = 0, xend = 0, yend = 15), size = 0.5, colour = 'grey10') +
+  theme(legend.position = 'none') +
+  ggtitle('B2: Quantiative time-to-submit limits')
+  
+# combine the plots with inset plots
+
+row_one <- p2 + inset_element(p1, 0.6, 0.6, 1, 1, align_to = 'full')
+
+row_two <- p4 + inset_element(p3, 0.6, 0.6, 1, 1, align_to = 'full')
+```
+
+```{r fig-policy-limits, fig.width = 7.5, fig.height = 7.5, fig.path = 'figs/', fig.cap = 'Limits imposed by journals on PPPR in terms of (A) length and (B) time-to-submit PPPR since publication of the target article. A1 and B1 show the number of PPPR options for which the journal did not state if there was a limit (“Not stated”), explicitly stated there was not a limit (“None”), stated a qualitative limit (“Qual”), or stated a quantitative limit (“Quant”). Quantitative limits are displayed in A2 and B2 as a histogram and boxplot with the dark line representing the median, lower and upper hinges representing the 25th and 75th percentiles, and upper and lower whiskers representing the ± 1.5 interquartile range.'}
+(wrap_elements(row_one) / wrap_elements(row_two) ) & theme(plot.margin = margin(0, 0, 0, 0, "cm")) 
+#p2 / p4
+```
+
+```{r}
+# calculate number of different pppr types
+pppr_types <- d_policy %>% 
+  filter(!is.na(PPPR_name)) %>% 
+  count(PPPR_name_harmonized) %>%
+  adorn_totals(name = "All types")
+  
+# calculate frequency of limits
+pppr_types_freq <- d_policy %>% 
+  filter(!is.na(PPPR_name)) %>% 
+  mutate(hasLengthLimit = ifelse(wordLimits %in% c('NOT STATED', 'NO'), F, T),
+         hasTimeLimit = ifelse(timeLimits %in% c('NOT STATED', 'NO'), F, T),
+         hasRefLimit = ifelse(referenceLimits %in% c('NOT STATED', 'NO'), F, T),
+         hasPeerReview = ifelse(peerReviewed %in% c('NOT STATED', 'NO'), F, T),
+         hasLengthLimit_quant = ifelse(wordLimits %in% c('NOT STATED', 'NO', 'Qualitative limit'), F, T),
+         hasTimeLimit_quant = ifelse(timeLimits %in% c('NOT STATED', 'NO', 'Qualitative limit'), F, T),
+         hasRefLimit_quant = ifelse(referenceLimits %in% c('NOT STATED', 'NO', 'Qualitative limit'), F, T)) %>%
+  group_by(PPPR_name_harmonized) %>%
+  summarise(
+    across(c(hasLengthLimit, hasLengthLimit_quant, hasTimeLimit, hasTimeLimit_quant, hasRefLimit, hasRefLimit_quant, hasPeerReview), sum)) %>% 
+  adorn_totals(name = "All types")
+
+# calculate medians for numeric limits
+pppr_types_numeric_limits <- d_policy %>%
+  filter(!is.na(PPPR_name)) %>%
+  mutate(
+    wordLimits = ifelse(
+      wordLimits %in% c('Qualitative limit','NOT STATED', 'NO'), NA, wordLimits),
+    timeLimits = ifelse(
+      timeLimits %in% c('Qualitative limit','NOT STATED', 'NO'), NA, timeLimits),
+    referenceLimits = ifelse(
+      referenceLimits %in% c('Qualitative limit','NOT STATED', 'NO'), NA, referenceLimits),
+    ) %>%
+  mutate(
+    wordLimits = as.numeric(wordLimits),
+    timeLimits = as.numeric(timeLimits),
+    referenceLimits = as.numeric(referenceLimits)) 
+  
+pppr_types_numeric_limits <- pppr_types_numeric_limits %>%
+  group_by(PPPR_name_harmonized) %>% # summarise by pppr type
+  summarise(
+    across(c(wordLimits, timeLimits, referenceLimits), 
+           list(median = median,
+               IQR = IQR), 
+           na.rm = T)) %>%
+  bind_rows( # attached overall summary
+    pppr_types_numeric_limits %>%
+      summarise(
+    across(c(wordLimits, timeLimits, referenceLimits), 
+           list(median = median,
+               IQR = IQR), 
+           na.rm = T)) %>%
+      mutate(PPPR_name_harmonized = "All types")
+  )
+
+pppr_types_tab <- pppr_types %>%
+  left_join(pppr_types_freq, by = 'PPPR_name_harmonized') %>%
+  left_join(pppr_types_numeric_limits, by = 'PPPR_name_harmonized') %>%
+  mutate(
+    length_n_percent = paste0(hasLengthLimit,' (',round(hasLengthLimit/n*100,0),'%)'),
+    length_quant_n_percent = paste0(hasLengthLimit_quant,' (',round(hasLengthLimit_quant/n*100,0),'%)'),
+    length_md_iqr = paste0(wordLimits_median,' (',wordLimits_IQR,')'),
+    time_n_percent = paste0(hasTimeLimit,' (',round(hasTimeLimit/n*100,0),'%)'),
+    time_quant_n_percent = paste0(hasTimeLimit_quant,' (',round(hasTimeLimit_quant/n*100,0),'%)'),
+    time_md_iqr = paste0(round(timeLimits_median,0),' (',round(timeLimits_IQR,0),')'),
+    ref_n_percent = paste0(hasRefLimit,' (',round(hasRefLimit/n*100,0),'%)'),
+    ref_quant_n_percent = paste0(hasRefLimit_quant,' (',round(hasRefLimit_quant/n*100,0),'%)'),
+    ref_md_iqr = paste0(referenceLimits_median,' (',referenceLimits_IQR,')'),
+    review_n_percent = paste0(hasPeerReview,' (',round(hasPeerReview/n*100,0),'%)')
+  ) %>%
+  select(`PPPR type` = PPPR_name_harmonized,
+         n,
+         length_n_percent,
+         length_quant_n_percent,
+         length_md_iqr,
+         time_n_percent,
+         time_quant_n_percent,
+         time_md_iqr,
+         ref_n_percent,
+         ref_quant_n_percent,
+         ref_md_iqr,
+         review_n_percent)
+```
+
+```{r pppr-limits-table}
+pppr_types_tab %>% kable(col.names = c("PPPR","n","n (%)","n (%)","Md (IQR)","n (%)","n (%)","Md (IQR)","n (%)","n (%)","Md (IQR)","n (%)"), caption = 'PPPR types and their length, time-to-submit, or reference limits. The table shows the number (n) and percentage  of PPPR types that are subject to any (qualitative or quantitative) limit, quantitative limits specifically, and the median (Md) and interquartile range (IQR) for quantitative limits. The table also shows whether the author submission guidelines state that the PPPR types are sent for independent external peer review either routinely or at the editor’s discretion (for details see Supplementary Information H).', booktabs = T) %>% kable_styling(latex_options="scale_down") %>% add_header_above(c(" " = 2, "Length" = 3, "Time-to-submit" = 3, "References" = 3, "Peer review" = 1))
+```
+
+Because some journals offered more than one type of PPPR, Figure \@ref(fig:fig-policy-limits)  does not give a complete picture of journal-level limits on PPPR. For example, an individual journal may compensate for a restrictive form of PPPR by also offering a less restrictive form of PPPR. This is difficult to assess systematically across the whole sample because of interactions between different limit types and the ambiguity of qualitative limits. However, in Table 2 we provided a focused examination of the 20 journals that offered the most restrictive PPPR options in terms of quantitative length and time-to-submit limits. To build this table, we created two separate lists of PPPR ranked by quantitative length limits and time limits respectively. We then identified the top ten journals in each ranked list. To handle duplicates within- or between- lists, we retained the higher ranked instance and replaced the lower ranked instance until we had 20 unique journals overall (Table 2). 
+
+```{r most-restrictive}
+# identify most restrictive PPPRs in terms of length limits
+restrict_length <- d_policy %>% 
+   filter(
+     journal %notin% c("LANCET", "ANNALS OF INTERNAL MEDICINE", "EMERGING INFECTIOUS DISEASES", "JAMA Internal Medicine", "JAMA Neurology", "JAMA Oncology", "JAMA Psychiatry", "JAMA-JOURNAL OF THE AMERICAN MEDICAL ASSOCIATION"), # remove journals that appear in other limit list at higher rank
+    !is.na(PPPR_name), # remove rows with no PPPR
+    wordLimits %notin% c('Qualitative limit','NOT STATED', 'NO')) %>%# select only PPPR specifying quantitative length limits
+  mutate(wordLimits = as.numeric(wordLimits)) %>% 
+  arrange(wordLimits) %>% # rank entries by length limits
+  select(journal, field, PPPR_name_harmonized, wordLimits) %>% 
+  distinct(journal) %>% # remove any lower ranked duplicate instances
+  slice(1:10) %>% # select the top ten entries
+  pull(journal)
+  
+# identify most restrictive PPPRs in terms of time limits
+restrict_time <- d_policy %>% 
+   filter(
+     journal %notin% c("NEW ENGLAND JOURNAL OF MEDICINE", "Lancet HIV"), # remove journals that appear in other limit list at higher rank
+     !is.na(PPPR_name), # remove rows with no PPPR
+     timeLimits %notin% c('Qualitative limit','NOT STATED', 'NO')) %>% # select only PPPR specifying quantitative time limits
+  mutate(timeLimits = as.numeric(timeLimits)) %>% 
+  arrange(timeLimits) %>%# rank entries by time limits
+  select(journal, field, PPPR_name_harmonized, timeLimits) %>% 
+  distinct(journal) %>% # remove any lower ranked duplicate instances
+  slice(1:10) %>% # select the top ten entries
+  pull(journal)
+
+# combine to make list of twenty journals offering most restrictive pppr options
+restrict_all <- c(restrict_length, restrict_time)
+stopifnot(any(is_unique(restrict_all))) # stop if there are any duplicated journal names
+```
+
+```{r most-restrictive-table}
+d_policy %>% filter(!is.na(PPPR_name), journal %in% restrict_all) %>% 
+  select(journal, PPPR_name_harmonized, wordLimits, timeLimits) %>% 
+  mutate(
+    journal = str_to_title(journal),
+    across(c(wordLimits,timeLimits), ~recode(., "NOT STATED" = "Not specified", "Qualitative limit" = "Qual limit"))) %>%
+  kable(col.names = c('journal', 'PPPR', 'word limits', 'time limits'), caption = "Twenty journals that offered the most restrictive PPPR options. Journals were selected based on having the most restrictive quantitative length and time-to-submit limits for at least one of their PPPR options. Some of these journals also offered additional less restrictive PPPR options, which we have included and marked with asterisks. When PPPR were subject to qualitative limits, the verbatim policy text is shown. Journals are presented in alphabetical order. Journal of the American Medical Association (JAMA) journals are clustered because they had identical PPPR policies.", booktabs = T, longtable = T) %>% kable_styling(latex_options=c("hold_position", "scaledown")) %>% column_spec(1, width = "15em")
+```
+
+From Table 2, we can see that more restrictive PPPR options are sometimes accompanied by less restrictive PPPR options. Eleven of the 20 journals only offered one PPPR option. Nine of the 20 journals offered web comments in addition to letters and, in general, web comment policies appeared to be less restrictive than letters. However, this was often unclear because exact quantitative limits were not specified and most differences were marginal. For example, in the JAMA family of journals, letters must be less than 400 words and submitted within 4 weeks of target article publication. By contrast, web comments are marginally less restrictive in terms of length (600 words), and ambiguous about their time-to-submit limits (“We may reject comments because they...are submitted a long time after article publication”). One journal - Science - offered commentaries (called ‘Technical Comments’) in addition to letters and web comments. In this case, letters and commentaries shared a time-to-submit limit of 3 months, and commentaries had a somewhat less restrictive length limit than letters (1000 vs. 300 words). By contrast, no time-to-submit limit was specified for web comments and an ambiguous length limit was implied (web comments should be ‘brief’).
+
+# Study Two
+
+## Methods
+
+### Design
+This was an observational study with a cross-sectional design. The goal of Study Two was to examine PPPR in practice at the 207 journals that offered PPPR according to Study One. We used two measures of PPPR prevalence. Our primary (preregistered) estimate of PPPR prevalence was based on how many of 10 randomly sampled articles per journal were linked to PPPR. As one journal - Wildlife Monographs only published 6 articles in 2018, the total number of assessed articles was 2066. An article was considered linked to PPPR if the article webpage mentioned the existence of relevant PPPR. 
+
+After Study One, but before beginning Study Two, we decided to also compute a secondary (not preregistered) PPPR prevalence estimate based on how many of randomly sampled articles were themselves examples of PPPR. To align the two estimates, we only used the first 10 eligible articles for each journal, and therefore the total number of assessed articles was 2066 as above. These two prevalence measures have complementary strengths and limitations. For the primary prevalence estimate PPPR was identified through searches of article web pages for linked PPPR. Its accuracy therefore depends on journals actively and visibly linking to PPPR on their webpages. However, it is not dependent on PPPR being indexed in Web of Science databases. By contrast, for the secondary prevalence estimate PPPR was identified by checking if sampled articles were themselves examples of PPPR. Thus, it does not rely on journals linking to relevant PPPR, but it does rely on PPPR being indexed in Web of Science databases, because that is how the sampled articles were identified.
+
+We also examined several variables related to how PPPR was conducted in practice. This assessment was only performed on PPPRs we identified via the primary prevalence measure. For each PPPR, we categorised the type of issues that were addressed (design, implementation, analysis, reporting, interpretation, or other), length (in words), whether new data were collected, whether novel analyses were performed, time since publication of the target article (in days), open access status of target article and PPPR, whether PPPR included a conflict of interest statement and whether it declared any conflicts of interest, whether PPPR authors were anonymous, whether the PPPR triggered a correction to the target article, whether target article authors replied, and if they replied, whether they collected new data or performed novel analyses, and whether they stated that their core claims remained unchanged after reading the PPPR. For more detail about variables measured in Study Two, see Supplementary Table I.
+
+### Sample
+The sample consisted of 10 randomly sampled eligible articles published in 2018 for each of the 207 journals that offered PPPR in principle (according to the results of Study One), aside from one journal, Wildlife Monographs, which only published 6 articles in 2018. Thus, the sample size was 2066 articles.
+
+To obtain this sample, one author (TEH) downloaded bibliographic records from Clarivate Web of Science for all articles published in each PPPR-offering journal in 2018. We did not include records with meta-data indicating that the article was a ‘Correction’, ‘Retraction’, ‘News Item’, ‘Book Review’, ‘Meeting Abstract’, or ‘Biographical-Item’. The remaining records were randomly shuffled using the ‘sample’ function in R. During manual inspection, additional articles were excluded if they (1) could not be found or accessed; (2) were non-English language; (3) had been retracted; or (4) did not include substantive research: specifically, we excluded news, book reviews, editorials, previews, or similar, and included empirical research, case studies, simulations, proofs, theoretical papers, reviews, meta-analyses, and perspectives (if they were predominantly evidence-based rather than opinion-based). If articles were themselves examples of PPPR, they were also excluded for the purposes of our primary PPPR prevalence measure, but included for the purposes of our secondary PPPR prevalence measure.
+
+### Procedure
+1. Between May 2021 and September, 2021, each coder (SAH, TB, RTT, JEK, LT, or TEH) self-assigned journals sequentially from a randomly shuffled list until they had coded an approximately equal amount. For each journal, the assigned coder worked sequentially through a list of randomly shuffled articles published by that journal in 2018. If a coder did not have access to a journal, it was skipped and assigned to the next available coder.
+
+2. For each article, coders ascertained whether it (1) needed to be excluded; (2) was itself an example of PPPR; or (3) was linked to PPPR. When we encountered multiple PPPRs that were part of the same back-and-forth exchange between target article authors and PPPR authors, these were counted as a single instance of PPPR. Coders followed an instruction sheet (https://osf.io/aejx4/), which reminded them of the exclusion criteria and operational definition of PPPR (Box 1), and entered data directly into a Google Sheet. Coders were encouraged to discuss any ambiguous cases with TEH and all positive PPPR classifications were independently verified by TEH.
+
+3. When journals relied on third-party services (e.g., Elsevier’s ScienceDirect) to distribute their articles we only used these websites if the journal did not also distribute their articles through their own dedicated website (as we noticed that links to PPPR were sometimes displayed on journal websites and not on third-party websites).
+
+4. Coders worked sequentially through each journal’s articles until they had examined ten that were eligible (i.e., they were not excluded or classified as themselves being PPPR).
+
+5. For the assessment of PPPR features, one author (TEH) extracted information (see Supplementary Table I) from all linked PPPRs identified by the primary estimate method.
+
+### Data analysis
+
+For prevalence estimates, 95% Wilson Confidence intervals computed by the R function ‘prop.test’ are reported in square brackets.
+
+## Results
+
+### How prevalent is PPPR in practice?
+
+```{r}
+d_freq_checked <- d_freq %>% nrow()
+d_freq_excluded <- d_freq %>% filter(exclusion == T) %>% nrow()
+d_freq_notResearch <- d_freq %>% filter(exclusion_explanation == "not research") %>% nrow()
+d_freq_noAccess <- d_freq %>% filter(exclusion_explanation %in% c("Article not found", "no access")) %>% nrow()
+d_freq_isPPPR <- d_freq %>% filter(isPPPR == T) %>% nrow()
+
+d_freq_primary <- d_freq %>% filter(exclusion == F, isPPPR == F) # remove excluded articles and articles that were themselves PPPR
+d_freq_secondary <- d_freq %>% filter(exclusion == F) %>% # remove excluded articles
+  mutate(isPPPR = factor(isPPPR), journal = factor(journal)) %>% 
+  group_by(journal) %>%
+  slice_head(n = 10) %>% # select the first 10 entries for each journal
+  ungroup()
+
+# primary prevalence estimate
+linkedPPPR_n <- d_freq_primary %>% filter(linkedPPPR == T) %>% nrow()
+prev_est_primary <- percentCI(linkedPPPR_n, nrow(d_freq_primary))
+
+# secondary prevalence estimate
+
+# as a sensitivity analysis we calculate the number of articles classified as themselves PPPRs amongst the first 10 evaluated articles in each journal (6 at Wildlife Monographs).
+
+isPPPR_n <- d_freq_secondary %>% filter(isPPPR == T) %>% nrow()
+prev_est_secondary <- percentCI(isPPPR_n, nrow(d_freq_secondary))
+```
+In total, we considered `r d_freq_checked` articles for inclusion before we reached our target of 2066 eligible research articles. `r d_freq_excluded` articles were excluded because they did not contain research (n = `r d_freq_notResearch`) or could not be found/accessed (n = `r d_freq_noAccess`). An additional `r d_freq_isPPPR` articles were classified as being themselves examples of PPPR. In total, `r linkedPPPR_n` of the 2066 research articles were linked to at least one PPPR. Our primary PPPR prevalence estimate was therefore `r prev_est_primary`. These articles were published in `r d_freq %>% filter(linkedPPPR == T) %>% count(journal) %>% nrow()` individual journals (Supplementary Table \@ref(tab:tab-practice-prev-primary-journals)).
+
+We also computed a secondary PPPR prevalence estimate based on the proportion of articles that were themselves PPPR amongst the first 10 eligible articles assessed at each journal (first 6 articles in the case of Wildlife Monographs). `r isPPPR_n` out of 2066 articles were classified as PPPR, yielding a secondary PPPR prevalence estimate of `r prev_est_secondary`. These articles were published in `r d_freq %>% group_by(journal) %>% slice_head(n = 10) %>% filter(isPPPR == T) %>% count(journal) %>% nrow()` individual journals (Supplementary Table \@ref(tab:tab-practice-prev-secondary-journals)). 
+
+```{r}
+field_prev_primary <- d_freq_primary %>%
+  count(ESI_field, PPPR = factor(linkedPPPR), .drop = F) %>%
+  group_by(ESI_field) %>%
+  mutate(prop = n/sum(n)) %>%
+  filter(PPPR == T) %>%
+  select(-PPPR, field = ESI_field, n, prop) %>%
+  bind_rows(
+    tibble(
+      field = "ALL FIELDS",
+      n = linkedPPPR_n,
+      prop = linkedPPPR_n/nrow(d_freq_primary)
+    )
+  ) %>%
+  mutate(percent = round(prop*100,0), field = factor(field)) %>%
+  arrange(desc(n)) %>% select(field, prevalence = percent)
+```
+
+```{r}
+field_prev_secondary <- d_freq_secondary %>%
+  count(ESI_field, PPPR = factor(isPPPR), .drop = F) %>%
+  group_by(ESI_field) %>%
+  mutate(prop = n/sum(n)) %>%
+  filter(PPPR == T) %>%
+  select(-PPPR, field = ESI_field, n, prop) %>%
+  bind_rows(
+    tibble(
+      field = "ALL FIELDS",
+      n = isPPPR_n,
+      prop = isPPPR_n/nrow(d_freq_secondary)
+    )
+  ) %>%
+  mutate(percent = round(prop*100,0), field = factor(field)) %>%
+  arrange(desc(n)) %>% select(field, prevalence = percent)
+```
+
+```{r}
+field_prev <- left_join(field_prev_primary %>% rename(primary = 'prevalence'), 
+          field_prev_secondary %>% rename(secondary = 'prevalence'), 
+          by = 'field') %>% 
+  mutate(
+    field = recode(field, "Multidisciplinary" = "MULTIDISCIPLINARY", "PSYCHIATRY_PSYCHOLOGY" = "PSYCHIATRY & PSYCHOLOGY", "ENVIRONMENT_ECOLOGY" = "ENVIRONMENT & ECOLOGY"),
+    field_abbr = case_when( # create abbreviated field labels to use in figures
+      field == "AGRICULTURAL SCIENCES" ~ "AGRI",
+      field == "BIOLOGY & BIOCHEMISTRY" ~ "BIO",       
+      field == "CHEMISTRY" ~ "CHEM" ,                   
+      field == "CLINICAL MEDICINE" ~ "MED",           
+      field == "COMPUTER SCIENCE" ~ "COMSCI",             
+      field == "ECONOMICS & BUSINESS" ~ "ECON",         
+      field == "ENGINEERING" ~ "ENGIN",                  
+      field == "ENVIRONMENT & ECOLOGY" ~ "ECO",         
+      field == "GEOSCIENCES" ~ "GEO",                  
+      field == "IMMUNOLOGY" ~ "IMMUN",                   
+      field == "MATERIALS SCIENCE" ~ "MATSCI",            
+      field == "MATHEMATICS" ~ "MATH",                
+      field == "MICROBIOLOGY" ~ "MICBIO",                 
+      field == "MOLECULAR BIOLOGY & GENETICS" ~ "MOLBIO", 
+      field == "MULTIDISCIPLINARY" ~ "MULTI",            
+      field == "NEUROSCIENCE & BEHAVIOR" ~ "NEURO",     
+      field == "PHARMACOLOGY & TOXICOLOGY" ~ "PHARM",    
+      field == "PHYSICS" ~ "PHYS",                     
+      field == "PLANT & ANIMAL SCIENCE" ~ "PLANT",       
+      field == "PSYCHIATRY & PSYCHOLOGY" ~ "PSY",       
+      field == "SOCIAL SCIENCES" ~ "SOCSCI",     
+      field == "SPACE SCIENCE" ~ "SPACE"          
+  )) %>% mutate(field_with_abbr = paste0(field,' (', field_abbr,')')) %>%
+  filter(field != "ALL FIELDS")
+
+
+field_prev_all <- left_join(field_prev_primary %>% rename(primary = 'prevalence'), 
+          field_prev_secondary %>% rename(secondary = 'prevalence'), 
+          by = 'field') %>%
+  filter(field == "ALL FIELDS") %>%
+  pivot_longer(cols = c(primary, secondary), names_to = 'estimate_type', values_to = 'prevalence') %>%
+  mutate(
+    ci_lwr = ifelse(estimate_type == 'primary', 
+                    round(prop.test(linkedPPPR_n,nrow(d_freq_primary))$conf.int*100, 0)[1],
+                    round(prop.test(isPPPR_n,nrow(d_freq_secondary))$conf.int*100, 0)[1]),
+    ci_upr = ifelse(estimate_type == 'primary', 
+                    round(prop.test(linkedPPPR_n,nrow(d_freq_primary))$conf.int*100, 0)[2],
+                    round(prop.test(isPPPR_n,nrow(d_freq_secondary))$conf.int*100, 0)[2]),
+    field_abbr = 'OVERALL',
+    field_with_abbr = 'OVERALL'
+  )
+```
+
+```{r fig-practice-prev, fig.width = 7.5, fig.height = 10, fig.path = 'figs/', fig.cap = 'Primary and secondary prevalence estimates for the use of PPPR in practice across domains and overall. On-graph text labels are not shown for domains with zero prevalence. Error bars represent 95% confidence intervals.'}
+field_prev %>%
+  pivot_longer(cols = c(primary, secondary), names_to = 'estimate_type', values_to = 'prevalence') %>%
+  mutate(estimate_type = factor(estimate_type, levels = c('primary','secondary'))) %>%
+  ggplot(aes(x = estimate_type, y = prevalence, colour = str_wrap(field_with_abbr,30))) +
+  geom_beeswarm(size = 3, alpha = .5, side = 1L) +
+  geom_errorbar(data = field_prev_all, aes(ymin=ci_lwr, ymax=ci_upr), width = .05, colour = 'black', position = position_nudge(x = 0.07)) +
+  geom_point(data = field_prev_all, size = 5, shape = 23, aes(fill = 'OVERALL'), colour = 'black', position = position_nudge(x = 0.07)) +
+  scale_fill_manual(values = 'white') +
+  scale_x_discrete(expand=expansion(mult = 0, add = c(0.5,0.3))) +
+  geom_text_repel(
+    aes(label = ifelse(prevalence > 0,as.character(field_abbr),''),
+        segment.square = T,
+        segment.inflect = T), #
+    #point.padding = 0.2,
+    size = 4, # size of labels
+    alpha = .75,
+    force_pull   = 0, # do not pull toward data points
+    nudge_y      = 0,
+    nudge_x = -0.4,
+    direction    = "y",
+    angle        = 0,
+    hjust        = 0,
+    ylim = c(0,Inf),
+    segment.size = 0.5,# size of connector lines
+    segment.curvature = -1e-20,
+    max.iter = 1e4, max.time = 1,
+    max.overlaps = Inf, # ensure all labels are shown even if overlapping
+    show.legend = FALSE # do not add legend entry
+  ) +
+  theme(legend.position = 'bottom') +
+  ylab('prevalence (%)') +
+  xlab('prevalence estimate type') +
+  guides(fill = guide_legend(nrow = 1, order = 1, title.position = 'top', title = "Scientific domains")) +
+  guides(colour = guide_legend(nrow = 11, order = 2,  title.position = 'top', title = ''))
+```
+
+```{r}
+primary_zero <- field_prev %>% filter(primary == 0) %>% nrow()
+secondary_zero <- field_prev %>% filter(secondary == 0) %>% nrow()
+
+primary_max <- field_prev %>% ungroup() %>% top_n(n = 1, wt = primary)
+secondary_max <- field_prev %>% ungroup() %>% top_n(n = 1, wt = secondary)
+
+# PPPPR estimates when clinical medicine is excluded
+d_freq_noMed <- d_freq_primary %>% filter(ESI_field != "CLINICAL MEDICINE")
+linkedPPPR_n_noMed <- d_freq_noMed %>% filter(linkedPPPR == T) %>% nrow()
+prev_est_noMed_primary <- percentCI(linkedPPPR_n_noMed, nrow(d_freq_noMed))
+```
+PPPR prevalence estimates varied substantially across scientific domains (Figure \@ref(fig:fig-practice-prev); for equivalent tabular data see Supplementary Table \@ref(tab:tab-practice-prev)). The number of domains which had zero instances of PPPR was `r primary_zero` according to our primary prevalence estimate and `r secondary_zero` according to our secondary prevalence estimate. The domain with the most PPPR was Clinical Medicine with `r primary_max$primary`% of research articles being linked to PPPR and `r secondary_max$secondary`% of assessed articles being themselves instances of PPPR.
+
+### Features of PPPR in practice
+
+```{r}
+# how many PPPRs per article
+d_assess_articles <- d_assess %>% 
+  count(article_id, name = 'ppprs') %>% # show n ppprs for each article
+  count(ppprs) # summarise ppprs per article
+
+d_assess_types <- d_assess %>% 
+  count(pppr_type)
+```
+
+We conducted a closer examination of the PPPR linked to the `r linkedPPPR_n` articles identified above for our primary prevalence estimate. These `r linkedPPPR_n` articles were each linked to either one PPPR (*n* = `r d_assess_articles %>% filter(ppprs==1) %>% pull(n)`), two PPPRs (*n* = `r d_assess_articles %>% filter(ppprs==2) %>% pull(n)`), three PPPRs (*n* = `r d_assess_articles %>% filter(ppprs==3) %>% pull(n)`), or four PPPRs (*n* = `r d_assess_articles %>% filter(ppprs==4) %>% pull(n)`); a total of `r d_assess %>% count(article_id) %>% pull(n) %>% sum()` PPPRs. Various features of these PPPRs are shown in Table 3 and features of target article author responses to these PPPRs are shown in Table 4.
+
+```{r pppr-practice-box}
+
+# how many types
+d_assess_type <- d_assess %>% 
+  count(var = pppr_type) %>% 
+  arrange(desc(n))
+
+# how many journals
+d_assess_journals <- d_assess %>% 
+  count(var = journal) %>% 
+  mutate(var = str_to_title(var)) %>%
+  arrange(desc(n))
+
+## how many journals just one pppr?
+journo_one_pppr <- d_assess_journals %>% filter(n == 1) %>% nrow()
+
+d_assess_journals <- d_assess_journals %>%
+  filter( n > 1) %>% # only show journals with at least one pppr option
+  bind_rows(data.frame(var = paste0(journo_one_pppr, " other journals"), n = 1)) # make last row a combined entry for the journals with only one pppr
+
+# how many domains
+d_assess_fields <- d_assess %>% 
+  count(var = ESI_field) %>% 
+  mutate(var = str_to_title(var)) %>%
+  arrange(desc(n))
+
+# open access
+d_assess_open_access <- d_assess %>% 
+  count(open_access_org, open_access_pppr) %>%
+  mutate(var = case_when(
+    open_access_org == T & open_access_pppr == T ~ "Target public, PPPR public",
+    open_access_org == F & open_access_pppr == T ~ "Target paywalled, PPPR public",
+    open_access_org == T & open_access_pppr == F ~ "Target public, PPPR paywalled",
+    open_access_org == F & open_access_pppr == F ~ "Target paywalled, PPPR paywalled",
+    T ~ "ERROR"
+  )) %>%
+  select(var, n) %>%
+  arrange(desc(n))
+
+# anonymity
+d_assess_anon <- d_assess %>%
+  count(var = anonymous_pppr) %>%
+  mutate(var = ifelse(var == T, "Anonymous", "Not anonymous")) %>%
+  arrange(desc(n))
+
+# conflict of interest
+d_assess_coi <- d_assess %>% 
+  count(coi_state_pppr, coi_actual_pppr) %>%
+  mutate(var = case_when(
+    coi_state_pppr == T & coi_actual_pppr == T ~ "Statement declares COI",
+    coi_state_pppr == T & coi_actual_pppr == F ~ "Statement declares no COI",
+    coi_state_pppr == F ~ "No COI statement",
+    T ~ "ERROR"
+  )) %>%
+  select(var, n) %>%
+  arrange(desc(n))
+
+# what issues were raised in the ppprs?
+d_assess_issues <- d_assess %>% 
+  select(starts_with('issue'), -c(issue_other, issues_detail)) %>% 
+  summarise(across(everything(),sum)) %>%
+  mutate('issue_ethics' = 1) %>% # this was the one 'other' issue identified, see d_assess$issue_other
+  pivot_longer(cols = everything(), names_to = "var", values_to = "n") %>%
+  mutate(var = str_remove(var,"issue_"),
+         var = str_to_sentence(var),
+         var = fct_recode(var, "Ethics (other)" = "Ethics"))
+
+# how many original articles shared data
+d_assess_data_shared <- d_assess %>% 
+  count(var = data_shared_org) %>% # group at article level first
+  mutate(var = str_to_sentence(var),
+         var = fct_recode(var, 
+                          "Statement says data are available" = "True", 
+                          "Statement says data are available upon request" = "States available upon request",
+                          "No data availability statement" = "False",
+                          "Data sharing not applicable" = "Not applicable")) %>%
+  arrange(desc(n))
+
+# analyses included in pppr
+d_assess_pppr_analyses <- d_assess %>% 
+  count(analysis_original_data, analysis_new_data) %>%
+  mutate(var = case_when(
+    analysis_original_data == T & analysis_new_data == T ~ "Novel analyses of original and new data",
+    analysis_original_data == F & analysis_new_data == F ~ "No analyses or data",
+    analysis_original_data == T & analysis_new_data == F ~ "Novel analyses of original data",
+    analysis_original_data == F & analysis_new_data == T ~ "Novel analyses of new data",
+    T ~ "ERROR"
+  )) %>%
+  select(var, n) %>%
+  arrange(desc(n))
+
+# how many words in pppr
+d_assess_words <- d_assess %>% 
+  group_by(pppr_type) %>%
+  summarise(
+    md = median(words_pppr),
+    min = min(words_pppr),
+    max = max(words_pppr),
+    iqr = IQR(words_pppr)
+  ) %>% bind_rows(
+    d_assess %>%
+      summarise(
+        pppr_type = "All types",
+        md = median(words_pppr),
+        min = min(words_pppr),
+        max = max(words_pppr),
+        iqr = IQR(words_pppr)
+      )
+    ) %>%
+  mutate(across(md:iqr, round, 0)) # round all values to 0 decimal places
+
+# time to publish
+d_assess_pub_time <- d_assess %>% 
+  group_by(pppr_type) %>%
+  summarise(
+    md = median(timeTillPub),
+    min = min(timeTillPub),
+    max = max(timeTillPub),
+    iqr = IQR(timeTillPub)
+  ) %>% bind_rows(
+    d_assess %>%
+      summarise(
+        pppr_type = "All types",
+        md = median(timeTillPub),
+        min = min(timeTillPub),
+        max = max(timeTillPub),
+        iqr = IQR(timeTillPub)
+      )
+  ) %>%
+  mutate(across(md:iqr, round, 0)) # round all values to 0 decimal places
+```
+
+```{r pppr-features-tables}
+bind_rows(
+  d_assess_type,
+  d_assess_journals,
+  d_assess_fields,
+  d_assess_open_access,
+  d_assess_anon,
+  d_assess_coi,
+  d_assess_issues,
+  d_assess_data_shared,
+  d_assess_pppr_analyses
+) %>% kable(caption = "Table 3A: Features of 58 assessed PPPRs.", booktabs = T, longtable = T) %>% kable_styling(latex_options=c("hold_position", "scaledown")) %>% column_spec(1, width = "25em") %>% pack_rows("PPPR type", 1, 3) %>% pack_rows("Journals", 4, 13) %>% pack_rows("Domains", 14, 20) %>% pack_rows("Open access to target article and PPPR", 21, 24) %>% pack_rows("PPPR author anonymity", 25, 26) %>% pack_rows("PPPR conflict of interest (COI)", 27, 29) %>% pack_rows("Type of issues raised in PPPR", 30, 35) %>% pack_rows("Data availability in target article", 36, 39) %>% pack_rows("Analyses/data included in PPPR", 40, 43)
+```
+
+```{r}
+d_assess_words %>% kable(caption = "In manuscript - part of Table 3. Features of 58 assessed PPPRs. Length of PPPR (words).", booktabs = T)
+d_assess_pub_time %>% kable(caption = "In manuscript - part of Table 3. Features of 58 assessed PPPRs. Time of PPPR publication relative to target article publication (days)", booktabs = T)
+```
+
+```{r}
+## AUTHOR RESPONSE TO PPPPR
+
+bind_rows(
+  # corrections
+  d_assess %>%
+    count(correction) %>%
+    rename(var = correction),
+  
+  # original author replies
+  d_assess %>%
+    count(reply_exists) %>%
+    rename(var = reply_exists),
+
+  # original author replies include new data collection
+  d_assess %>%
+    count(reply_new_data) %>%
+    rename(var = reply_new_data) %>%
+    filter(!is.na(var)),
+  
+  # original author replies include new analysis
+  d_assess %>%
+    count(reply_new_analysis) %>%
+    rename(var = reply_new_analysis) %>%
+    filter(!is.na(var)),
+  
+   # original author replies original claim unchanged
+  d_assess %>%
+    count(reply_claim_unchanged) %>%
+    rename(var = reply_claim_unchanged) %>%
+    filter(!is.na(var))
+) %>%
+  mutate(var = recode(factor(var), "TRUE" = "Yes", "FALSE" = "No")) %>%
+  kable(caption = 'Features of target article author response to 58 assessed PPPRs.', booktabs = T) %>%
+  pack_rows("Did the PPPR prompt publication of a correction?", 1, 2) %>%
+  pack_rows("Did the PPPR prompt publication of an author reply?", 3, 4) %>%
+  pack_rows("Did the authors’ reply involve collection of new data?", 5, 6) %>%
+  pack_rows("Did the authors’ reply involve new analyses?", 7, 8) %>%
+  pack_rows("Did the authors’ reply assert that their core claims remain unchanged?", 9, 10)
+```
+
+# Discussion
+In 330 influential journals operating across 22 scientific domains we found substantial variation in how PPPR was handled in both policy and practice. A considerable number of journals (37%) did not offer any PPPR options at all, and many imposed restricted length and time-to-submit limits, representing a serious obstacle to the cultivation, documentation, and dissemination of post-publication critique. 
+
+There was substantial variation across scientific domains with Clinical Medicine standing out as the domain that offered the most PPPR options, had the most restrictive PPPR options, and published the most PPPR (for concordant evidence, see Altman, 2002; Von Elm et al., 2009; Winker, 2013). Other health-related domains seemed to have a more active PPPR culture than non-health related domains like the physical and social sciences. Many domains, such as mathematics, showed little evidence of any PPPR activity, with few journals offering PPPR and scarce evidence of published PPPR. Our data do not speak to the causal forces that underlie these inter-domain differences, but some potential contributing factors could be cultural (e.g., different attitudes towards scientific criticism and how it should be handled), pragmatic (e.g., differences in methodological standards and research quality, manifesting in differential need for scientific criticism), bureaucratic (e.g., different resources available to support PPPR), or historic (e.g., individuals or events that highlighted the value of PPPR). 
+
+PPPR could usually be mapped to one of three main types (letters, commentaries, and web comments), of which letters were most common in policy and practice. Generally, letters were most restrictive, followed by commentaries, then web comments. Typically, letters had to be shorter, submitted more quickly, and contain fewer references relative to commentaries. Usually, web comments had no stated limits, except for a quarter that had length limits. Policies implied that commentaries were more likely to be sent for independent external peer review, with letters more likely to be handled exclusively by the editorial team. Web comments were typically subject to ‘light’ editorial moderation or no review at all. Some journals may offer less restrictive web comments to compensate for other more restrictive PPPR options they offer (Table 2). 
+
+The extent to which journal limits on PPPR are reasonable or unreasonable is a somewhat subjective determination and there are likely to be competing interests between what is best for journals and what is best for the advancement of science. Restrictions on PPPR may arise from editorial bias against criticism of papers they have published. Editors may also prefer to facilitate only what they perceive as the most timely and concise debate. However, length restrictions arbitrarily limit the scope of PPPR, particularly if the criticism involves extended analyses or additional data. One can certainly say very little of substance in 175, 200, or 250 words (the most restrictive length limits). Restricting the number of references to 3, 4, or 5 (the most restrictive reference limits) may prevent links to relevant evidential, contextual, or methodological information, undermining an aspect of scholarship that is surely as important to PPPR as it is to regular articles. Finally, imposing time-to-submit limits on PPPR is clearly not justifiable from a scientific perspective because important critiques may arise at any time. Limiting the time allowed to submit PPPR to 2, 3, or 4 weeks (the most restrictive time-to-submit limits) seems especially unjustifiable and poses a serious obstacle to the publication of scientific critique. An earlier study describing strict length and time-to-submit limits imposed on PPPR at six leading medical journals led the author to trenchantly conclude that "In effect, there is a statute of limitations by which authors of articles in these journals are immune to disclosure of methodological weaknesses once some arbitrary (short) period has elapsed, which cannot be right." (Altman, 2002; also see Altman, 2005).
+
+Our exploration of how PPPR is used in practice suggested that letters are far more common than other types of PPPR, perhaps because they are the most frequently available PPPR option and also because, as formal articles, they may impart greater academic credit to their authors than informal web comments (Table 3). We found that half of PPPRs were behind a paywall, sometimes even when the target article was publicly accessible. This reduces access to PPPR for both professional scientists and other readers, like patients, journalists, and policy-makers (Winker, 2015). Most PPPR had conflict of interest statements and half of those statements declared a potential conflict. Conflict of interest statements enable readers to evaluate risk of bias and seem just as important to PPPR as they are to other academic articles (Dunn et al., 2016). 
+
+The PPPRs we examined addressed a range of issues spanning the timeline of a research project, including design, implementation, analysis, reporting, and interpretation. The vast majority of PPPRs did not include new analysis of original or new data. This may be because the vast majority of original articles did not share data, as is typical in many scientific domains (Hardwicke et al., 2021; Hardwicke, Wallach, et al., 2020; Serghiou et al., 2021). Most of the PPPR was short (~250 words) and published within five months of the target article, perhaps partly because they were published in some journals that imposed the strictest limits on PPPR (Table 2). 
+
+In the majority of cases, target article authors replied to PPPR, particularly if the PPPR was a letter or commentary rather than a web comment. Author replies rarely included new data or analyses. We found that only 2 PPPRs prompted publication of a correction and in all but three cases, the target article authors asserted that their core claims remained unchanged despite the arguments presented in the PPPR. It was beyond the scope of our study to examine whether author replies were appropriate and justified, but prior research has suggested that they are often inadequate (Gotzsche et al., 2010). In all, target article authors seemed almost entirely immune to PPPR criticisms, with rare exceptions.
+
+Our two studies have some important limitations. Firstly, we believe our operational definition of PPPR (Box 1) captures the most explicit journal-based avenues for scientific criticism, but it will inevitably miss indirect or less formal critique as is, for example, embedded in research or review articles with a broader focus, or as occurs outside of journals (e.g., on social media or external commenting platforms, such as PubPeer). We also did not include errata, corrections, corrigendums, retractions, or similar, in our definition, though such notifications can be prompted by peer scrutiny (e.g., Beheim et al., 2021; Whitehouse et al., 2021). Adopting a precise definition was necessary to ensure clarity and tractability. Secondly, for Study One we relied on information as stated on journal websites as of November, 2019, and for Study Two we relied on a random sample of articles published in 2018. Our assessment therefore cannot account for incomplete policy statements, more recent policy updates, or unpublished information, such as numbers of PPPRs rejected, modified, or delayed. Because of a lack of consistency and clarity in the presentation of PPPR policies, we were unable to reliably extract information on other potentially interesting features of PPPR, such as whether PPPR involves a fee to submit or publish, or whether PPPR is routinely indexed in academic databases. Thirdly, we focused on a sample of highly influential journals only and it is unclear to what extent our findings may extend to other journals. For example, it may be that more recently established journals are more progressive than traditional journals and more open to critical scrutiny of their publications. Articles published in less influential journals may also receive less attention overall, and thus receive even less PPPR.
+
+Many of our findings imply that the extant culture of journal-based post-publication critique is suboptimal, though more detailed scrutiny of PPPR dynamics at specific journals will enhance this diagnosis. It is interesting to note that, of the 123 journals that did not offer PPPR options, 83 were members of COPE, an organisation whose guidelines state that "Journals must allow debate post publication either on their site, through letters to the editor, or on an external moderated site, such as PubPeer" (Committee on Publication Ethics, 2019). Further research is needed to explore the extent to which the current state of PPPR is a result of principled decisions or practical obstacles. It is tempting to look outside of the journal system for solutions to facilitate PPPR (Bastian, 2014); however, attempts to establish dedicated PPPR platforms have met with limited success — one major platform, PubMed Commons, was shut down in 2018 due to low usage (NCBI Insights, 2018). In Box 2, we have suggested some policy changes for journals to consider that may facilitate PPPR.
+
+The cultivation, documentation, and dissemination of post-publication critique is an important part of a healthy and self-correcting research literature. Our study reveals considerable variation in how PPPR is handled by journals operating across scientific domains. Clinical medicine had a much more active PPPR culture than other domains; but it's journals also imposed the strictest limits. Overall, PPPR appears to be tightly controlled and restricted by influential academic journals. At many journals, it was not possible to publish PPPR at all, and journals that did offer PPPR options often imposed strict length and time-to-submit restrictions. The PPPR we did identify appeared to have negligible impact on target article authors. These data provide a stratum of empirical evidence upon which to base debates about how scientific critique should be optimally handled. We encourage stakeholders across the academic ecosystem to explore ways to foster a richer culture of post-publication critique.
+
+## Box 2. Policy changes that journals could adopt to facilitate PPPR.
+
+1. Offer at least one PPPR option.
+2. Clearly identify and describe PPPR options in instructions to authors.
+3. Clearly state whether PPPR will be independently peer reviewed. Recognise that the authors of the target article may provide useful feedback, but cannot be considered neutral.
+4. Facilitate expedient handling of PPPR submissions to ensure timely dissemination of relevant critique to research consumers.
+5. Foster a culture of critique. Actively encourage and highlight PPPR to the journal’s readership, for example, via editorials.
+6. Enhance access to and discoverability of PPPR: (a) Tag PPPR with appropriate meta-data so they can be indexed in third-party databases, websites and referencing software; (b) display prominent links to PPPR alongside target articles; (c) make PPPR open access.
+7. Remove strict length, time-to-submit, and reference limits. Judge PPPR on a case-by-case basis and promote concise writing via editorial feedback.
+8. Ensure transparent reporting of research articles (e.g., sharing of data, analysis code, and materials, and adherence to reporting guidelines) to enable informed critique and debate.
+9. Adopt a two-tier PPPR system. Tier One involves rapid publication of lightly moderated contributions on the journal’s website (i.e., web comments). Tier Two curates the most informative Tier One contributions and converts them to formal articles (letters) that become a permanent part of the scientific record and provide appropriate academic credit to their authors. For an example two-tier system, see BMJ Rapid Responses (Delamothe & Smith, 2002).
+10. Improve transparency and accountability by hiring an independent editor responsible for handling PPPR (Schriger & Altman, 2010). Publish all editorial decisions related to PPPR, including the number of PPPR submitted, rejected, and published.
+
+# Open practices statement
+The study protocol (rationale, methods, and analysis plan) was pre-registered on February 14th, 2020 (https://osf.io/hjvnw/). All departures from this protocol are explicitly acknowledged in Supplementary Information A. All data exclusions and measures conducted during this study are reported in this manuscript. All data, materials, and analysis scripts are publicly available on the Open Science Framework (https://osf.io/8b6jy/). To facilitate reproducibility this manuscript was written by interleaving regular prose and analysis code using knitr (Xie, 2017) and papaja (Aust & Barth, 2020), and is available in a Code Ocean container (https://doi.org/10.24433/CO.1811964.v1) which re-creates the software environment in which the original analyses were performed.
+
+# Funding statement
+The authors received no specific funding for this work and no funder had any role in the research. Tom E. Hardwicke receives funding from the European Union’s Horizon 2020 research and innovation programme under the Marie Sklodowska-Curie grant agreement No. 841188. Robert T. Thibault is supported by a general support grant awarded to METRICS from the Laura and John Arnold Foundation and a postdoctoral fellowship from the Fonds de recherche du Quebec - Sante. Theiss Bendixen thanks the Aarhus University Research Foundation for support. Jessica E. Kosie received funding from an NSF SBE Postdoctoral Research Fellowship #2004983 and an NIH F32 National Research Service Award #HD103439. Loukia Tzavella was supported by ESRC postdoctoral fellowship ES/V011030/1. The Meta-Research Innovation Center at Stanford (METRICS) is supported by a grant from the Laura and John Arnold Foundation. The Meta-Research Innovation Center Berlin (METRIC-B) is supported by a grant from the Einstein Foundation and Stiftung Charite.
+
+# Conflict of interest statement
+All authors declare no conflicts of interest.
+
+# Author contributions
+Conceptualization: T.E.H. and J.P.A.I. Data curation: T.E.H. Formal analysis: T.E.H. Investigation: T.E.H., R.T.T., T.B., J.E.K., L.T., and V.E.K. Methodology: T.E.H., R.T.T., T.B., and J.P.A.I. Project administration: T.E.H. Resources: T.E.H. Software: T.E.H. Supervision: T.E.H. and J.P.A.I. Validation: T.E.H. Visualization: T.E.H. Writing - original draft: T.E.H. Writing - review & editing: T.E.H., R.T.T., T.B., L.T., and J.P.A.I.
+
+
+\newpage
+
+# References
+Altman, D. G. (1994). The scandal of poor medical research. BMJ, 308(6924), 283–284. https://doi.org/10.1136/bmj.308.6924.283
+
+Altman, D. G. (2002). Poor-quality medical research: What can journals do? JAMA, 287(21), 2765–2767. https://doi.org/10.1001/jama.287.21.2765
+
+Altman, D. G. (2005). Unjustified restrictions on letters to the editor. PLoS Medicine, 2(5), e126. https://doi.org/10.1371/journal.pmed.0020126
+
+Aust, F., & Barth, M. (2020). Papaja: Create apa manuscripts with rmarkdown. https://github.com/crsh/papaja
+
+Bastian, H. (2014). A stronger post-publication culture is needed for better science. PLOS Medicine, 11(12), e1001772. https://doi.org/10.1371/journal.pmed.1001772
+
+Beheim, B., Atkinson, Q. D., Bulbulia, J., Gervais, W., Gray, R. D., Henrich, J., Lang, M., Monroe, M. W., Muthukrishna, M., Norenzayan, A., Purzycki, B. G., Shariff, A., Slingerland, E., Spicer, R., & Willard, A. K. (2021). Treatment of missing data determined conclusions regarding moralizing gods. Nature, 595(7866), E29–E34. https://doi.org/10.1038/s41586-021-03655-4
+
+Committee on Publication Ethics. (2019). Core Practices. COPE: Committee on Publication Ethics.
+https://web.archive.org/web/20191122170830/https://publicationethics.org/core-practices
+
+Delamothe, T., & Smith, R. (2002). Twenty thousand conversations: Rapid responses suggest new models of knowledge creation. BMJ, 324(7347), 1171–1172. https://doi.org/10.1136/bmj.324.7347.1171
+
+Dunn, A. G., Coiera, E., Mandl, K. D., & Bourgeois, F. T. (2016). Conflict of interest disclosure in biomedical research: A review of current practices, biases, and the role of public registries in improving transparency. Research Integrity and Peer Review, 1, 1. https://doi.org/10.1186/s41073-016-0006-7
+
+Gotzsche, P. C., Delamothe, T., Godlee, F., & Lundh, A. (2010). Adequacy of authors’ replies to criticism raised in electronic letters to the editor: Cohort study. BMJ, 341(aug10 2), c3926–c3926. https://doi.org/10.1136/bmj.c3926
+
+Hardwicke, T. E., Serghiou, S., Janiaud, P., Danchev, V., Crüwell, S., Goodman, S. N., & Ioannidis, J. P. A. (2020). Calibrating the scientific ecosystem through meta-research. Annual Review of Statistics and Its Application, 7(1), 11–37. https://doi.org/10.1146/annurev-statistics-031219-041104
+
+Hardwicke, T. E., Thibault, R. T., Kosie, J., Wallach, J. D., Kidwell, M. C., & Ioannidis, J. (2021). Estimating the prevalence of transparency and reproducibility-related research practices in psychology (2014-2017). Perspectives on Psychological Science. https://doi.org/10.1177/1745691620979806
+
+Hardwicke, T. E., Wallach, J. D., Kidwell, M. C., Bendixen, T., Crüwell, S., & Ioannidis, J. P. A. (2020). An empirical assessment of transparency and reproducibility-related research practices in the social sciences (2014–2017). Royal Society Open Science, 7(2), 190806. https://doi.org/10.1098/rsos.190806
+
+Ioannidis, J. P. A. (2005). Why most published research findings are false. PLOS Medicine, 2(8), e124. https://doi.org/10.1371/journal.pmed.0020124
+
+NCBI Insights: PubMed Commons to be Discontinued. (2018, February 1). NCBI Insights. https://ncbiinsights.ncbi.nlm.nih.gov/2018/02/01/pubmed-commons-to-be-discontinued/
+
+Nosek, B. A., Hardwicke, T. E., Moshontz, H., Allard, A., Corker, K. S., Almenberg, A. D., Fidler, F., Hilgard, J., Struhl, M. K., Nuijten, M. B., Rohrer, J. M., Romero, F., Scheel, A. M., Scherer, L., Schönbrodt, F., & Vazire, S. (2021). Replicability, Robustness, and Reproducibility in Psychological Science. PsyArXiv. https://doi.org/10.31234/osf.io/ksfvq
+
+Schriger, D. L., & Altman, D. G. (2010). Inadequate post-publication review of medical research. BMJ, 341. https://doi.org/10.1136/bmj.c3803
+
+Serghiou, S., Contopoulos-Ioannidis, D. G., Boyack, K. W., Riedel, N., Wallach, J. D., & Ioannidis, J. P. A. (2021). Assessment of transparency indicators across the biomedical literature: How open is open? PLOS Biology, 19(3), e3001107. https://doi.org/10.1371/journal.pbio.3001107
+
+Van Calster, B., Wynants, L., Riley, R. D., van Smeden, M., & Collins, G. S. (2021). Methodology over metrics: Current scientific standards are a disservice to patients and society. Journal of Clinical Epidemiology. https://doi.org/10.1016/j.jclinepi.2021.05.018
+
+Von Elm, E., Wandel, S., & Jüni, P. (2009). The role of correspondence sections in post-publication peer review: A bibliometric study of general and internal medicine journals. Scientometrics, 81(3), 747. https://doi.org/10.1007/s11192-009-2236-0
+
+Whitehouse, H., François, P., Savage, P. E., Currie, T. E., Feeney, K. C., Cioni, E., Purcell, R., Ross, R. M., Larson, J., Baines, J., ter Haar, B., Covey, A., & Turchin, P. (2021). Retraction Note: Complex societies precede moralizing gods throughout world history. Nature, 595(7866), 320–320. https://doi.org/10.1038/s41586-021-03656-3
+
+Winker, M. A. (2013). Letters and Comments Published in Response to Research: Whither Postpublication Peer Review? Peer Review Congress. Peer Review Congress, Chicago. https://web.archive.org/web/20211023052251/https://peerreviewcongress.org/2013-abstracts/
+
+Winker, M. A. (2015). The promise of post-publication peer review: How do we get there from here? Learned Publishing, 28(2), 143–145. https://doi.org/10.1087/20150209
+Xie, Y. (2017). Dynamic documents with R and knitr. CRC Press.
+
+
+```{=tex}
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+```
+
+```{r render_appendix, include=FALSE}
+render_appendix("supplementary_information.Rmd")
+```
+
+\endgroup
