@@ -1,0 +1,20 @@
+*Data codebook*
+
+Project title: Avenues for critical discourse at influential scientific journals: A cross-disciplinary assessment of post-publication peer review policies and practice
+
+This codebook documents the dataset dataJournal.csv
+
+Description: This dataset contains information about journals included in the sample. 
+
+Source: 2017 Journal Impact Factors were obtained via Clarivate Journal Citation Reports (https://jcr.clarivate.com). Journal domain classifications were defined by Clarivate Essential Science Indicators (https://perma.cc/MD4V-A5X5). Journal COPE membership status was established by manually searching the members list (https://publicationethics.org/members). Links to journal webpages were identified via Google search.
+
+Explanation of columns: 
+
+Rank: The journal's rank, based on 2017 Journal Impact Factor
+Full Journal Title: Journal name.	
+Journal Impact Factor: Journal Impact Factor	 
+ESI_field: The scientific domain assigned to the journal by Essential Science Indicators
+COPE (T = member; F = not a member): Whether the journal is a member of COPE (T) or not (F)	
+journalHomepage: The homepage of the journal's website
+originalLink_articleTypes: A link to the 'article' types section of the journal webpage. F = 'FALSE' i.e., an article types page could not be identified
+permaLink_articleTypes: Link(s) to the preserved version of the journal webpage(s) on perma.cc, web archive, or OSF. NA = not applicable (because no relevant webpage could be found).
