@@ -1,0 +1,11 @@
+*Data codebook*
+
+Project title: Avenues for critical discourse at influential scientific journals: A cross-disciplinary assessment of post-publication peer review policies and practice
+
+This codebook documents the dataset dataPolicy.csv
+
+Description: This dataset contains information extracted about journal post-publication peer review policies in Study One. There were 330 journals in the sample. Data for each journal was coded by two individual coders, who then agreed on a final coding. There are therefore, three rows of data per journal and 990 rows in total.
+
+Source: The data was entered via a Google Form.
+
+Explanation of columns: The column names should be self-explanatory. For more details, see Supplementary Table B1.

@@ -1,0 +1,30 @@
+*Data codebook*
+
+Project title: Avenues for critical discourse at influential scientific journals: A cross-disciplinary assessment of post-publication peer review policies and practice
+
+This codebook documents the dataset dataPracticeFreq.csv
+
+Description: This dataset contains information about the articles that were assessed in Study Two including whether they were linked to PPPR or were themselves examples of PPPR.
+
+Source: Lists of all articles published in 2018 by each journal in the sample were randomly shuffled. Coders worked though these lists until they had encountered 10 eligible research articles for each journal (except Wildlife Monographs, which only published six articles in 2018). The result was these 3069 articles. Note that this includes 27 extra articles and 12 exchange duplicates. These are removed by the preprocessing script, which leaves the 3030 articles considered for inclusion as reported in the paper.
+
+Explanation of columns: 
+
+
+id: the unique id code assigned to each article published by each journal in 2018. The article id is built from the journal's name plus the article's number (the order in which it appears).
+doi: A digital object identifier associated with the PPPR (if available)
+authors: the article's authors	
+title: the article's title	
+exclusion: was the article excluded (TRUE/FALSE)?	
+exclusion explanation: if the article was excluded, why?	
+Is article itself PPPR: TRUE if we found the article itself was an example of PPPR
+Is article linked to PPPR: TRUE if we found the article was linked to at least one PPPR		
+exchange duplicate: If we identified PPPR that was part of the same exchange (back and forth between target authors and PPPR authors about the same article) then we linked only included one part of the exchange in our PPPR count. To achieve this, exchange duplicates were labelled 'A' or 'B' and articles marked as 'B' were removed by the preprocessing script.
+Additional notes: any notes we made during coding.
+
+The remaining columns are Web of Science field codes. 
+PT: Publication Type (J=Journal; B=Book; S=Series; P=Patent)
+SO: Source (Publication Name)	
+PD: Publication Date
+PY: Year Published	
+UT: Accession Number

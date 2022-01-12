@@ -1,0 +1,22 @@
+*Data codebook*
+
+Project title: Avenues for critical discourse at influential scientific journals: A cross-disciplinary assessment of post-publication peer review policies and practice
+
+This codebook documents the dataset dataPracticeAssess.csv
+
+Description: This dataset contains information about the features of 58 PPPRs that were evaluated in detail by TEH.
+
+Source: Information was manually entered into a spreadsheet by TEH.
+
+Explanation of columns: 
+
+coder: The coder for all PPPRs was TEH	
+pppr_id:  The ID is built from article id (see below), followed by the letters 'PPPR' and another number which is used to differentiate multiple PPPRs associated with the same article.	
+pppr_doi: A digital object identified associated with the PPPR (if available)
+pppr_type: Harmonised classification of the PPPR, as determined by TEH (either letters, commentaries, or web comments)	
+article_id: the unique id code assigned to each article published by each journal in 2018. The article id is built from the journal's name plus the article's number (the order in which it appears).	
+article_doi: A digital object identified associated with the article (if available)	
+pub_date_original: Publication date of the article, in the format YYYY-MM-DD
+pub_date_pppr: Publication date of the PPPR, in the format YYYY-MM-DD
+
+The remaining columns should be self-explanatory. For details, see Supplementary Table I.
