@@ -739,10 +739,13 @@ prev_est_primary <- percentCI(linkedPPPR_n, nrow(d_freq_primary))
 
 isPPPR_n <- d_freq_secondary %>% filter(isPPPR == T) %>% nrow()
 prev_est_secondary <- percentCI(isPPPR_n, nrow(d_freq_secondary))
+
+ratio_secondary <- isPPPR_n / (nrow(d_freq_secondary) - isPPPR_n)*100 # as a ratio, X PPPRs per 100 research articles
+
 ```
 In total, we considered `r d_freq_checked` articles for inclusion before we reached our target of 2066 eligible research articles. `r d_freq_excluded` articles were excluded because they did not contain research (n = `r d_freq_notResearch`) or could not be found/accessed (n = `r d_freq_noAccess`). An additional `r d_freq_isPPPR` articles were classified as being themselves examples of PPPR. In total, `r linkedPPPR_n` of the 2066 research articles were linked to at least one PPPR. Our primary PPPR prevalence estimate was therefore `r prev_est_primary`. These articles were published in `r d_freq %>% filter(linkedPPPR == T) %>% count(journal) %>% nrow()` individual journals (Supplementary Table \@ref(tab:tab-practice-prev-primary-journals)).
 
-We also computed a secondary PPPR prevalence estimate based on the proportion of articles that were themselves PPPR amongst the first 10 eligible articles assessed at each journal (first 6 articles in the case of Wildlife Monographs). `r isPPPR_n` out of 2066 articles were classified as PPPR, yielding a secondary PPPR prevalence estimate of `r prev_est_secondary`. These articles were published in `r d_freq %>% group_by(journal) %>% slice_head(n = 10) %>% filter(isPPPR == T) %>% count(journal) %>% nrow()` individual journals (Supplementary Table \@ref(tab:tab-practice-prev-secondary-journals)). 
+We also computed a secondary PPPR prevalence estimate based on the proportion of articles that were themselves PPPR amongst the first 10 eligible articles assessed at each journal (first 6 articles in the case of Wildlife Monographs). `r isPPPR_n` out of 2066 articles were classified as PPPR, yielding a secondary PPPR prevalence estimate of `r prev_est_secondary`. This is equivalent to `r round(ratio_secondary,1)` PPPRs for every 100 research articles. These articles were published in `r d_freq %>% group_by(journal) %>% slice_head(n = 10) %>% filter(isPPPR == T) %>% count(journal) %>% nrow()` individual journals (Supplementary Table \@ref(tab:tab-practice-prev-secondary-journals)). 
 
 ```{r}
 field_prev_primary <- d_freq_primary %>%
