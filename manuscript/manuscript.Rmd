@@ -1,5 +1,5 @@
 ---
-title             : "A cross-disciplinary assessment of post-publication peer review policies and practice in influential scientific journals."
+title             : "A cross-disciplinary assessment of post-publication peer review policies and practice at influential scientific journals."
 shorttitle        : "Post-publication peer review"
 
 author:
