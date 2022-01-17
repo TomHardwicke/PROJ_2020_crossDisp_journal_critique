@@ -62,13 +62,11 @@ linenumbers       : yes
 mask              : no
 draft             : no
 always_allow_html: true
+appendix: "supplementary_information.Rmd"
 
 documentclass     : "apa6"
 classoption       : "man"
-output            : 
-  papaja::apa6_pdf:
-    includes:
-        after_body: "supplementary_information.tex"
+output            : papaja::apa6_pdf
 ---
 
 ```{r setup, include = FALSE}
@@ -1197,10 +1195,6 @@ Xie, Y. (2017). Dynamic documents with R and knitr. CRC Press.
 \begingroup
 \setlength{\parindent}{-0.5in}
 \setlength{\leftskip}{0.5in}
-```
-
-```{r render_appendix, include=FALSE}
-render_appendix("supplementary_information.Rmd")
 ```
 
 \endgroup
