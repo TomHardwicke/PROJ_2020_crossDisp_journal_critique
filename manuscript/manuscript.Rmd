@@ -835,41 +835,72 @@ field_prev_all <- left_join(field_prev_primary %>% rename(primary = 'prevalence'
   )
 ```
 
-```{r fig-practice-prev, fig.width = 7.5, fig.height = 10, fig.path = 'figs/', fig.cap = 'Primary and secondary prevalence estimates for the use of PPPR in practice across domains and overall. On-graph text labels are not shown for domains with zero prevalence. Error bars represent 95% confidence intervals.'}
-field_prev %>%
+```{r}
+scale_fill_domains <- function(...){
+    ggplot2:::manual_scale(
+        'fill', 
+        values = setNames(c(hue_pal()(22),'#000000'), c(levels(factor(field_prev$field_abbr[! field_prev$field_abbr == 'OVERALL'])), 'OVERALL')), 
+        ...
+    )
+}
+```
+
+```{r}
+ggthemr_reset()
+
+plt1 <- field_prev %>%
   pivot_longer(cols = c(primary, secondary), names_to = 'estimate_type', values_to = 'prevalence') %>%
   mutate(estimate_type = factor(estimate_type, levels = c('primary','secondary'))) %>%
-  ggplot(aes(x = estimate_type, y = prevalence, colour = str_wrap(field_with_abbr,30))) +
-  geom_beeswarm(size = 3, alpha = .5, side = 1L) +
-  geom_errorbar(data = field_prev_all, aes(ymin=ci_lwr, ymax=ci_upr), width = .05, colour = 'black', position = position_nudge(x = 0.07)) +
-  geom_point(data = field_prev_all, size = 5, shape = 23, aes(fill = 'OVERALL'), colour = 'black', position = position_nudge(x = 0.07)) +
-  scale_fill_manual(values = 'white') +
-  scale_x_discrete(expand=expansion(mult = 0, add = c(0.5,0.3))) +
-  geom_text_repel(
-    aes(label = ifelse(prevalence > 0,as.character(field_abbr),''),
-        segment.square = T,
-        segment.inflect = T), #
-    #point.padding = 0.2,
-    size = 4, # size of labels
-    alpha = .75,
-    force_pull   = 0, # do not pull toward data points
-    nudge_y      = 0,
-    nudge_x = -0.4,
-    direction    = "y",
-    angle        = 0,
-    hjust        = 0,
-    ylim = c(0,Inf),
-    segment.size = 0.5,# size of connector lines
-    segment.curvature = -1e-20,
-    max.iter = 1e4, max.time = 1,
-    max.overlaps = Inf, # ensure all labels are shown even if overlapping
-    show.legend = FALSE # do not add legend entry
-  ) +
-  theme(legend.position = 'bottom') +
+  bind_rows(field_prev_all) %>%
+  filter(estimate_type == 'primary') %>%
+  arrange(prevalence) %>%
+  ungroup() %>%
+  mutate(field_abbr = factor(field_abbr, levels = c(field_abbr[! field_abbr == 'OVERALL'], 'OVERALL'), ordered = T)) %>%
+  ggplot(aes(x=field_abbr, y = prevalence, fill = field_abbr)) +
+  ylim(0,40) +
+  geom_segment(aes(xend=field_abbr, y=0, yend=prevalence), colour = 'white') +
+  geom_segment(aes(xend=field_abbr, y=0, yend=prevalence), colour = 'black', data = . %>% filter(field_abbr != 'OVERALL')) +
+  geom_point(size = 5, shape = 21, colour = 'black', data = . %>% filter(field_abbr != 'OVERALL')) + 
+  geom_point(size = 2, shape = 23, colour = 'black', data = . %>% filter(field_abbr == 'OVERALL')) + 
+  geom_errorbar(data = . %>% filter(field_abbr == 'OVERALL'), aes(ymin=ci_lwr, ymax=ci_upr), width = .5, colour = 'black') +
+  ggtitle('Primary estimate') +
   ylab('prevalence (%)') +
-  xlab('prevalence estimate type') +
-  guides(fill = guide_legend(nrow = 1, order = 1, title.position = 'top', title = "Scientific domains")) +
-  guides(colour = guide_legend(nrow = 11, order = 2,  title.position = 'top', title = ''))
+  scale_fill_domains() +
+  theme_apa() +
+  theme(
+    panel.grid.major.x = element_line(),
+    axis.title.y = element_blank(),
+    legend.position = 'none') + 
+  coord_flip()
+
+plt2 <- field_prev %>%
+  pivot_longer(cols = c(primary, secondary), names_to = 'estimate_type', values_to = 'prevalence') %>%
+  mutate(estimate_type = factor(estimate_type, levels = c('primary','secondary'))) %>%
+  bind_rows(field_prev_all) %>%
+  filter(estimate_type == 'secondary') %>%
+  arrange(prevalence) %>%
+  ungroup() %>%
+  mutate(field_abbr = factor(field_abbr, levels = c(field_abbr[! field_abbr == 'OVERALL'], 'OVERALL'), ordered = T)) %>%
+  ggplot(aes(x=field_abbr, y = prevalence, fill = field_abbr)) +
+  ylim(0,40) +
+  geom_segment(aes(xend=field_abbr, y=0, yend=prevalence), colour = 'white') +
+  geom_segment(aes(xend=field_abbr, y=0, yend=prevalence), colour = 'black', data = . %>% filter(field_abbr != 'OVERALL')) +
+  geom_point(size = 5, shape = 21, colour = 'black', data = . %>% filter(field_abbr != 'OVERALL')) + 
+  geom_point(size = 2, shape = 23, colour = 'black', data = . %>% filter(field_abbr == 'OVERALL')) + 
+  geom_errorbar(data = . %>% filter(field_abbr == 'OVERALL'), aes(ymin=ci_lwr, ymax=ci_upr), width = .5, colour = 'black') +
+  ggtitle('Secondary estimate') +
+  ylab('prevalence (%)') +
+  scale_fill_domains() +
+  theme_apa() +
+  theme(
+    panel.grid.major.x = element_line(),
+    axis.title.y = element_blank(),
+    legend.position = 'none') + 
+  coord_flip()
+```
+
+```{r fig-practice-prev, fig.width = 7.5, fig.height = 6, fig.path = 'figs/', fig.cap = 'Primary (Panel A) and secondary (Panel B) prevalence estimates for the use of PPPR in all journals overall (N = 330 journals; black diamond, error bars represent 95% confidence intervals) and then in descending order by each scientific domain (n = 15 journals; coloured circles). Domain abbreviations: Agricultural Sciences (AGRI), Biology & Biochemistry (BIO), Chemistry (CHEM), Clinical Medicine (MED), Computer Science (COMSCI), Economics & Business (ECON), Engineering (ENGIN), Environment & Ecology (ECO), Geosciences (GEO), Immunology (IMMUN), Materials Science (MATSCI), Mathematics (MATH), Microbiology (MICBIO), Molecular Biology & Genetics (MOLBIO), Multidisciplinary (MULTI), Neuroscience & Behavior (NEURO), Pharmacology & Toxicology (PHARM), Physics (PHYS), Plant & Animal Science (PLANT), Psychiatry & Psychology (PSY), Social Sciences (SOCSCI), Space Science (SPACE).'}
+plt1 + plt2
 ```
 
 ```{r}
