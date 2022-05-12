@@ -72,6 +72,21 @@ mutate(field = fct_recode(field,
   "ENVIRONMENT & ECOLOGY" = "ENVIRONMENT_ECOLOGY",
   "MULTIDISCIPLINARY" = "Multidisciplinary"))
 
+# add higher-level domain classifications
+policyData <- policyData %>%
+  mutate(domain = case_when(
+    field %in% c('AGRICULTURAL SCIENCES','PSYCHIATRY & PSYCHOLOGY','BIOLOGY & BIOCHEMISTRY','ENVIRONMENT & ECOLOGY','MICROBIOLOGY','MOLECULAR BIOLOGY & GENETICS','NEUROSCIENCE & BEHAVIOR','PLANT & ANIMAL SCIENCE', 'CLINICAL MEDICINE','IMMUNOLOGY','PHARMACOLOGY & TOXICOLOGY') 
+    ~'HEALTH & LIFE SCIENCES',
+    field %in% c('CHEMISTRY','ENGINEERING','GEOSCIENCES','MATERIALS SCIENCE','SPACE SCIENCE','PHYSICS') 
+    ~'PHYSICAL SCIENCES',
+    field %in% c('ECONOMICS & BUSINESS','SOCIAL SCIENCES') 
+    ~'SOCIAL SCIENCES',
+    field %in% c('COMPUTER SCIENCE','MATHEMATICS') 
+    ~'FORMAL SCIENCES',
+    field %in% c('MULTIDISCIPLINARY')
+    ~'MULTIDISCIPLINARY'
+  ))
+
 # tests
 stopifnot(policyData$anyPPPR %in% c("YES", "NO")) # anyPPPR should be YES or NO
 
