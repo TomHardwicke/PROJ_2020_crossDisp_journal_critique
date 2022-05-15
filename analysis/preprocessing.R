@@ -505,6 +505,28 @@ practiceFreqData <- practiceFreqData %>%
 # add ESI fields
 practiceFreqData <- left_join(practiceFreqData, journalData %>% select(journal, ESI_field), by = 'journal') # add ESI field
 
+# adjust field names for presentation purposes
+practiceFreqData <- practiceFreqData %>%
+  mutate(ESI_field = fct_recode(ESI_field, 
+                            "PSYCHIATRY & PSYCHOLOGY" = "PSYCHIATRY_PSYCHOLOGY",
+                            "ENVIRONMENT & ECOLOGY" = "ENVIRONMENT_ECOLOGY",
+                            "MULTIDISCIPLINARY" = "Multidisciplinary"))
+
+# add higher-level domain classifications
+practiceFreqData <- practiceFreqData %>%
+  mutate(domain = case_when(
+    ESI_field %in% c('AGRICULTURAL SCIENCES','PSYCHIATRY & PSYCHOLOGY','BIOLOGY & BIOCHEMISTRY','ENVIRONMENT & ECOLOGY','MICROBIOLOGY','MOLECULAR BIOLOGY & GENETICS','NEUROSCIENCE & BEHAVIOR','PLANT & ANIMAL SCIENCE', 'CLINICAL MEDICINE','IMMUNOLOGY','PHARMACOLOGY & TOXICOLOGY') 
+    ~'HEALTH & LIFE SCIENCES',
+    ESI_field %in% c('CHEMISTRY','ENGINEERING','GEOSCIENCES','MATERIALS SCIENCE','SPACE SCIENCE','PHYSICS') 
+    ~'PHYSICAL SCIENCES',
+    ESI_field %in% c('ECONOMICS & BUSINESS','SOCIAL SCIENCES') 
+    ~'SOCIAL SCIENCES',
+    ESI_field %in% c('COMPUTER SCIENCE','MATHEMATICS') 
+    ~'FORMAL SCIENCES',
+    ESI_field %in% c('MULTIDISCIPLINARY')
+    ~'MULTIDISCIPLINARY'
+  ))
+
 # quality checks
 test_results <- practiceFreqData %>%
   check_that(
