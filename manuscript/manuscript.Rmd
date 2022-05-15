@@ -1180,6 +1180,130 @@ bind_rows(
   pack_rows("Did the authors’ reply assert that their core claims remain unchanged?", 9, 10)
 ```
 
+```{r}
+# table for Peer Review Congress abstract
+
+# summarise number of journals offering each PPPR type in each domain
+sum_domain_type <- d_policy %>%
+  count(domain, type = PPPR_name_harmonized, .drop = F) %>%
+  filter(type %notin% c('Not categorised','Other'))
+
+# summarise number of journals offering any PPPR type in each domain
+sum_domain_any_type <- d_policy %>%
+  filter(PPPR_type == 'A') %>% # only need the first entry for each journal
+  count(domain, anyPPPR) %>%
+  group_by(domain) %>%
+  mutate(N = sum(n)) %>%
+  filter(anyPPPR == T) %>%
+  select(-anyPPPR) %>%
+  mutate(type = 'Any PPPR')
+
+sum_domain <- full_join(sum_domain_type, sum_domain_any_type %>% select(-N)) %>%
+  right_join(sum_domain_any_type %>% select(domain, N), by = 'domain') 
+
+sum_overall <- sum_domain %>%
+    group_by(type) %>%
+    summarise(n = sum(n),
+           N = sum(N)) %>%
+    mutate(domain = 'All')
+  
+sum_combined <- bind_rows(sum_domain, sum_overall) %>%
+  mutate(
+    domain = factor(domain, 
+                    levels = c('All', 
+                               'HEALTH & LIFE SCIENCES',
+                               'MULTIDISCIPLINARY',
+                               'PHYSICAL SCIENCES',
+                               'FORMAL SCIENCES',
+                               'SOCIAL SCIENCES')),
+    values = paste0(n,' (',round(n/N*100,0),'%)')) %>%  # add percentages
+  select(-n) %>%
+  rename('Features' = type)
+  
+
+# now do length and time limits
+df_limits <- d_policy %>% 
+  filter(!is.na(PPPR_name)) %>% 
+  mutate(hasLengthLimit = ifelse(wordLimits %in% c('NOT STATED', 'NO'), F, T),
+         hasTimeLimit = ifelse(timeLimits %in% c('NOT STATED', 'NO'), F, T),
+         hasLengthLimit_quant = ifelse(wordLimits %in% c('NOT STATED', 'NO', 'Qualitative limit'), F, T),
+         hasTimeLimit_quant = ifelse(timeLimits %in% c('NOT STATED', 'NO', 'Qualitative limit'), F, T),
+         wordLimits = ifelse(
+      wordLimits %in% c('Qualitative limit','NOT STATED', 'NO'), NA, as.numeric(wordLimits)),
+    timeLimits = ifelse(
+      timeLimits %in% c('Qualitative limit','NOT STATED', 'NO'), NA, as.numeric(timeLimits))) 
+
+df_limits_domain <- df_limits %>%
+  group_by(domain) %>%
+  summarise(
+    across(c(hasLengthLimit, hasLengthLimit_quant, hasTimeLimit, hasTimeLimit_quant), sum),
+    across(c(wordLimits, timeLimits), 
+           list(median = median,
+               IQR = ~ paste0(quantile(.x,na.rm=T)[2],'-',quantile(.x,na.rm=T)[4])), na.rm = T)) 
+
+df_limits_overall <- df_limits %>%
+  summarise(
+    across(c(hasLengthLimit, hasLengthLimit_quant, hasTimeLimit, hasTimeLimit_quant), sum),
+    across(c(wordLimits, timeLimits), 
+           list(median = median,
+               IQR = ~ paste0(quantile(.x,na.rm=T)[2],'-',quantile(.x,na.rm=T)[4])), na.rm = T)) %>%
+  mutate(domain = 'All')
+
+df_limits_combined <- bind_rows(df_limits_domain, df_limits_overall) %>%
+  mutate(lengthLimits = paste0('Any: ', hasLengthLimit,' Quant: ', hasLengthLimit_quant),
+         lengthQuant = paste0('Md = ', wordLimits_median, ' IQR: ', wordLimits_IQR),
+         timeLimits = paste0('Any: ', hasTimeLimit,' Quant: ', hasTimeLimit_quant),
+         timeQuant = paste0('Md = ', timeLimits_median, ' IQR: ', timeLimits_IQR)) %>%
+  select(domain, lengthLimits, lengthQuant, timeLimits, timeQuant) %>% 
+  pivot_longer(cols = lengthLimits:timeQuant, names_to = 'Features', values_to = 'values')
+  
+# PPPR prevalence by domain
+prevalence_domain <- d_freq_primary %>% 
+  mutate(linkedPPPR = factor(linkedPPPR)) %>% 
+  count(domain, linkedPPPR, .drop = F) %>% 
+  group_by(domain) %>% 
+  mutate(N = sum(n)) %>% 
+  filter(linkedPPPR == 'TRUE') %>%
+  adorn_totals(where = 'row', name = 'All', "n", "N") %>%
+  select(-linkedPPPR) %>%
+  rowwise() %>%
+  mutate(
+    percent = round(n/N*100,1),
+    ci_lwr = round(prop.test(n,N)$conf.int*100,1)[1],
+    ci_upr = round(prop.test(n,N)$conf.int*100,1)[2],
+    values = paste0(n,'/',N,', ',percent,'% (',ci_lwr,'-',ci_upr,'%)')
+  ) %>%
+  select(domain, values) %>%
+  mutate('Features' = 'PPPR Prevalence')
+
+# combine everything to make final table
+final_table <-bind_rows(sum_combined, prevalence_domain, df_limits_combined) %>%
+  select(-N) %>%
+  right_join(sum_domain_any_type %>% ungroup() %>% select(domain, N) %>% add_row(domain = 'All', N = 330), by = 'domain') %>%
+  pivot_wider(id_cols = Features,
+              names_from = c(domain, N),
+              values_from = c(values),
+              names_glue = "{domain} (N={N})") %>%
+  relocate('Features', 'All (N=330)', 'HEALTH & LIFE SCIENCES (N=165)', 'MULTIDISCIPLINARY (N=15)', 'PHYSICAL SCIENCES (N=90)', 'FORMAL SCIENCES (N=30)', 'SOCIAL SCIENCES (N=30)')
+
+
+
+
+d_policy %>%
+  mutate(limits = timeLimits) %>% # use either wordLimits or timeLimits
+  filter(!is.na(PPPR_name), limits %notin% c('Qualitative limit','NOT STATED', 'NO')) %>%
+  mutate(limits = as.numeric(limits)) %>%
+  group_by(field) %>%
+  summarise(
+    md = median(limits),
+    iqr = paste0(quantile(limits,na.rm=T)[2],'-',quantile(limits,na.rm=T)[4]),
+    min = min(limits),
+    max = max(limits)
+  )
+  
+
+```
+
 # Discussion
 We found substantial variation in how PPPR was handled in both policy and practice at 330 influential journals operating across 22 scientific domains. Publication of PPPR was rare in most domains and a considerable number of journals (37%) did not offer any options for submitting PPPR. Journals that did offer PPPR often imposed restrictive length and time-to-submit limits. Overall, influential journals often represented a serious obstacle to the cultivation, documentation, and dissemination of post-publication critique. 
 
