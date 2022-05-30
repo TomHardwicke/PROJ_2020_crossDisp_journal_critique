@@ -285,7 +285,7 @@ purple <- "#C2A5CF"
 green <- "#ACD39E"
 
 PPPR_category_plotter <- function(d){
-   ggplot(d, aes(y = PPPR_category, x = n, label = ifelse(var_type == "Any PPPR",paste0(round((n/15)*100,0),'%'),''), colour = var_type)) +
+   ggplot(d, aes(y = PPPR_category, x = n, label = ifelse(var_type == "Any PPC",paste0(round((n/15)*100,0),'%'),''), colour = var_type)) +
     geom_segment(aes(x=0, xend=n, y=PPPR_category, yend=PPPR_category)) +
     geom_point(aes(size = var_type)) +
     geom_text(color="black", size = 2.5) +
@@ -303,7 +303,7 @@ PPPR_category_plotter <- function(d){
 
 PPPR_category_plotter_allFields <- function(d){
    ggplot(d, aes(y = PPPR_category, x = n, label = 
-     ifelse(var_type == "Any PPPR",paste0(round((n/330)*100,0),'%'),''), 
+     ifelse(var_type == "Any PPC",paste0(round((n/330)*100,0),'%'),''), 
      colour = var_type)) +
     geom_segment(aes(x=0, xend=n, y=PPPR_category, yend=PPPR_category)) +
     geom_point(aes(size = var_type)) +
@@ -331,9 +331,11 @@ thisData <- d_policy %>%
       select(-anyPPPR) %>%
       mutate(PPPR_category = 'Any PPPR')
   ) %>%
-  mutate(PPPR_category = factor(PPPR_category, levels = c("Other", "Web comments", "Commentaries", "Letters", "Any PPPR")),
-         var_type = ifelse(PPPR_category == "Any PPPR", "Any PPPR", "Other"),
-         field = factor(field, levels = rev(levels(policySummary$field)[2:23]))) # reorder levels by proportion offering any PPPR
+  mutate(
+    PPPR_category= ifelse(PPPR_category == "Any PPPR", "Any PPC", PPPR_category),
+    PPPR_category = factor(PPPR_category, levels = c("Other", "Web comments", "Commentaries", "Letters", "Any PPC")),
+    var_type = ifelse(PPPR_category == "Any PPC", "Any PPC", "Other"),
+    field = factor(field, levels = rev(levels(policySummary$field)[2:23]))) # reorder levels by proportion offering any PPPR
 
 allfieldsPlot <- thisData %>% group_by(PPPR_category, var_type) %>% summarise(n = sum(n)) %>% mutate(field = 'ALL DOMAINS') %>% ungroup() %>% PPPR_category_plotter_allFields()
 
@@ -445,7 +447,7 @@ limitCategoriesPlot <- function(d, thisTitle){
     ggplot(aes(x = limits, y = n, label = n, fill = type)) +
     geom_col(colour = 'grey10') +
     geom_text(aes(y = n + 18), color="black", size = 3) +
-    ylab(expression(paste('PPPRs (',italic('n'),')'))) +
+    ylab(expression(paste('PPCs (',italic('n'),')'))) +
     scale_y_continuous(expand = c(0, 0), limits = c(0,200), breaks = seq(0,200,100)) +
     scale_fill_manual(values = c(nonnumericColour,numericColour), guide = 'none') +
     theme(axis.title.y = element_text(size = 10),
@@ -476,7 +478,7 @@ limitNumericPlot <- function(d, thisBinWidth, thisBoxWidth){
       alpha = 1,
       colour = 'grey10') +
     expand_limits(x = 0) +
-    ylab('PPPRs (n)') +
+    ylab('PPCs (n)') +
     theme(
       axis.line = element_blank(),
       axis.ticks = element_line(colour = 'grey10'),
@@ -1409,3 +1411,12 @@ Xie, Y. (2017). Dynamic documents with R and knitr. CRC Press.
 ```
 
 \endgroup
+
+
+\newpage
+
+# (APPENDIX) Appendix {-}
+
+```{r child = "supplementary_information.Rmd"}
+```
+
