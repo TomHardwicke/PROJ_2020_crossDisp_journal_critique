@@ -1,12 +1,12 @@
 ---
-title             : "A cross-disciplinary assessment of post-publication peer review policies and practice at influential scientific journals."
-shorttitle        : "Post-publication peer review"
+title             : "Post-publication critique at top-ranked journals across scientific disciplines: A cross-sectional assessment of policies and practice"
+shorttitle        : "Post-publication critique"
 
 author:
   - name: 'Tom E. Hardwicke'
     affiliation: '1'
     corresponding: yes
-    email: 'tom.hardwicke@uva.nl'
+    email: 'hardwickete@gmail.com'
     address: 'Department of Psychology, University of Amsterdam, Nieuwe Achtergracht 129-B, 1018 WT Amsterdam'
   - name: 'Robert T. Thibault'
     affiliation: '2,8'
@@ -48,9 +48,9 @@ affiliation:
 authornote: ''
   
 abstract: |
-  Critical scrutiny of published research is an important feature of a self-correcting scientific ecosystem. Academic journals exert considerable control over criticism submitted in the form of letters, commentaries, or online comments (post-publication peer review, PPPR). Currently, there is limited empirical data documenting how journals handle PPPR. We assessed PPPR policies and practice amongst 330 influential journals operating across 22 scientific disciplines. 123 (37%) journals did not offer any options for submitting PPPR. 207 (63%) journals offered PPPR options, but often imposed limits on length (median 1000, IQR 700 words) and time-to-submit (median 12, IQR 22 weeks). The most restrictive limits were 175 words and 2 weeks; the least restrictive PPPRs had no limits. Of a random sample of 2066 research articles published in 2018 by PPPR-offering journals, we found that 1.9% (95% CI [1.4, 2.6]) were the subject of at least one PPPR. We examined 58 PPPRs and found, for example, that 44 received an author reply, of which 41 asserted that the authors’ conclusions were unchanged. Clinical Medicine stood out as the domain with the most active PPPR culture, with all 15 journals providing PPPR options and publishing the most PPPR, but also imposing the strictest length limits (median 400, IQR 150 words) and time-to-submit limits (median 4, IQR 2 weeks). Overall, our findings suggest that influential academic journals often pose serious barriers to the cultivation, documentation, and dissemination of PPPR. We suggest policies that journals could adopt to promote a richer culture of post-publication critique.
+  Journals exert considerable control over letters, commentaries, and online comments that criticize prior research (post-publication critique). We assessed policies (Study One) and practice (Study Two) related to post-publication critique at 15 top-ranked journals in each of 22 scientific disciplines (N=330 journals). 207 (63%) journals accepted post-publication critique and often imposed limits on length (median 1000, interquartile range [IQR] 500-1200 words) and time-to-submit (median 12, IQR 4-26 weeks). The most restrictive limits were 175 words and 2 weeks; some policies imposed no limits. Of 2066 randomly sampled research articles published in 2018 by journals accepting post-publication critique, 39 (1.9%, 95% confidence interval [1.4, 2.6]) were linked to at least one post-publication critique (there were 58 post-publication critiques in total). Of the 58 post-publication critiques, 44 received an author reply, of which 41 asserted that original conclusions were unchanged. Clinical Medicine had the most active culture of post-publication critique: all journals accepted post-publication critique and published the most post-publication critique overall, but also imposed the strictest limits on length (median 400, IQR 400-550 words) and time-to-submit (median 4, IQR 4-6 weeks). Our findings suggest that top-ranked academic journals often pose serious barriers to the cultivation, documentation, and dissemination of post-publication critique.
   
-keywords          : "peer review, post-publication peer review, letter to the editor, meta-research, journal policy, self-correction, scientific criticism"
+keywords          : "peer review, post-publication critique, letter to the editor, meta-research, journal policy, self-correction, scientific criticism"
 
 bibliography      : ["references.bib"]
 
@@ -86,6 +86,10 @@ library(patchwork) # for multipanel plot layouts
 library(ggbeeswarm) # for dotplots
 ```
 
+```{r, include=FALSE}
+options(tinytex.verbose = TRUE)
+```
+
 ```{r load-functions}
 source(here('analysis','functions.R')) # load custom functions
 ```
@@ -110,58 +114,35 @@ ggthemr('fresh') # set ggplot theme
 ```
 
 # Introduction
-Poor quality research frequently survives peer review and permeates through to the academic literature (Altman, 1994; Hardwicke, Serghiou, et al., 2020; Ioannidis, 2005; Nosek et al., 2021; Van Calster et al., 2021). This highlights the importance of facilitating ongoing critical scrutiny of published research. Post-publication critique can highlight errors, limitations, or alternative interpretations that were not adequately addressed during traditional peer review and help research consumers to make informed judgements about the utility and validity of published scientific claims (Altman, 2005; Bastian, 2014).
+Poor quality research frequently survives peer review and permeates through to the academic literature (Altman, 1994; Hardwicke, Serghiou, et al., 2020; Ioannidis, 2005; Nosek et al., 2022; Van Calster et al., 2021). This highlights the importance of ongoing critical scrutiny of published research to identify errors, limitations, or alternative interpretations that were not adequately addressed during pre-publication peer review. Such critiques may help research consumers to make more informed judgements about the utility and validity of published scientific claims (Altman, 2005; Bastian, 2014).
 
-Currently, critical discourse about research is fragmented across the scientific ecosystem, ranging from conversations between colleagues, social media exchanges (e.g., blogs, Twitter), and purpose-built online commenting platforms (e.g., PubPeer), to letters or commentaries published in academic journals. These modes of critical discourse have been collectively referred to as ‘post-publication peer review’ (PPPR; Altman, 2002; Bastian, 2014; Winker, 2015). In the present study, we were specifically interested in examining journal-based PPPR (for our operational definition, see Box 1).
-
-Journals may exert considerable control over the cultivation, documentation, and dissemination of PPPR; however, little empirical data is available to systematically evaluate how they handle this important aspect of scientific self-correction. Prior PPPR studies were narrow in scope, mainly limited to medical journals, and now outdated (Altman, 2002; Von Elm et al., 2009; Winker, 2013). The present study sought to provide a systematic, cross-disciplinary, and more contemporary assessment of journal PPPR policies (Study One) and practice (Study Two) amongst 330 highly influential journals operating across 22 scientific disciplines. Our goal is to provide a stratum of empirical evidence to inform debates about how scientific critique should be optimally handled in the scientific ecosystem.
-
-## Box 1. What is post-publication peer review (PPPR)?
-
-PPPR can refer to many forms of critical discourse about published research (Altman, 2002; Bastian, 2014; Winker, 2015). In this study, we focused only on PPPR handled by academic journals according to the following operational definition: 
-
->> Any journal-based avenue for sharing peer-initiated critical discourse related to specific research articles previously published in the same journal.
-
-For scientific discourse to constitute PPPR under this definition, it had to meet the following specific criteria:
-
-(a) Journal-based. The mode of sharing critical discourse had to be directly or indirectly controlled by the journal. Online commenting systems developed by 3rd party services (e.g., Disqus), still counted as PPPR if the journal was responsible for operating them.
-
-(b) Shared. The critique had to be accessible to the journal’s readership, rather than, for example, handled privately within the editorial team. Critical discourse published behind a paywall still counted as PPPR as long as it was visible to the journal’s typical readership.
-
-(c) Peer-initiated. It had to be possible for independent researchers to make unsolicited submissions; commissioned articles and/or editorials did not count as PPPR.
-
-(d) Critical discourse. PPPR had to allow for critical content. Exclusively positive or neutral content (e.g., news or ‘spotlight’ articles) did not count as PPPR.
-
-(e) Related to specific research articles previously published in the journal. The target of PPPR had to be specific research already published in the same journal, rather than research published elsewhere, or articles about general scientific topics or general methodological issues. Systematic reviews and meta-analyses did not count as PPPR.
+Journals exert considerable control over criticism of prior research submitted in the form of letters, commentaries, or online comments (Altman, 2002; Winker, 2015). We refer to these collectively as ‘post-publication critique’ (see Supplementary Information K for an operational definition). Currently, there is limited empirical data available to systematically evaluate how journals handle this important aspect of scientific self-correction. Prior studies of post-publication critique were narrow in scope, mainly focused on medical journals, and are now outdated (Altman, 2002; Kastner et al., 2013; Von Elm et al., 2009; Winker, 2013). In the present research, we sought to provide a systematic, cross-disciplinary, and more contemporary assessment of journal policies (Study One) and practice (Study Two) related to post-publication critique at 330 top-ranked journals operating in 22 scientific disciplines (Supplementary Information M provides a schematic illustration of the two studies). Our goal was to generate empirical evidence to inform debates about how scientific critique should be optimally handled by academic journals. 
 
 # Study One
 
 ## Methods
 
-### Design
-
-This was an observational study with a cross-sectional design. We recorded the name and description of any PPPR options offered by journals, limits imposed on PPPR in terms of length (e.g., number of words), time-to-submit (e.g., weeks since publication of the target article), or number of references, and whether PPPRs are sent for independent external peer-review[^1]. We also obtained 2017 Journal Impact Factors and identified whether journals were members of the Committee on Publication Ethics (COPE). For more detail about variables measured in Study One, see Supplementary Information B.
-
-[^1]: We operationally defined 'independent external peer review' as reviews solicited from individuals who were not (a) members of the editorial team or (b) authors of the original article.
-
 ### Sample
 
-The sample consisted of 330 highly influential academic journals operating broadly across science. Specifically, we used Clarivate Journal Citation Reports (https://jcr.clarivate.com) to identify the 15 most highly ranked journals by 2017 Journal Impact Factor in each of 22 high-level scientific domains (defined by Clarivate Essential Science Indicators: https://perma.cc/MD4V-A5X5). We did not include journals that only published reviews. The sample size was chosen based on a precision analysis which is documented in our preregistered protocol (https://osf.io/hjvnw/).
+The sample consisted of 15 academic journals, top-ranked by 2017 Journal Impact Factor operating in each of 22 scientific disciplines (N = 330 journals). This represents the entire population of interest. Journal Impact Factors were identified using Clarivate Journal Citation Reports (https://jcr.clarivate.com). Scientific disciplines were defined by Clarivate Essential Science Indicators: https://perma.cc/MD4V-A5X5; Supplementary Information L). We did not include journals that only published reviews. The sample size was chosen based on a precision analysis which is documented in our preregistered protocol (https://osf.io/hjvnw/).
+
+### Design
+
+The study had a cross-sectional design. The measured variables (see Supplementary Information B for details) were the name and description of any options for post-publication critique offered by each journal (e.g., letters), limits imposed on post-publication critique in terms of length (e.g., number of words), time-to-submit (e.g., weeks since publication of the target article), or number of references, and whether post-publication critiques are sent for independent external peer-review (reviews solicited from individuals who were not members of the editorial team or authors of the target article). We also obtained 2017 Journal Impact Factors and identified whether journals were members of the Committee on Publication Ethics (COPE).
 
 ### Procedure
 
-1. Between November, 2019 and January, 2020, we identified and preserved the ‘article types’ section of the author submission guidelines on each journal’s website (Supplementary Information C).
+1.	Between November, 2019, and January, 2020, TEH and VEK identified and preserved the ‘article types’ section of the author submission guidelines on each journal’s website (Supplementary Information C).
 
-2. Between February and August 2020, data extraction for each journal was performed independently by two authors using a Google Form (https://osf.io/bkvnw/) and instruction sheet (https://osf.io/5fmhb/). Authors were randomly assigned to 110 journals each as either first coders (SAH, TB, LT) or second coders (RTT, JEK, TEH) using the ‘sample’ function in R.
+2.	Between February and August 2020, data extraction for each journal was performed independently by two authors using a Google Form (https://osf.io/bkvnw/) and instruction sheet (https://osf.io/5fmhb/). Authors were randomly assigned to 110 journals each as either first coders (SAH, TB, LT) or second coders (RTT, JEK, TEH) using the ‘sample’ function in R.
 
-3. Coding was predominantly based on the preserved ‘article types’ documentation to ensure stability and reproducibility (live journal websites can be updated). It was only necessary to examine live journal websites to check for web-based commenting systems. When an ‘article types’ section was not found in step 1, each coder conducted an additional check of the live website and examined the most recently published issue of the journal to see if they could identify any examples of PPPR.
+3.	Coding was predominantly based on the preserved ‘article types’ documentation to ensure stability and reproducibility (live journal websites can be updated). It was only necessary to examine live journal websites to check for web-based commenting systems. When an ‘article types’ section was not found in step 1, each coder conducted an additional check of the live website and examined the most recently published issue of the journal to see if they could identify any examples of post-publication critique.
 
-4. Any coding differences were resolved through discussion between the assigned coders, with arbitration by an additional coder if necessary. If coding differences highlighted ambiguities in the extraction instructions, we discussed as a team, amended the instructions, and adjusted any relevant prior coding to ensure alignment.
+4.	Any coding differences were resolved through discussion between the assigned coders, with arbitration by an additional coder if necessary. If coding differences highlighted ambiguities in the extraction instructions, we discussed as a team, amended the instructions, and adjusted any relevant prior coding to ensure alignment.
 
-5. If an article type seemed like it might be PPPR, but the description was insufficient to judge, coders checked several published articles of this type to determine whether any met our operational definition of PPPR (Box 1).
+5.	If an article type seemed like it might be post-publication critique, but the description was insufficient to judge, coders checked several published articles of this type to determine whether any met our operational definition of post-publication critique (Supplementary Information K).
 
-6. Because journals used various naming conventions for similar types of PPPR and various units to specify limits (e.g., characters, words, or pages for length limits), we harmonized PPPR names to three types (‘letters [to the editor]’, ‘commentaries’, and ‘web comments’) and transformed units to words (length limits) and weeks (time-to-submit limits). Letters and commentaries were types of articles submitted through the regular manuscript submission system, whereas web comments were submitted via an online interface on the target article webpage. For details, see Supplementary Information D.
-
+6.	Because journals used various naming conventions for similar types of post-publication critique and various units to specify limits (e.g., characters, words, or pages for length limits), we harmonized names to four types (‘letters [to the editor]’, ‘commentaries’, ‘web comments’, and ‘other’) and transformed units to words (length limits) and weeks (time-to-submit limits). Letters and commentaries were types of articles submitted through the regular manuscript submission system, whereas web comments were submitted via an online interface on the target article webpage. For details, see Supplementary Information D.
 
 ## Results
 
@@ -198,9 +179,9 @@ journalCharacteristics <- d_policy_journal %>%
 allFieldChar <- journalCharacteristics %>% filter(`Scientific domain` == 'All Domains')
 ```
 
-Across all 22 scientific fields (n = 330 journals), the median 2017 Journal Impact Factor was `r allFieldChar %>% pull(Median_jif)` (range `r allFieldChar %>% pull(Min_jif)` - `r allFieldChar %>% pull(Max_jif)`) and `r allFieldChar %>% mutate(COPE_report = paste0(COPE_Signatories, ' (', round((COPE_Signatories/330)*100,0),'%)')) %>% pull(COPE_report)` journals were signatories of COPE. Characteristics data for each scientific domain are available in Supplementary Table \@ref(tab:journal-characteristics-table).
+Across all 22 scientific disciplines (n = 330 journals), the median 2017 Journal Impact Factor was `r allFieldChar %>% pull(Median_jif)` (range `r allFieldChar %>% pull(Min_jif)` - `r allFieldChar %>% pull(Max_jif)`). `r allFieldChar %>% mutate(COPE_report = paste0(COPE_Signatories, ' (', round((COPE_Signatories/330)*100,0),'%)')) %>% pull(COPE_report)` journals were members of COPE. Characteristics for each scientific discipline are available in Supplementary Table E1.
 
-### How many journals offer PPPR?
+### How many journals offer post-publication critique?
 
 ```{r}
 policySummary <- d_policy %>%
@@ -262,9 +243,9 @@ pppr_cope <- pppr_cope %>%
   pull(n)
 ```
 
-Figure \@ref(fig:fig-policy-freq) shows the number of journals offering any form of PPPR, and different types of PPPR, across 22 scientific domains (for equivalent tabular data, see Supplementary Table F1). Of `r journalsOfferingAnyPPPR$n` journals that offered PPPR, `r pppr_cope` were members of COPE. Of `r journalsOfferingAnyPPPR$N - journalsOfferingAnyPPPR$n` journals that did not offer PPPR, `r no_pppr_cope` were members of COPE. 
+Figure \@ref(fig:fig-policy-freq) shows the number of journals offering any form of post-publication critique, and specific types of post-publication critique, across 22 scientific disciplines (for equivalent tabular data, see Supplementary Table F1). Of `r journalsOfferingAnyPPPR$n` journals that offered post-publication critique, `r pppr_cope` (`r round(pppr_cope/journalsOfferingAnyPPPR$n,2)*100`%) were members of COPE. Of `r journalsOfferingAnyPPPR$N - journalsOfferingAnyPPPR$n` journals that did not offer post-publication critique, `r no_pppr_cope` (`r round(no_pppr_cope/(journalsOfferingAnyPPPR$N - journalsOfferingAnyPPPR$n),2)*100`%) were members of COPE. 
 
-Journals offering PPPR were most common in `r str_to_title(high_field_PPPR$field)` (n = `r high_field_PPPR$n`, `r high_field_PPPR$percent`%) and least common in `r str_to_title(low_field_PPPR$field)` (n = `r low_field_PPPR$n`, `r low_field_PPPR$percent`%). Overall, `r journalsOfferingOnePPPR` journals offered one PPPR option, `r journalsOfferingTwoPPPR` journals offered two PPPR options, and `r journalsOfferingThreePPPR` journals offered three PPPR options, equating to a total of `r d_policy %>% filter(!is.na(PPPR_name)) %>% nrow()` individual PPPR options across journals.
+Journals offering post-publication critique were most common in `r str_to_title(high_field_PPPR$field)` (n = `r high_field_PPPR$n`, `r high_field_PPPR$percent`%) and least common in `r str_to_title(low_field_PPPR$field)` (n = `r low_field_PPPR$n`, `r low_field_PPPR$percent`%). Overall, `r journalsOfferingOnePPPR` journals offered one option for post-publication critique, `r journalsOfferingTwoPPPR` journals offered two options, and `r journalsOfferingThreePPPR` journals offered three options, equating to a total of `r d_policy %>% filter(!is.na(PPPR_name)) %>% nrow()` individual post-publication critique options across journals.
 
 ```{r}
 PPPR_names_summary <- d_policy %>% filter(!is.na(PPPR_name)) %>% count(PPPR_name_harmonized)
@@ -277,7 +258,7 @@ web_comments_n <- PPPR_names_summary %>% filter(PPPR_name_harmonized == "Web com
 
 other_n <- PPPR_names_summary %>% filter(PPPR_name_harmonized == "Other") %>% pull(n)
 ```
-After harmonizing PPPR names, there were `r letters_n` journals offering letters, `r commentaries_n` journals offering commentaries, and `r web_comments_n` journals offering web comments. `r other_n` journals offered other miscellaneous types of PPPR such as ‘Forum papers’ and ‘Update articles’. At least two journals (The British Journal of Psychiatry and The BMJ) offered a hybrid type of PPPR whereby selected web comments (known as ‘eLetters’ and ‘Rapid Responses’ respectively) were chosen by editors to be subsequently (re-)published in the journal print edition as letters. To avoid double counting this data, we classified them only as web comments. There were no cases where multiple PPPR types offered by the same journal were classified with the same harmonized label. A complete list of journals and the PPPR they offered is available in  Supplementary Table G1.
+After post-publication critique names were harmonized into four types, there were `r letters_n` journals offering letters, `r commentaries_n` journals offering commentaries, and `r web_comments_n` journals offering web comments. `r other_n` journals offered other miscellaneous types of post-publication critique such as ‘Forum papers’ and ‘Update articles’. A complete list of journals and their post-publication critique options is available in  Supplementary Table G1.
 
 ```{r}
 # define colours
@@ -387,11 +368,11 @@ megaPlot[[19]] <- megaPlot[[19]] + theme(axis.text.y = element_text(), axis.tick
 megaPlot[[21]] <- megaPlot[[21]] + theme(axis.title.x = element_text()) # restore x axis title to bottom middle plot
 ```
 
-```{r fig-policy-freq, fig.width = 7.5, fig.height = 10, fig.path = 'figs/', fig.cap = 'Number and percentage of journals offering any PPPR options (purple) and the number of specific PPPR options (green) available in all scientific domains (top-left panel) and in each scientific domain (other panels). Note that individual journals can offer multiple PPPR options.'}
+```{r fig-policy-freq, fig.width = 7.5, fig.height = 10, fig.path = 'figs/', fig.cap = 'Number and percentage of journals offering any (purple) and specific (green) options for post-publication critique (PPC) in all scientific disciplines (top-left panel, n = 330 journals) and in individual scientific disciplines (other panels, n = 15 journals). Note that individual journals can offer multiple post-publication critique options.'}
 megaPlot
 ```
 
-### What limits did journals place on PPPR?
+### What limits did journals place on post-publication critique?
 
 ```{r}
 # prepare in text stats reports for limits
@@ -423,7 +404,7 @@ ref_limits_report <- d_policy %>%
   generateLimitReport()
 ```
 
-Table 1 shows how often journal policies imposed limits on PPPR in terms of length, time-to-submit, or number of references. Limits were mostly expressed quantitatively, but sometimes they were qualitative and more ambiguous, for example, stating that PPPR should be ‘concise’ or address ‘recently published’ articles. Often there was no information at all about a particular limit. Occasionally policies explicitly asserted that there was no limit. This happened `r d_policy %>% filter(wordLimits == 'NO') %>% nrow()` time for length limits, `r d_policy %>% filter(timeLimits == 'NO') %>% nrow()` times for time-to-submit limits, and `r d_policy %>% filter(referenceLimits == 'NO') %>% nrow()` times for reference limits. The full distribution of quantitative length limits and time-to-submit limits is displayed in Figure 2 and limits imposed by individual journals are available in Supplementary Table G1. Table 1 also shows whether PPPR was subject to independent external peer review (for details see Supplementary Table H1).
+Table 1 shows how often journal policies imposed limits on post-publication critique in terms of length, time-to-submit, or number of references. Limits were mostly expressed quantitatively, but sometimes they were qualitative and more ambiguous, for example, stating that post-publication critique should be ‘concise’ or address ‘recently published’ articles. Often there was no information at all about a particular limit. Occasionally policies explicitly asserted that there was no limit. This happened `r d_policy %>% filter(wordLimits == 'NO') %>% nrow()` time for length limits, `r d_policy %>% filter(timeLimits == 'NO') %>% nrow()` times for time-to-submit limits, and `r d_policy %>% filter(referenceLimits == 'NO') %>% nrow()` times for reference limits. The full distribution of quantitative length limits and time-to-submit limits is displayed in Figure 2 and limits imposed by individual journals are available in Supplementary Table G1. Table 1 also shows whether post-publication critique was subject to independent external peer review (for details see Supplementary Table H1).
 
 ```{r}
 numericColour <- '#A0CAD8' # 'mistyrose2' # set colour for numeric limits
@@ -534,7 +515,7 @@ row_one <- p2 + inset_element(p1, 0.6, 0.6, 1, 1, align_to = 'full')
 row_two <- p4 + inset_element(p3, 0.6, 0.6, 1, 1, align_to = 'full')
 ```
 
-```{r fig-policy-limits, fig.width = 7.5, fig.height = 7.5, fig.path = 'figs/', fig.cap = 'Limits imposed by journals on PPPR in terms of (A) length and (B) time-to-submit PPPR since publication of the target article. A1 and B1 show the number of PPPR options for which the journal did not state if there was a limit (“Not stated”), explicitly stated there was not a limit (“None”), stated a qualitative limit (“Qual”), or stated a quantitative limit (“Quant”). Quantitative limits are displayed in A2 and B2 as a histogram and boxplot with the dark line representing the median, lower and upper hinges representing the 25th and 75th percentiles, and upper and lower whiskers representing the ± 1.5 interquartile range.'}
+```{r fig-policy-limits, fig.width = 7.5, fig.height = 7.5, fig.path = 'figs/', fig.cap = 'Limits imposed by journals on post-publication critique (PPC) in terms of (A) length and (B) time-to-submit since publication of the target article. A1 and B1 show the number of post-publication critique options for which the journal did not state if there was a limit (“Not stated”), explicitly stated there was not a limit (“None”), stated a qualitative limit (“Qual”), or stated a quantitative limit (“Quant”). Quantitative limits are displayed in A2 and B2 as a histogram and boxplot with the dark line representing the median, lower and upper hinges representing the 25th and 75th percentiles, and upper and lower whiskers representing the ± 1.5 interquartile range.'}
 (wrap_elements(row_one) / wrap_elements(row_two) ) & theme(plot.margin = margin(0, 0, 0, 0, "cm")) 
 #p2 / p4
 ```
@@ -624,10 +605,10 @@ pppr_types_tab <- pppr_types %>%
 ```
 
 ```{r pppr-limits-table}
-pppr_types_tab %>% kable(col.names = c("PPPR","n","n (%)","n (%)","Md (IQR)","n (%)","n (%)","Md (IQR)","n (%)","n (%)","Md (IQR)","n (%)"), caption = 'PPPR types and their length, time-to-submit, or reference limits. The table shows the number (n) and percentage  of PPPR types that are subject to any (qualitative or quantitative) limit, quantitative limits specifically, and the median (Md) and interquartile range (IQR) for quantitative limits. The table also shows whether the author submission guidelines state that the PPPR types are sent for independent external peer review either routinely or at the editor’s discretion (for details see Supplementary Information H).', booktabs = T) %>% kable_styling(latex_options="scale_down") %>% add_header_above(c(" " = 2, "Length" = 3, "Time-to-submit" = 3, "References" = 3, "Peer review" = 1))
+pppr_types_tab %>% kable(col.names = c("PPPR","n","n (%)","n (%)","Md (IQR)","n (%)","n (%)","Md (IQR)","n (%)","n (%)","Md (IQR)","n (%)"), caption = 'Post-publication critique types and their length, time-to-submit, or reference limits. The table shows the number (n) and percentage (\\%) of post-publication critique types that are subject to any (qualitative or quantitative) limit, quantitative limits specifically, and the median (Md) and interquartile range (IQR) for quantitative limits. The table also shows whether the author submission guidelines state that the post-publication critique types are sent for independent external peer review either routinely or at the editor’s discretion (for details see Supplementary Information H).', booktabs = T) %>% kable_styling(latex_options="scale_down") %>% add_header_above(c(" " = 2, "Length" = 3, "Time-to-submit" = 3, "References" = 3, "Peer review" = 1))
 ```
 
-Because some journals offered more than one type of PPPR, Figure \@ref(fig:fig-policy-limits)  does not give a complete picture of journal-level limits on PPPR. For example, an individual journal may compensate for a restrictive form of PPPR by also offering a less restrictive form of PPPR. This is difficult to assess systematically across the whole sample because of interactions between different limit types and the ambiguity of qualitative limits. However, in Table 2 we provided a focused examination of the 20 journals that offered the most restrictive PPPR options in terms of quantitative length and time-to-submit limits. To build this table, we created two separate lists of PPPR ranked by quantitative length limits and time limits respectively. We then identified the top ten journals in each ranked list. To handle duplicates within- or between- lists, we retained the higher ranked instance and replaced the lower ranked instance until we had 20 unique journals overall (Table 2). 
+Because some journals offered more than one type of post-publication critique, Figure \@ref(fig:fig-policy-limits)  does not give a complete picture of journal-level limits. For example, an individual journal may compensate for a restrictive form of post-publication critique by also offering a less restrictive form. This is difficult to assess systematically across the whole sample because of interactions between different limit types and the ambiguity of qualitative limits. However, in Table 2 we provided a focused examination of the 20 journals that offered the most restrictive post-publication critique options in terms of quantitative length and time-to-submit limits. To build this table, we created two separate lists of post-publication critique ranked by quantitative length limits and time limits respectively. We then identified the top ten journals in each ranked list. To handle duplicates within- or between- lists, we retained the higher ranked instance and replaced the lower ranked instance until we had 20 unique journals overall (Table 2). 
 
 ```{r most-restrictive}
 # identify most restrictive PPPRs in terms of length limits
@@ -667,50 +648,51 @@ d_policy %>% filter(!is.na(PPPR_name), journal %in% restrict_all) %>%
   mutate(
     journal = str_to_title(journal),
     across(c(wordLimits,timeLimits), ~recode(., "NOT STATED" = "Not specified", "Qualitative limit" = "Qual limit"))) %>%
-  kable(col.names = c('journal', 'PPPR', 'word limits', 'time limits'), caption = "Twenty journals that offered the most restrictive PPPR options. Journals were selected based on having the most restrictive quantitative length and time-to-submit limits for at least one of their PPPR options. Some of these journals also offered additional less restrictive PPPR options, which we have included and marked with asterisks. When PPPR were subject to qualitative limits, the verbatim policy text is shown. Journals are presented in alphabetical order. Journal of the American Medical Association (JAMA) journals are clustered because they had identical PPPR policies.", booktabs = T, longtable = T) %>% kable_styling(latex_options=c("hold_position", "scaledown")) %>% column_spec(1, width = "15em")
+  kable(col.names = c('journal', 'PPPR', 'word limits', 'time limits'), caption = "Twenty journals that offered the most restrictive options for post-publication critique. Journals were selected based on having the most restrictive quantitative length and time-to-submit limits for at least one of their post-publication critique options. Some of these journals also offered additional less restrictive options, which we have included and marked with asterisks. When post-publication critiques were subject to qualitative limits, the verbatim policy text is shown. Journals are presented in alphabetical order. Journal of the American Medical Association (JAMA) journals are clustered because they had identical post-publication critique policies.", booktabs = T, longtable = T) %>% kable_styling(latex_options=c("hold_position")) %>% column_spec(1, width = "15em")
 ```
 
-From Table 2, it is notable that 8 of the journals offering the most restrictive PPPR options operate in the domain of Clinical Medicine. Overall in this domain, journals specified strict limits on length (19 PPPR policies with a quantitative limit: median 400, IQR 150 words; 3 PPPR policies did not mention a limit) and time-to-submit (13 PPPR policies with a quantitative limit: median 4, IQR 2 weeks; 3 PPPR policies stated a qualitative limit, 5 PPPR policies did not mention a limit, 1 PPPR policy stated there was no limit). Table 2 also suggests that restrictive PPPR options are sometimes accompanied by less restrictive PPPR options. Eleven of the 20 journals only offered one PPPR option. Nine of the 20 journals offered web comments in addition to letters and, in general, web comment policies appeared to be less restrictive than letters. However, this was often unclear because exact quantitative limits were not specified and most differences were marginal. For example, in the JAMA family of journals, letters must be less than 400 words and submitted within 4 weeks of target article publication. By contrast, web comments are marginally less restrictive in terms of length (600 words), and ambiguous about their time-to-submit limits (“We may reject comments because they...are submitted a long time after article publication”). One journal - Science - offered commentaries (called ‘Technical Comments’) in addition to letters and web comments. In this case, letters and commentaries shared a time-to-submit limit of 3 months, and commentaries had a somewhat less restrictive length limit than letters (1000 vs. 300 words). By contrast, no time-to-submit limit was specified for web comments and an ambiguous length limit was implied (web comments should be ‘brief’).
+From Table 2, it is notable that 8 of the journals offering the most restrictive options for post-publication critique operate in the discipline of Clinical Medicine. Overall, medical journals specified strict limits on length (19 policies with a quantitative limit: median 400, IQR 150 words; 3 policies did not mention a limit) and time-to-submit (13 policies with a quantitative limit: median 4, IQR 2 weeks; 3 policies stated a qualitative limit, 5 policies did not mention a limit, 1 policy stated there was no limit). Table 2 also suggests that restrictive options for post-publication critique are sometimes accompanied by less restrictive options. Eleven of the 20 journals only offered one option for post-publication critique. Nine of the 20 journals offered web comments in addition to letters and, in general, web comment policies appeared to be less restrictive than letters. However, this was often unclear because exact quantitative limits were not specified and most differences were marginal. For example, in the JAMA family of journals, letters must be less than 400 words and submitted within 4 weeks of target article publication. By contrast, web comments are marginally less restrictive in terms of length (600 words), and ambiguous about their time-to-submit limits (“We may reject comments because they...are submitted a long time after article publication”). One journal - Science - offered commentaries (called ‘Technical Comments’) in addition to letters and web comments. In this case, letters and commentaries shared a time-to-submit limit of 3 months, and commentaries had a somewhat less restrictive length limit than letters (1000 vs. 300 words). By contrast, no time-to-submit limit was specified for web comments and an ambiguous length limit was implied (web comments should be ‘brief’).
 
 ```{r}
 # examine limits in medicine only
 med_journ_limits <- d_policy %>% filter(field == "CLINICAL MEDICINE", !is.na(PPPR_name))
 
-med_journ_limits %>% count(wordLimits)
-med_journ_limits %>% count(timeLimits)
+#med_journ_limits %>% count(wordLimits)
+#med_journ_limits %>% count(timeLimits)
 
-med_journ_limits %>% select(wordLimits) %>% filter(wordLimits != "NOT STATED") %>% mutate(wordLimits = as.numeric(wordLimits)) %>% pull(wordLimits) %>% median()
-med_journ_limits %>% select(wordLimits) %>% filter(wordLimits != "NOT STATED") %>% mutate(wordLimits = as.numeric(wordLimits)) %>% pull(wordLimits) %>% IQR()
-med_journ_limits %>% select(timeLimits) %>% filter(timeLimits %notin% c("NOT STATED", "Qualitative limit", "NO")) %>% mutate(timeLimits = as.numeric(timeLimits)) %>% pull(timeLimits) %>% median()
-med_journ_limits %>% select(timeLimits) %>% filter(timeLimits %notin% c("NOT STATED", "Qualitative limit", "NO")) %>% mutate(timeLimits = as.numeric(timeLimits)) %>% pull(timeLimits) %>% IQR()
+#med_journ_limits %>% select(wordLimits) %>% filter(wordLimits != "NOT STATED") %>% mutate(wordLimits = as.numeric(wordLimits)) %>% pull(wordLimits) %>% median()
+#med_journ_limits %>% select(wordLimits) %>% filter(wordLimits != "NOT STATED") %>% mutate(wordLimits = as.numeric(wordLimits)) %>% pull(wordLimits) %>% IQR()
+#med_journ_limits %>% select(timeLimits) %>% filter(timeLimits %notin% c("NOT STATED", "Qualitative limit", "NO")) %>% mutate(timeLimits = as.numeric(timeLimits)) %>% pull(timeLimits) %>% median()
+#med_journ_limits %>% select(timeLimits) %>% filter(timeLimits %notin% c("NOT STATED", "Qualitative limit", "NO")) %>% mutate(timeLimits = as.numeric(timeLimits)) %>% pull(timeLimits) %>% IQR()
 ```
 
 # Study Two
 
 ## Methods
 
-### Design
-This was an observational study with a cross-sectional design. The goal of Study Two was to examine PPPR in practice at the 207 journals that offered PPPR according to Study One. We used two measures of PPPR prevalence. Our primary (preregistered) estimate of PPPR prevalence was based on how many of 10 randomly sampled articles per journal were linked to PPPR. As one journal - Wildlife Monographs only published 6 articles in 2018, the total number of assessed articles was 2066. An article was considered linked to PPPR if the article webpage mentioned the existence of relevant PPPR. 
-
-After Study One, but before beginning Study Two, we decided to also compute a secondary (not preregistered) PPPR prevalence estimate based on how many of randomly sampled articles were themselves examples of PPPR. To align the two estimates, we only used the first 10 eligible articles for each journal, and therefore the total number of assessed articles was 2066 as above. These two prevalence measures have complementary strengths and limitations. For the primary prevalence estimate PPPR was identified through searches of article web pages for linked PPPR. Its accuracy therefore depends on journals actively and visibly linking to PPPR on their webpages. However, it is not dependent on PPPR being indexed in Web of Science databases. By contrast, for the secondary prevalence estimate PPPR was identified by checking if sampled articles were themselves examples of PPPR. Thus, it does not rely on journals linking to relevant PPPR, but it does rely on PPPR being indexed in Web of Science databases, because that is how the sampled articles were identified. Note that our primary estimate was also time-restricted in the sense that any identified PPPR must have been published after 2018 (when the sampled articles were published). By contrast, our secondary estimate could theoretically detect PPPRs pertaining to any previously target articles, regardless of their publication date.
-
-We also examined several variables related to how PPPR was conducted in practice. This assessment was only performed on PPPRs we identified via the primary prevalence measure. For each PPPR, we categorised the type of issues that were addressed (design, implementation, analysis, reporting, interpretation, or other), length (in words), whether new data were collected, whether novel analyses were performed, time since publication of the target article (in days), open access status of target article and PPPR, whether PPPR included a conflict of interest statement and whether it declared any conflicts of interest, whether PPPR authors were anonymous, whether the PPPR triggered a correction to the target article, whether target article authors replied, and if they replied, whether they collected new data or performed novel analyses, and whether they stated that their core claims remained unchanged after reading the PPPR. For more detail about variables measured in Study Two, see Supplementary Table I.
-
 ### Sample
-The sample consisted of 10 randomly sampled eligible articles published in 2018 for each of the 207 journals that offered PPPR in principle (according to the results of Study One), aside from one journal, Wildlife Monographs, which only published 6 articles in 2018. Thus, the sample size was 2066 articles.
+The sample consisted of 10 randomly sampled eligible articles published in 2018 for each of the 207 journals that offered post-publication critique in principle (according to the results of Study One), aside from one journal, Wildlife Monographs, which only published 6 articles in 2018. Thus, the sample size was 2066 articles.
 
-To obtain this sample, one author (TEH) downloaded bibliographic records from Clarivate Web of Science for all articles published in each PPPR-offering journal in 2018. We did not include records with meta-data indicating that the article was a ‘Correction’, ‘Retraction’, ‘News Item’, ‘Book Review’, ‘Meeting Abstract’, or ‘Biographical-Item’. The remaining records were randomly shuffled using the ‘sample’ function in R. During manual inspection, additional articles were excluded if they (1) could not be found or accessed; (2) were non-English language; (3) had been retracted; or (4) did not include substantive research: specifically, we excluded news, book reviews, editorials, previews, or similar, and included empirical research, case studies, simulations, proofs, theoretical papers, reviews, meta-analyses, and perspectives (if they were predominantly evidence-based rather than opinion-based). If articles were themselves examples of PPPR, they were also excluded for the purposes of our primary PPPR prevalence measure, but included for the purposes of our secondary PPPR prevalence measure.
+To obtain this sample, one author (TEH) downloaded bibliographic records from Clarivate Web of Science for all articles published in each journal offering post-publication critique in 2018. We did not include records with meta-data indicating that the article was a ‘Correction’, ‘Retraction’, ‘News Item’, ‘Book Review’, ‘Meeting Abstract’, or ‘Biographical-Item’. The remaining records were randomly shuffled using the ‘sample’ function in R. During manual inspection, additional articles were excluded if they (1) could not be found or accessed; (2) were non-English language; (3) had been retracted; or (4) did not include substantive research: specifically, we excluded news, book reviews, editorials, previews, or similar, and included empirical research, case studies, simulations, proofs, theoretical papers, reviews, meta-analyses, and perspectives (if they were predominantly evidence-based rather than opinion-based). If articles were themselves examples of post-publication critique, they were also excluded for the purposes of our primary prevalence measure, but included for the purposes of our secondary prevalence measure.
+
+### Design
+The study had a cross-sectional design. The goal of Study Two was to examine post-publication critique in practice at the 207 journals that offered post-publication critique according to Study One. We used two measures of post-publication critique prevalence. Our primary (preregistered) estimate of prevalence was based on how many of 10 randomly sampled articles per journal were linked to post-publication critique. As one journal - Wildlife Monographs only published 6 articles in 2018, the total number of assessed articles was 2066. An article was considered linked to post-publication critique if the article webpage mentioned the existence of relevant post-publication critique. 
+
+After Study One, but before beginning Study Two, we decided to also compute a secondary (not preregistered) prevalence estimate based on how many of the randomly sampled articles were themselves examples of post-publication critique. To align the two estimates, we only used the first 10 eligible articles for each journal, and therefore the total number of assessed articles was 2066 as above. These two prevalence measures have complementary strengths and limitations. For the primary prevalence estimate, post-publication critique was identified through searches of article web pages for linked post-publication critique. Its accuracy therefore depends on journals actively and visibly linking to post-publication critique on their webpages. However, it is not dependent on post-publication critique being indexed in Web of Science databases. By contrast, for the secondary prevalence estimate, post-publication critique was identified by checking if sampled articles were themselves examples of post-publication critique. Thus, it does not rely on journals linking to relevant post-publication critique, but it does rely on post-publication critique being indexed in Web of Science databases, because that is how the sampled articles were identified. Note that our primary estimate was also time-restricted in the sense that any identified post-publication critique must have been published after 2018 (when the sampled articles were published). By contrast, our secondary estimate could theoretically detect post-publication critiques pertaining to any prior articles, regardless of their publication date.
+
+We also examined several variables related to how post-publication critique was conducted in practice. This assessment was only performed on post-publication critiques we identified via the primary prevalence measure. For each post-publication critique, we categorised the type of issues that were addressed (design, implementation, analysis, reporting, interpretation, or other), length (in words), whether new data were collected, whether novel analyses were performed, time since publication of the target article (in days), open access status of target article and post-publication critique, whether post-publication critique included a conflict of interest statement and whether it declared any conflicts of interest, whether post-publication critique authors were anonymous, whether the post-publication critique triggered a correction to the target article, whether target article authors replied, and if they replied, whether they collected new data or performed novel analyses, and whether they stated that their core claims remained unchanged after reading the post-publication critique. For more detail about variables measured in Study Two, see Supplementary Table I.
 
 ### Procedure
-1. Between May 2021 and September, 2021, each coder (SAH, TB, RTT, JEK, LT, or TEH) self-assigned journals sequentially from a randomly shuffled list until they had coded an approximately equal amount. For each journal, the assigned coder worked sequentially through a list of randomly shuffled articles published by that journal in 2018. If a coder did not have access to a journal, it was skipped and assigned to the next available coder.
 
-2. For each article, coders ascertained whether it (1) needed to be excluded; (2) was itself an example of PPPR; or (3) was linked to PPPR. When we encountered multiple PPPRs that were part of the same back-and-forth exchange between target article authors and PPPR authors, these were counted as a single instance of PPPR. Coders followed an instruction sheet (https://osf.io/aejx4/), which reminded them of the exclusion criteria and operational definition of PPPR (Box 1), and entered data directly into a Google Sheet. Coders were encouraged to discuss any ambiguous cases with TEH and all positive PPPR classifications were independently verified by TEH.
+1.	Between May 2021 and September, 2021, each coder (SAH, TB, RTT, JEK, LT, or TEH) self-assigned journals sequentially from a randomly shuffled list until they had coded an approximately equal amount. For each journal, the assigned coder worked sequentially through a list of randomly shuffled articles published by that journal in 2018. If a coder did not have access to a journal, it was skipped and assigned to the next available coder.
 
-3. When journals relied on third-party services (e.g., Elsevier’s ScienceDirect) to distribute their articles we only used these websites if the journal did not also distribute their articles through their own dedicated website (as we noticed that links to PPPR were sometimes displayed on journal websites and not on third-party websites).
+2.	For each article, coders ascertained whether it (1) needed to be excluded; (2) was itself an example of post-publication critique; or (3) was linked to post-publication critique. When we encountered multiple post-publication critiques that were part of the same back-and-forth exchange between target article authors and post-publication critique authors, these were counted as a single instance of post-publication critique. Coders followed an instruction sheet (https://osf.io/aejx4/), which reminded them of the exclusion criteria and operational definition of post-publication critique (Supplementary Information K), and entered data directly into a Google Sheet. Coders were encouraged to discuss any ambiguous cases with TEH and all positive post-publication critique classifications were independently verified by TEH.
 
-4. Coders worked sequentially through each journal’s articles until they had examined ten that were eligible (i.e., they were not excluded or classified as themselves being PPPR).
+3.	When journals relied on third-party services (e.g., Elsevier’s ScienceDirect) to distribute their articles we only used these websites if the journal did not also distribute their articles through their own dedicated website (as we noticed that links to post-publication critique were sometimes displayed on journal websites and not on third-party websites).
 
-5. For the assessment of PPPR features, one author (TEH) extracted information (see Supplementary Table I) from all linked PPPRs identified by the primary estimate method.
+4.	Coders worked sequentially through each journal’s articles until they had examined ten that were eligible (i.e., they were not excluded or classified as themselves being post-publication critique).
+
+5.	For the assessment of post-publication critique features, one author (TEH) extracted information (see Supplementary Table I) from all linked post-publication critiques identified by the primary estimate method.
 
 ### Data analysis
 
@@ -718,7 +700,7 @@ For prevalence estimates, 95% Wilson Confidence intervals computed by the R func
 
 ## Results
 
-### How prevalent is PPPR in practice?
+### How prevalent is post-publication critique in practice?
 
 ```{r}
 d_freq_checked <- d_freq %>% nrow()
@@ -748,9 +730,9 @@ prev_est_secondary <- percentCI(isPPPR_n, nrow(d_freq_secondary))
 ratio_secondary <- isPPPR_n / (nrow(d_freq_secondary) - isPPPR_n)*100 # as a ratio, X PPPRs per 100 research articles
 
 ```
-In total, we considered `r d_freq_checked` articles for inclusion before we reached our target of 2066 eligible research articles. `r d_freq_excluded` articles were excluded because they did not contain research (n = `r d_freq_notResearch`) or could not be found/accessed (n = `r d_freq_noAccess`). An additional `r d_freq_isPPPR` articles were classified as being themselves examples of PPPR. In total, `r linkedPPPR_n` of the 2066 research articles were linked to at least one PPPR. Our primary PPPR prevalence estimate was therefore `r prev_est_primary`. These articles were published in `r d_freq %>% filter(linkedPPPR == T) %>% count(journal) %>% nrow()` individual journals (Supplementary Table \@ref(tab:tab-practice-prev-primary-journals)).
+In total, we considered `r d_freq_checked` articles for inclusion before we reached our target of 2066 eligible research articles. `r d_freq_excluded` articles were excluded because they did not contain research (n = `r d_freq_notResearch`) or could not be found/accessed (n = `r d_freq_noAccess`). An additional `r d_freq_isPPPR` articles were classified as being themselves examples of post-publication critique and excluded from our primary prevalence estimate. In total, `r linkedPPPR_n` of the 2066 research articles were linked to at least one post-publication critique. Our primary post-publication critique prevalence estimate was therefore `r prev_est_primary`. These articles were published in `r d_freq %>% filter(linkedPPPR == T) %>% count(journal) %>% nrow()` individual journals (Supplementary Table J2)).
 
-We also computed a secondary PPPR prevalence estimate based on the proportion of articles that were themselves PPPR amongst the first 10 eligible articles assessed at each journal (first 6 articles in the case of Wildlife Monographs). `r isPPPR_n` out of 2066 articles were classified as PPPR, yielding a secondary PPPR prevalence estimate of `r prev_est_secondary`. This is equivalent to `r round(ratio_secondary,1)` PPPRs for every 100 research articles. These articles were published in `r d_freq %>% group_by(journal) %>% slice_head(n = 10) %>% filter(isPPPR == T) %>% count(journal) %>% nrow()` individual journals (Supplementary Table \@ref(tab:tab-practice-prev-secondary-journals)). 
+We also computed a secondary prevalence estimate based on the proportion of articles that were themselves post-publication critique  amongst the first 10 eligible articles assessed at each journal (first 6 articles in the case of Wildlife Monographs; N = 2066 articles). We only examined the first 10 eligible articles in order to align the denominator of the primary and secondary estimates. This meant that articles classified as being themselves examples of post-publication critique only contributed if they were found within the first 10 eligible articles, and thus, we did not include all of the 173 post-publication critiques found among the 3030 articles mentioned above. `r isPPPR_n` out of 2066 articles were classified as post-publication critique, yielding a secondary prevalence estimate of `r prev_est_secondary`. This is equivalent to `r round(ratio_secondary,1)` post-publication critiques for every 100 research articles. These articles were published in `r d_freq_secondary %>% group_by(journal) %>% slice_head(n = 10) %>% filter(isPPPR == T) %>% count(journal) %>% nrow()` individual journals (Supplementary Table \@ref(tab:tab-practice-prev-secondary-journals)). 
 
 ```{r}
 field_prev_primary <- d_freq_primary %>%
@@ -902,7 +884,7 @@ plt2 <- field_prev %>%
   coord_flip()
 ```
 
-```{r fig-practice-prev, fig.width = 7.5, fig.height = 6, fig.path = 'figs/', fig.cap = 'Primary (Panel A) and secondary (Panel B) prevalence estimates for the use of PPPR in all journals overall (N = 330 journals; black diamond, error bars represent 95% confidence intervals) and then in descending order by each scientific domain (n = 15 journals; coloured circles). Domain abbreviations: Agricultural Sciences (AGRI), Biology & Biochemistry (BIO), Chemistry (CHEM), Clinical Medicine (MED), Computer Science (COMSCI), Economics & Business (ECON), Engineering (ENGIN), Environment & Ecology (ECO), Geosciences (GEO), Immunology (IMMUN), Materials Science (MATSCI), Mathematics (MATH), Microbiology (MICBIO), Molecular Biology & Genetics (MOLBIO), Multidisciplinary (MULTI), Neuroscience & Behavior (NEURO), Pharmacology & Toxicology (PHARM), Physics (PHYS), Plant & Animal Science (PLANT), Psychiatry & Psychology (PSY), Social Sciences (SOCSCI), Space Science (SPACE).'}
+```{r fig-practice-prev, fig.width = 7.5, fig.height = 6, fig.path = 'figs/', fig.cap = 'Primary (Panel A) and secondary (Panel B) prevalence estimates for post-publication critique in all journals overall (N = 330 journals; black diamond, error bars represent 95% confidence intervals) and then in descending order by each scientific discipline (n = 15 journals; coloured circles). Discipline abbreviations: Agricultural Sciences (AGRI), Biology & Biochemistry (BIO), Chemistry (CHEM), Clinical Medicine (MED), Computer Science (COMSCI), Economics & Business (ECON), Engineering (ENGIN), Environment & Ecology (ECO), Geosciences (GEO), Immunology (IMMUN), Materials Science (MATSCI), Mathematics (MATH), Microbiology (MICBIO), Molecular Biology & Genetics (MOLBIO), Multidisciplinary (MULTI), Neuroscience & Behavior (NEURO), Pharmacology & Toxicology (PHARM), Physics (PHYS), Plant & Animal Science (PLANT), Psychiatry & Psychology (PSY), Social Sciences (SOCSCI), Space Science (SPACE).'}
 plt1 + plt2
 ```
 ```{r}
@@ -974,9 +956,14 @@ linkedPPPR_n_noMed <- d_freq_noMed %>% filter(linkedPPPR == T) %>% nrow()
 prev_est_noMed_primary <- percentCI(linkedPPPR_n_noMed, nrow(d_freq_noMed))
 ```
 
-PPPR prevalence estimates varied substantially across scientific domains (Figure \@ref(fig:fig-practice-prev); for equivalent tabular data see Supplementary Table \@ref(tab:tab-practice-prev)). The number of domains which had zero instances of PPPR was `r primary_zero` according to our primary prevalence estimate and `r secondary_zero` according to our secondary prevalence estimate. The domain with the most PPPR was Clinical Medicine with `r primary_max$primary`% of research articles being linked to PPPR and `r secondary_max$secondary`% of assessed articles being themselves instances of PPPR.
+```{r}
+linkedPPPR_med <- d_freq_primary %>% count(linkedPPPR, ESI_field) %>% filter(linkedPPPR==T, ESI_field == "CLINICAL MEDICINE") %>% pull(n)
 
-### Features of PPPR in practice
+isPPPR_med <- d_freq_secondary %>% count(isPPPR, ESI_field) %>% filter(isPPPR==T, ESI_field == "CLINICAL MEDICINE") %>% pull(n)
+```
+Prevalence estimates varied substantially across scientific disciplines (Figure \@ref(fig:fig-practice-prev); for equivalent tabular data see Supplementary Table J1). The number of disciplines which had zero instances of post-publication critique was `r primary_zero` according to our primary prevalence estimate and `r secondary_zero` according to our secondary prevalence estimate. The discipline with the most post-publication critique was Clinical Medicine with `r linkedPPPR_med` (`r primary_max$primary`%) of 150 research articles being linked to post-publication critique and `r isPPPR_med` (`r secondary_max$secondary`%) of 150 assessed articles being themselves instances of post-publication critique.
+
+### Features of post-publication critique in practice
 
 ```{r}
 # how many PPPRs per article
@@ -988,7 +975,7 @@ d_assess_types <- d_assess %>%
   count(pppr_type)
 ```
 
-We conducted a closer examination of the PPPR linked to the `r linkedPPPR_n` articles identified above for our primary prevalence estimate. These `r linkedPPPR_n` articles were each linked to either one PPPR (*n* = `r d_assess_articles %>% filter(ppprs==1) %>% pull(n)`), two PPPRs (*n* = `r d_assess_articles %>% filter(ppprs==2) %>% pull(n)`), three PPPRs (*n* = `r d_assess_articles %>% filter(ppprs==3) %>% pull(n)`), or four PPPRs (*n* = `r d_assess_articles %>% filter(ppprs==4) %>% pull(n)`); a total of `r d_assess %>% count(article_id) %>% pull(n) %>% sum()` PPPRs. Various features of these PPPRs are shown in Table 3 and features of target article author responses to these PPPRs are shown in Table 4.
+We conducted a closer examination of the post-publication critique linked to the `r linkedPPPR_n` articles identified above for our primary prevalence estimate. These `r linkedPPPR_n` articles were each linked to either one (*n* = `r d_assess_articles %>% filter(ppprs==1) %>% pull(n)`), two (*n* = `r d_assess_articles %>% filter(ppprs==2) %>% pull(n)`), three (*n* = `r d_assess_articles %>% filter(ppprs==3) %>% pull(n)`), or four post-publication critiques (*n* = `r d_assess_articles %>% filter(ppprs==4) %>% pull(n)`); a total of `r d_assess %>% count(article_id) %>% pull(n) %>% sum()` post-publication critiques. Various features of these post-publication critiques are shown in Tables 3, 4, and 5 (Table 3 in the actual manuscript) and features of target article author responses to these post-publication critiques are shown in Table 6 (Table 4 in the actual manuscript).
 
 ```{r pppr-practice-box}
 
@@ -1010,7 +997,7 @@ d_assess_journals <- d_assess_journals %>%
   filter( n > 1) %>% # only show journals with at least one pppr option
   bind_rows(data.frame(var = paste0(journo_one_pppr, " other journals"), n = 1)) # make last row a combined entry for the journals with only one pppr
 
-# how many domains
+# how many disciplines
 d_assess_fields <- d_assess %>% 
   count(var = ESI_field) %>% 
   mutate(var = str_to_title(var)) %>%
@@ -1133,16 +1120,16 @@ bind_rows(
   d_assess_issues,
   d_assess_data_shared,
   d_assess_pppr_analyses
-) %>% kable(caption = "Table 3A: Features of 58 assessed PPPRs.", booktabs = T, longtable = T) %>% kable_styling(latex_options=c("hold_position", "scaledown")) %>% column_spec(1, width = "25em") %>% pack_rows("PPPR type", 1, 3) %>% pack_rows("Journals", 4, 13) %>% pack_rows("Domains", 14, 20) %>% pack_rows("Open access to target article and PPPR", 21, 24) %>% pack_rows("PPPR author anonymity", 25, 26) %>% pack_rows("PPPR conflict of interest (COI)", 27, 29) %>% pack_rows("Type of issues raised in PPPR", 30, 35) %>% pack_rows("Data availability in target article", 36, 39) %>% pack_rows("Analyses/data included in PPPR", 40, 43)
+) %>% kable(caption = "Table 3A: Features of 58 assessed post-publication critiques.") %>% kable_styling(latex_options=c("hold_position")) %>% column_spec(1, width = "25em") %>% pack_rows("PPPR type", 1, 3) %>% pack_rows("Journals", 4, 13) %>% pack_rows("Domains", 14, 20) %>% pack_rows("Open access to target article and PPPR", 21, 24) %>% pack_rows("PPPR author anonymity", 25, 26) %>% pack_rows("PPPR conflict of interest (COI)", 27, 29) %>% pack_rows("Type of issues raised in PPPR", 30, 35) %>% pack_rows("Data availability in target article", 36, 39) %>% pack_rows("Analyses/data included in PPPR", 40, 43)
 ```
 
 ```{r}
-d_assess_words %>% kable(caption = "In manuscript - part of Table 3. Features of 58 assessed PPPRs. Length of PPPR (words).", booktabs = T)
-d_assess_pub_time %>% kable(caption = "In manuscript - part of Table 3. Features of 58 assessed PPPRs. Time of PPPR publication relative to target article publication (days)", booktabs = T)
+d_assess_words %>% kable(caption = "In manuscript this is part of Table 3. Features of 58 assessed post-publication critiques. Length of post-publication critique (words).", booktabs = T) %>% kable_styling(latex_options=c("hold_position")) 
+d_assess_pub_time %>% kable(caption = "In manuscript this is part of Table 3. Features of 58 assessed post-publication critiques. Time of post-publication critique publication relative to target article publication (days)", booktabs = T) %>% kable_styling(latex_options=c("hold_position")) 
 ```
 
 ```{r}
-## AUTHOR RESPONSE TO PPPPR
+## AUTHOR RESPONSE TO post-publication critique
 
 bind_rows(
   # corrections
@@ -1174,23 +1161,24 @@ bind_rows(
     filter(!is.na(var))
 ) %>%
   mutate(var = recode(factor(var), "TRUE" = "Yes", "FALSE" = "No")) %>%
-  kable(caption = 'Features of target article author response to 58 assessed PPPRs.', booktabs = T) %>%
-  pack_rows("Did the PPPR prompt publication of a correction?", 1, 2) %>%
-  pack_rows("Did the PPPR prompt publication of an author reply?", 3, 4) %>%
+  kable(caption = 'Features of target article author response to 58 assessed post-publication critiques.', booktabs = T) %>%
+  kable_styling(latex_options=c("hold_position")) %>%
+  pack_rows("Did the post-publication critique prompt publication of a correction?", 1, 2) %>%
+  pack_rows("Did the post-publication critique prompt publication of an author reply?", 3, 4) %>%
   pack_rows("Did the authors’ reply involve collection of new data?", 5, 6) %>%
   pack_rows("Did the authors’ reply involve new analyses?", 7, 8) %>%
   pack_rows("Did the authors’ reply assert that their core claims remain unchanged?", 9, 10)
 ```
 
-```{r}
+```{r warning=F}
 # table for Peer Review Congress abstract
 
-# summarise number of journals offering each PPPR type in each domain
+# summarise number of journals offering each post-publication critique type in each discipline
 sum_domain_type <- d_policy %>%
   count(domain, type = PPPR_name_harmonized, .drop = F) %>%
   filter(type %notin% c('Not categorised','Other'))
 
-# summarise number of journals offering any PPPR type in each domain
+# summarise number of journals offering any post-publication critique type in each discipline
 sum_domain_any_type <- d_policy %>%
   filter(PPPR_type == 'A') %>% # only need the first entry for each journal
   count(domain, anyPPPR) %>%
@@ -1259,7 +1247,7 @@ df_limits_combined <- bind_rows(df_limits_domain, df_limits_overall) %>%
   select(domain, lengthLimits, lengthQuant, timeLimits, timeQuant) %>% 
   pivot_longer(cols = lengthLimits:timeQuant, names_to = 'Features', values_to = 'values')
   
-# PPPR prevalence by domain
+# post-publication critique prevalence by discipline
 prevalence_domain <- d_freq_primary %>% 
   mutate(linkedPPPR = factor(linkedPPPR)) %>% 
   count(domain, linkedPPPR, .drop = F) %>% 
@@ -1289,64 +1277,65 @@ final_table <-bind_rows(sum_combined, prevalence_domain, df_limits_combined) %>%
   relocate('Features', 'All (N=330)', 'HEALTH & LIFE SCIENCES (N=165)', 'MULTIDISCIPLINARY (N=15)', 'PHYSICAL SCIENCES (N=90)', 'FORMAL SCIENCES (N=30)', 'SOCIAL SCIENCES (N=30)')
 
 
-
-
-d_policy %>%
-  mutate(limits = timeLimits) %>% # use either wordLimits or timeLimits
-  filter(!is.na(PPPR_name), limits %notin% c('Qualitative limit','NOT STATED', 'NO')) %>%
-  mutate(limits = as.numeric(limits)) %>%
-  group_by(field) %>%
-  summarise(
-    md = median(limits),
-    iqr = paste0(quantile(limits,na.rm=T)[2],'-',quantile(limits,na.rm=T)[4]),
-    min = min(limits),
-    max = max(limits)
-  )
-  
-
+# d_policy %>%
+#   mutate(limits = timeLimits) %>% # use either wordLimits or timeLimits
+#   filter(!is.na(PPPR_name), limits %notin% c('Qualitative limit','NOT STATED', 'NO')) %>%
+#   mutate(limits = as.numeric(limits)) %>%
+#   group_by(field) %>%
+#   summarise(
+#     md = median(limits),
+#     iqr = paste0(quantile(limits,na.rm=T)[2],'-',quantile(limits,na.rm=T)[4]),
+#     min = min(limits),
+#     max = max(limits)
+#   )
 ```
 
 # Discussion
-We found substantial variation in how PPPR was handled in both policy and practice at 330 influential journals operating across 22 scientific domains. Publication of PPPR was rare in most domains and a considerable number of journals (37%) did not offer any options for submitting PPPR. Journals that did offer PPPR often imposed restrictive length and time-to-submit limits. Overall, influential journals often represented a serious obstacle to the cultivation, documentation, and dissemination of post-publication critique. 
+We found substantial variation in how post-publication critique was handled in both policy and practice at 330 top-ranked journals operating in 22 scientific disciplines. Post-publication critique was rare in most disciplines and a considerable number of journals (37%) did not offer any options for submitting post-publication critique. Journals that did offer post-publication critique often imposed restrictive length and time-to-submit limits. Overall, top-ranked journals often represented a serious obstacle to the cultivation, documentation, and dissemination of post-publication critique. 
 
-There was substantial variation across scientific domains with journals in Clinical Medicine standing out as offering the most PPPR options and publishing the most PPPR, but also imposed the most restrictive length and time-to-submit limits (for concordant evidence, see Altman, 2002; Von Elm et al., 2009; Winker, 2013). In general, health-related domains seemed to have a more active PPPR culture than non-health related domains like the physical sciences and social sciences. Many domains, such as mathematics, showed little evidence of any PPPR activity, with few journals offering PPPR and scarce evidence of published PPPR. Our data do not speak to the causal forces that underlie these inter-domain differences, but some potential contributing factors could be cultural (e.g., different attitudes towards scientific criticism and how it should be handled), pragmatic (e.g., differences in methodological standards and research quality, manifesting in differential need for scientific criticism), bureaucratic (e.g., different resources available to support PPPR), or historic (e.g., individuals or events that highlighted the value of PPPR). 
+There was substantial variation across scientific disciplines with journals in Clinical Medicine standing out as offering the most options for post-publication critique and publishing the most post-publication critique, but also imposed the most restrictive length and time-to-submit limits (for concordant evidence, see Altman, 2002; Kastner et al., 2013; Von Elm et al., 2009; Winker, 2013). In general, health-related disciplines seemed to have a more active post-publication critique culture than non-health related disciplines like the physical sciences and social sciences. Many disciplines, such as mathematics, showed little evidence of any post-publication critique activity, with few journals offering post-publication critique and scarce evidence of published post-publication critique. Our data do not speak to the causal forces that underlie these inter-discipline differences, but some potential contributing factors could be cultural (e.g., different attitudes towards scientific criticism and how it should be handled), pragmatic (e.g., differences in methodological standards and research quality, manifesting in differential need for scientific criticism), bureaucratic (e.g., different resources available to support post-publication critique), or historic (e.g., individuals or events that highlighted the value of post-publication critique). 
 
-PPPR could usually be mapped to one of three main types (letters, commentaries, and web comments), of which letters were most common in policy and practice. Generally, letters had the most restrictive limits, followed by commentaries, then web comments. Typically, letters had to be shorter, submitted more quickly, and contain fewer references relative to commentaries. Usually, web comments had no stated limits, except for a quarter that had length limits. Policies implied that commentaries were more likely to be sent for independent external peer review, with letters more likely to be handled exclusively by the editorial team. Web comments were typically subject to ‘light’ editorial moderation or no review at all. Some journals may offer less restrictive web comments to compensate for other more restrictive PPPR options they offer (Table 2). 
+Post-publication critique could usually be mapped to one of three main types (letters, commentaries, and web comments), of which letters were most common in policy and practice. Generally, letters had the most restrictive limits, followed by commentaries, then web comments. Typically, letters had to be shorter, submitted more quickly, and contain fewer references relative to commentaries. Usually, web comments had no stated limits, except for a quarter that had length limits. Policies implied that commentaries were more likely to be sent for independent external peer review, with letters more likely to be handled exclusively by the editorial team. Web comments were typically subject to ‘light’ editorial moderation or no review at all. Some journals may offer less restrictive web comments to compensate for other more restrictive options for post-publication critique they offer (Table 2). 
+	
+The extent to which journal limits on post-publication critique are reasonable or unreasonable is a somewhat subjective determination and there are likely to be competing interests between what is best for journals and what is best for the advancement of science. Restrictions on post-publication critique may arise from editorial bias against criticism of papers they have published. Editors may also prefer to allow only what they perceive as the most timely and concise debate. However, length restrictions arbitrarily limit the scope of post-publication critique, particularly if the criticism involves extended analyses or additional data. One can certainly say very little of substance in 175, 200, or 250 words (the most restrictive length limits). Restricting the number of references to 3, 4, or 5 (the most restrictive reference limits) may prevent links to relevant evidential, contextual, or methodological information, undermining an aspect of scholarship that is surely as important to post-publication critique as it is to regular articles. Finally, imposing time-to-submit limits on post-publication critique is clearly not justifiable from a scientific perspective because important critiques may arise at any time. Limiting the time allowed to submit post-publication critique to 2, 3, or 4 weeks (the most restrictive time-to-submit limits) seems especially unjustifiable and poses a serious threat to the dissemination of scientific critique. An earlier study describing strict length and time-to-submit limits imposed on post-publication critique at six leading medical journals led the author to trenchantly conclude that “In effect, there is a statute of limitations by which authors of articles in these journals are immune to disclosure of methodological weaknesses once some arbitrary (short) period has elapsed, which cannot be right.” (Altman, 2002; also see Altman, 2005).
 
-The extent to which journal limits on PPPR are reasonable or unreasonable is a somewhat subjective determination and there are likely to be competing interests between what is best for journals and what is best for the advancement of science. Restrictions on PPPR may arise from editorial bias against criticism of papers they have published. Editors may also prefer to allow only what they perceive as the most timely and concise debate. However, length restrictions arbitrarily limit the scope of PPPR, particularly if the criticism involves extended analyses or additional data. One can certainly say very little of substance in 175, 200, or 250 words (the most restrictive length limits). Restricting the number of references to 3, 4, or 5 (the most restrictive reference limits) may prevent links to relevant evidential, contextual, or methodological information, undermining an aspect of scholarship that is surely as important to PPPR as it is to regular articles. Finally, imposing time-to-submit limits on PPPR is clearly not justifiable from a scientific perspective because important critiques may arise at any time. Limiting the time allowed to submit PPPR to 2, 3, or 4 weeks (the most restrictive time-to-submit limits) seems especially unjustifiable and poses a serious threat to the dissemination of scientific critique. An earlier study describing strict length and time-to-submit limits imposed on PPPR at six leading medical journals led the author to trenchantly conclude that "In effect, there is a statute of limitations by which authors of articles in these journals are immune to disclosure of methodological weaknesses once some arbitrary (short) period has elapsed, which cannot be right." (Altman, 2002; also see Altman, 2005).
+Our exploration of how post-publication critique is used in practice suggested that letters are far more common than other types of post-publication critique, perhaps because they are the most frequently available post-publication critique option and also because, as formal articles, they may impart greater academic credit to their authors than informal web comments (Table 3). We found that half of the post-publication critiques we examined were behind a paywall, sometimes even when the target article was publicly accessible. This reduces access to post-publication critique for both professional scientists and other readers, like patients, journalists, and policy-makers (Winker, 2015). Most post-publication critiques had conflict of interest statements and a third of those statements declared a potential conflict. Conflict of interest statements enable readers to evaluate an important risk of bias and seem just as relevant to post-publication critiques as they are to other academic articles (Dunn et al., 2016). 
 
-Our exploration of how PPPR is used in practice suggested that letters are far more common than other types of PPPR, perhaps because they are the most frequently available PPPR option and also because, as formal articles, they may impart greater academic credit to their authors than informal web comments (Table 3). We found that half of the PPPRs we examined were behind a paywall, sometimes even when the target article was publicly accessible. This reduces access to PPPR for both professional scientists and other readers, like patients, journalists, and policy-makers (Winker, 2015). Most PPPR had conflict of interest statements and a third of those statements declared a potential conflict. Conflict of interest statements enable readers to evaluate an important risk of bias and seem just as relevant to PPPR as they are to other academic articles (Dunn et al., 2016). 
-The PPPRs we examined addressed a range of issues spanning the timeline of a research project, including design, implementation, analysis, reporting, and interpretation. The vast majority of PPPRs did not include new analysis of original or new data. This may be because very few original articles stated that data were available, as is typical in many scientific domains (Hardwicke et al., 2021; Hardwicke, Wallach, et al., 2020; Serghiou et al., 2021). Most of the PPPR was short (~250 words) and published within five months of the target article, perhaps partly because they were published in some journals that imposed the strictest limits on PPPR (Table 2). 
+The post-publication critiques we examined addressed a range of issues spanning the timeline of a research project, including design, implementation, analysis, reporting, and interpretation (for concordant evidence, see Kastner et al., 2013). The vast majority of post-publication critiques did not include new analysis of original or new data. This may be because very few original articles stated that data were available, as is typical in many scientific disciplines (Hardwicke et al., 2021; Hardwicke, Wallach, et al., 2020; Serghiou et al., 2021). Most of the post-publication critiques were short (~250 words) and published within five months of the target article, perhaps partly because they were published in some journals that imposed the strictest limits on post-publication critique (Table 2). 
 
-In the majority of cases, target article authors replied to PPPR, particularly if the PPPR was a letter or commentary rather than a web comment. Author replies rarely included new data or analyses. We found that only 2 PPPRs prompted publication of a correction and in all but three cases, the target article authors asserted that their core claims remained unchanged despite the arguments presented in the PPPR. It was beyond the scope of our study to examine whether author replies were appropriate and justified, but prior research has suggested that they are often inadequate (Gotzsche et al., 2010). In all, target article authors seemed almost entirely immune to PPPR criticisms, with rare exceptions.
+In the majority of cases, target article authors replied to post-publication critique, particularly for letters or commentaries relative to web comments. Author replies rarely included new data or analyses. We found that only 2 post-publication critiques prompted publication of a correction and in all but three cases, the target article authors asserted that their core claims remained unchanged despite the arguments presented in the post-publication critique. It was beyond the scope of our study to examine whether author replies were appropriate and justified, but prior research has suggested that they are often inadequate (Gotzsche et al., 2010). In all, target article authors seemed almost entirely immune to the criticisms raised, with rare exceptions.
 
-Our two studies have some important limitations. Firstly, we believe our operational definition of PPPR (Box 1) captures the most explicit journal-based avenues for scientific criticism, but it will inevitably miss indirect or less formal critique as is, for example, embedded in research or review articles with a broader focus, or as occurs outside of journals (e.g., on social media or external commenting platforms, such as PubPeer). We also did not include errata, corrections, corrigendums, retractions, or similar, in our definition, though such notifications can be prompted by peer scrutiny (e.g., Beheim et al., 2021; Whitehouse et al., 2021). Adopting a precise definition was necessary to ensure clarity and tractability. Secondly, for Study One we relied on information as stated on journal websites as of November, 2019, and for Study Two we relied on a random sample of articles published in 2018. Our assessment therefore cannot account for incomplete policy statements, more recent policy updates, or unpublished information, such as numbers of PPPRs rejected, modified, or delayed. Because of a lack of consistency and clarity in the presentation of PPPR policies, we were unable to reliably extract information on other potentially interesting features of PPPR, such as whether PPPR involves a fee to submit or publish, or whether PPPR is routinely indexed in academic databases. Thirdly, we focused on a sample of highly influential journals only and it is unclear to what extent our findings may extend to other journals. For example, it may be that more recently established journals are more progressive than traditional journals and more open to critical scrutiny of their publications. Articles published in less influential journals may also receive less attention overall, and thus receive even less PPPR.
+Our two studies have some important limitations. Firstly, we believe our operational definition of post-publication critique (Supplementary Information K) captures the most explicit journal-based avenues for scientific criticism, but it will inevitably miss indirect or less formal critique as is, for example, embedded in research or review articles with a broader focus, or as occurs outside of journals (e.g., on social media or external commenting platforms, such as PubPeer). We also did not include errata, corrections, corrigendums, retractions, or similar, in our definition, though such notifications can be prompted by peer scrutiny (e.g., Beheim et al., 2021; Whitehouse et al., 2021). Adopting a precise definition was necessary to ensure clarity and tractability. Secondly, for Study One we relied on information as stated on journal websites as of November, 2019, and for Study Two we relied on a random sample of articles published in 2018. Our assessment therefore cannot account for incomplete policy statements, more recent policy updates, or unpublished information, such as numbers of post-publication critiques rejected, modified, or delayed. Because of a lack of consistency and clarity in the presentation of post-publication critique policies, we were unable to reliably extract information on other potentially interesting features, such as fees to submit or publish, or whether post-publication critique is routinely indexed in academic databases. Thirdly, we focused on a sample of top-ranked journals only and it is unclear to what extent our findings may extend to other journals. For example, it may be that more recently established journals are more progressive and open to critical scrutiny of their publications compared to top-ranked journals. Articles published in lower-ranked journals may also receive less attention overall, and thus receive even less post-publication critique. Fourthly, there is no objective method for delineating scientific disciplines, which are often porous and overlapping. All categorization schemes therefore have limitations. We opted to use an established categorization schema provided by Essential Science Indicators, but there is an element of arbitrariness to the assignment of journals to disciplines. For example, JAMA Psychiatry is assigned to the discipline of Psychology & Psychiatry, but could arguably also be assigned to Clinical Medicine. 
 
-Many of our findings imply that the extant culture of journal-based post-publication critique is suboptimal, though more detailed scrutiny of PPPR dynamics at specific journals will enhance this diagnosis. It is interesting to note that, of the 123 journals that did not offer any options for submitting PPPR, 83 were members of COPE, an organisation whose guidelines state that "Journals must allow debate post publication either on their site, through letters to the editor, or on an external moderated site, such as PubPeer" (Committee on Publication Ethics, 2019). Further research is needed to explore the extent to which the current state of PPPR is a result of principled editorial decisions or practical obstacles. It is tempting to look outside of the journal system for solutions to facilitate PPPR (Bastian, 2014); however, attempts to establish dedicated PPPR platforms have met with limited success — one major platform, PubMed Commons, was shut down in 2018 due to low usage (NCBI Insights, 2018). In Box 2, we have suggested some policy changes for journals to consider that may facilitate PPPR.
+Many of our findings imply that the extant culture of journal-based post-publication critique is suboptimal, though more detailed scrutiny of policies and practice at specific journals will enhance this diagnosis. It is interesting to note that, of the 123 journals that did not offer any options for submitting post-publication critique, 83 were members of COPE, an organisation whose guidelines state that "Journals must allow debate post publication either on their site, through letters to the editor, or on an external moderated site, such as PubPeer" (Committee on Publication Ethics, 2019)[^1]. Further research is needed to explore the extent to which the current state of post-publication critique is a result of principled editorial decisions or practical obstacles. It is tempting to look outside of the journal system for solutions to facilitate post-publication critique (Bastian, 2014); however, attempts to establish dedicated platforms have met with limited success -- one major platform, PubMed Commons, was shut down in 2018 due to low usage (NCBI Insights, 2018). In Box 1, we offer some tentative policy suggestions (based on our opinion) for journals to consider that may facilitate post-publication critique.
 
-The cultivation, documentation, and dissemination of post-publication critique is an important part of a healthy and self-correcting research literature. Our study reveals considerable variation in how PPPR is handled by journals operating across scientific domains. Clinical Medicine had a much more active PPPR culture than other domains; but it's journals also imposed the strictest limits. Overall, PPPR appears to be tightly controlled and restricted by influential academic journals. At many journals, it was not possible to publish PPPR at all, and journals that did offer PPPR options often imposed strict length and time-to-submit restrictions. The PPPR we did identify appeared to have negligible impact on target article authors' conclusions. These data provide a stratum of empirical evidence upon which to base debates about how scientific critique should be optimally handled. We encourage stakeholders across the academic ecosystem to explore ways to foster a richer culture of post-publication critique.
+[^1]: Note that these journals could technically claim they are in compliance with this guideline because post-publication critique is always possible on PubPeer, which operates independently of journals. Also note that the International Committee of Medical Journal Editors recommends that ‘Medical journals should provide readers with a mechanism for submitting comments, questions, or criticisms about published articles, usually but not necessarily always through a correspondence section or online forum.’
 
-## Box 2. Policy changes that journals could adopt to facilitate PPPR.
+## Box 1. Policies journals could consider adopting to facilitate post-publication critique.
 
-1. Offer at least one PPPR option.
-2. Clearly identify and describe PPPR options in instructions to authors.
-3. Clearly state whether PPPR will be independently peer reviewed. Recognise that the authors of the target article may provide useful feedback, but cannot be considered neutral.
-4. Facilitate expedient handling of PPPR submissions to ensure timely dissemination of relevant critique to research consumers.
-5. Foster a culture of critique. Actively encourage and highlight PPPR to the journal’s readership, for example, via editorials.
-6. Enhance access to and discoverability of PPPR: (a) Tag PPPR with appropriate meta-data so they can be indexed in third-party databases, websites and referencing software; (b) display prominent links to PPPR alongside target articles; (c) make PPPR open access.
-7. Remove strict length, time-to-submit, and reference limits. Judge PPPR on a case-by-case basis and promote concise writing via editorial feedback.
-8. Ensure transparent reporting of research articles (e.g., sharing of data, analysis code, and materials, and adherence to reporting guidelines) to enable informed critique and debate.
-9. Adopt a two-tier PPPR system. Tier One involves rapid publication of lightly moderated contributions on the journal’s website (i.e., web comments). Tier Two curates the most informative Tier One contributions and converts them to formal articles (letters) that become a permanent part of the scientific record and provide appropriate academic credit to their authors. For an example two-tier system, see BMJ Rapid Responses (Delamothe & Smith, 2002).
-10. Improve transparency and accountability by hiring an independent editor responsible for handling PPPR (Schriger & Altman, 2010). Publish all editorial decisions related to PPPR, including the number of PPPR submitted, rejected, and published.
+1.	Offer at least one option for post-publication critique.
+2.	Clearly identify and describe options for post-publication critique in instructions to authors.
+3.	Clearly state whether post-publication critique will be independently peer reviewed. Recognise that the authors of the target article may provide useful feedback, but cannot be considered neutral.
+4.	Facilitate expedient handling of post-publication critique submissions to ensure timely dissemination of relevant critique to research consumers.
+5.	Foster a culture of critique. Actively encourage and highlight post-publication critique to the journal’s readership, for example, via editorials.
+6.	Enhance access to and discoverability of post-publication critique: (a) Tag post-publication critique with appropriate meta-data so they can be indexed in third-party databases, websites and referencing software; (b) display prominent links to post-publication critique alongside target articles; (c) make post-publication critique open access.
+7.	Remove strict length, time-to-submit, and reference limits. Judge post-publication critique on a case-by-case basis and promote concise writing via editorial feedback.
+8.	Ensure transparent reporting of research articles (e.g., sharing of data, analysis code, and materials, and adherence to reporting guidelines) to enable informed critique and debate.
+9.	Adopt a two-tier post-publication critique system. Tier One involves rapid publication of lightly moderated contributions on the journal’s website (i.e., web comments). Tier Two curates the most informative Tier One contributions and converts them to formal articles (letters) that become a permanent part of the scientific record and provide appropriate academic credit to their authors. For an example two-tier system, see BMJ Rapid Responses (Delamothe & Smith, 2002).
+10.	Improve transparency and accountability by hiring an independent editor responsible for handling post-publication critique (Schriger & Altman, 2010). Publish all editorial decisions related to post-publication critique, including the number submitted, rejected, and published.
+
+# Conclusion
+
+The cultivation, documentation, and dissemination of post-publication critique is an important part of a healthy and self-correcting research literature. Our study reveals considerable variation in how post-publication critique is handled by journals operating across scientific disciplines. Clinical Medicine had a more active post-publication critique culture than other disciplines; but its journals also imposed the strictest limits. Overall, post-publication critique appears to be tightly controlled and restricted by top-ranked academic journals. At many journals, it was apparently not possible to publish post-publication critique at all, and journals that did offer options for post-publication critique often imposed strict length and time-to-submit restrictions. The post-publication critique we did identify appeared to have negligible impact on target article authors’ conclusions. These data provide a stratum of empirical evidence upon which to base debates about how scientific critique should be optimally handled. We encourage stakeholders across the academic ecosystem to explore ways to foster a richer culture of post-publication critique.
 
 # Open practices statement
-The study protocol (rationale, methods, and analysis plan) was pre-registered on February 14th, 2020 (https://osf.io/hjvnw/). All departures from this protocol are explicitly acknowledged in Supplementary Information A. All data exclusions and measures conducted during this study are reported in this manuscript. All data, materials, and analysis scripts are publicly available on the Open Science Framework (https://osf.io/8b6jy/). To facilitate reproducibility this manuscript was written by interleaving regular prose and analysis code using knitr (Xie, 2017) and papaja (Aust & Barth, 2020), and is available in a Code Ocean container (https://doi.org/10.24433/CO.3805142.v1) which re-creates the software environment in which the original analyses were performed.
+The study protocol (rationale, methods, and analysis plan) was pre-registered on February 14th, 2020 (https://osf.io/hjvnw/). All departures from this protocol are explicitly acknowledged in Supplementary Information A. All data exclusions and measures conducted during this study are reported in this manuscript. All data, materials, and analysis scripts are publicly available on the Open Science Framework (https://osf.io/8b6jy/). To facilitate reproducibility this manuscript was written by interleaving regular prose and analysis code using knitr (Xie, 2017) and papaja (Aust & Barth, 2020), and is available in a Code Ocean container (https://doi.org/10.24433/CO.3805142.v2) which re-creates the software environment in which the original analyses were performed.
 
 # Funding statement
-The authors received no specific funding for this work and no funder had any role in the research. Tom E. Hardwicke receives funding from the European Union’s Horizon 2020 research and innovation programme under the Marie Sklodowska-Curie grant agreement No. 841188. Robert T. Thibault is supported by a general support grant awarded to METRICS from the Laura and John Arnold Foundation and a postdoctoral fellowship from the Fonds de recherche du Quebec - Sante. Theiss Bendixen thanks the Aarhus University Research Foundation for support. Jessica E. Kosie received funding from an NSF SBE Postdoctoral Research Fellowship #2004983 and an NIH F32 National Research Service Award #HD103439. Loukia Tzavella was supported by ESRC postdoctoral fellowship ES/V011030/1. The Meta-Research Innovation Center at Stanford (METRICS) is supported by a grant from the Laura and John Arnold Foundation. The Meta-Research Innovation Center Berlin (METRIC-B) is supported by a grant from the Einstein Foundation and Stiftung Charite.
+The authors received no specific funding for this work and no funder had any role in the research. Tom E. Hardwicke receives funding from the European Union’s Horizon 2020 research and innovation programme under the Marie Skłodowska-Curie grant agreement No. 841188. Robert T. Thibault is supported by a general support grant awarded to METRICS from the Laura and John Arnold Foundation and a postdoctoral fellowship from the Fonds de recherche du Québec – Santé. Theiss Bendixen thanks the Aarhus University Research Foundation for support. Jessica E. Kosie received funding from an NSF SBE Postdoctoral Research Fellowship #2004983 and an NIH F32 National Research Service Award #HD103439. Loukia Tzavella was supported by ESRC postdoctoral fellowship ES/V011030/1. The Meta-Research Innovation Center at Stanford (METRICS) is supported by a grant from the Laura and John Arnold Foundation. The Meta-Research Innovation Center Berlin (METRIC-B) is supported by a grant from the Einstein Foundation and Stiftung Charité.
 
 # Conflict of interest statement
-All authors declare no conflicts of interest.
+All authors declare no conflicts of interest. At the time of writing, John Ioannidis is a Board Member of Royal Society Open Science, but had no involvement in the review or assessment of the paper.
 
 # Author contributions
 Conceptualization: T.E.H. and J.P.A.I. Data curation: T.E.H. Formal analysis: T.E.H. Investigation: T.E.H., R.T.T., T.B., J.E.K., L.T., S.A.H., and V.E.K. Methodology: T.E.H., R.T.T., T.B., and J.P.A.I. Project administration: T.E.H. Resources: T.E.H. Software: T.E.H. Supervision: T.E.H. and J.P.A.I. Validation: T.E.H. Visualization: T.E.H. Writing - original draft: T.E.H. Writing - review & editing: T.E.H., R.T.T., T.B., L.T., and J.P.A.I.
@@ -1356,50 +1345,28 @@ Conceptualization: T.E.H. and J.P.A.I. Data curation: T.E.H. Formal analysis: T.
 
 # References
 Altman, D. G. (1994). The scandal of poor medical research. BMJ, 308(6924), 283–284. https://doi.org/10.1136/bmj.308.6924.283
-
 Altman, D. G. (2002). Poor-quality medical research: What can journals do? JAMA, 287(21), 2765–2767. https://doi.org/10.1001/jama.287.21.2765
-
 Altman, D. G. (2005). Unjustified restrictions on letters to the editor. PLoS Medicine, 2(5), e126. https://doi.org/10.1371/journal.pmed.0020126
-
 Aust, F., & Barth, M. (2020). Papaja: Create apa manuscripts with rmarkdown. https://github.com/crsh/papaja
-
 Bastian, H. (2014). A stronger post-publication culture is needed for better science. PLOS Medicine, 11(12), e1001772. https://doi.org/10.1371/journal.pmed.1001772
-
 Beheim, B., Atkinson, Q. D., Bulbulia, J., Gervais, W., Gray, R. D., Henrich, J., Lang, M., Monroe, M. W., Muthukrishna, M., Norenzayan, A., Purzycki, B. G., Shariff, A., Slingerland, E., Spicer, R., & Willard, A. K. (2021). Treatment of missing data determined conclusions regarding moralizing gods. Nature, 595(7866), E29–E34. https://doi.org/10.1038/s41586-021-03655-4
-
-Committee on Publication Ethics. (2019). Core Practices. COPE: Committee on Publication Ethics.
-https://web.archive.org/web/20191122170830/https://publicationethics.org/core-practices
-
+Committee on Publication Ethics. (2019). Core Practices. COPE: Committee on Publication Ethics. https://web.archive.org/web/20191122170830/https://publicationethics.org/core-practices
 Delamothe, T., & Smith, R. (2002). Twenty thousand conversations: Rapid responses suggest new models of knowledge creation. BMJ, 324(7347), 1171–1172. https://doi.org/10.1136/bmj.324.7347.1171
-
 Dunn, A. G., Coiera, E., Mandl, K. D., & Bourgeois, F. T. (2016). Conflict of interest disclosure in biomedical research: A review of current practices, biases, and the role of public registries in improving transparency. Research Integrity and Peer Review, 1, 1. https://doi.org/10.1186/s41073-016-0006-7
-
-Gotzsche, P. C., Delamothe, T., Godlee, F., & Lundh, A. (2010). Adequacy of authors’ replies to criticism raised in electronic letters to the editor: Cohort study. BMJ, 341(aug10 2), c3926–c3926. https://doi.org/10.1136/bmj.c3926
-
+Gotzsche, P. C., Delamothe, T., Godlee, F., & Lundh, A. (2010). Adequacy of authors’ replies to criticism raised in electronic letters to the editor: Cohort study. BMJ, 341, c3926–c3926. https://doi.org/10.1136/bmj.c3926
 Hardwicke, T. E., Serghiou, S., Janiaud, P., Danchev, V., Crüwell, S., Goodman, S. N., & Ioannidis, J. P. A. (2020). Calibrating the scientific ecosystem through meta-research. Annual Review of Statistics and Its Application, 7(1), 11–37. https://doi.org/10.1146/annurev-statistics-031219-041104
-
 Hardwicke, T. E., Thibault, R. T., Kosie, J., Wallach, J. D., Kidwell, M. C., & Ioannidis, J. (2021). Estimating the prevalence of transparency and reproducibility-related research practices in psychology (2014-2017). Perspectives on Psychological Science. https://doi.org/10.1177/1745691620979806
-
 Hardwicke, T. E., Wallach, J. D., Kidwell, M. C., Bendixen, T., Crüwell, S., & Ioannidis, J. P. A. (2020). An empirical assessment of transparency and reproducibility-related research practices in the social sciences (2014–2017). Royal Society Open Science, 7(2), 190806. https://doi.org/10.1098/rsos.190806
-
 Ioannidis, J. P. A. (2005). Why most published research findings are false. PLOS Medicine, 2(8), e124. https://doi.org/10.1371/journal.pmed.0020124
-
+Kastner, M., Menon, A., Straus, S. E., & Laupacis, A. (2013). What do letters to the editor publish about randomized controlled trials? A cross-sectional study. BMC Research Notes, 6:414. https://doi.org/10.1186/1756-0500-6-414
 NCBI Insights: PubMed Commons to be Discontinued. (2018, February 1). NCBI Insights. https://ncbiinsights.ncbi.nlm.nih.gov/2018/02/01/pubmed-commons-to-be-discontinued/
-
-Nosek, B. A., Hardwicke, T. E., Moshontz, H., Allard, A., Corker, K. S., Almenberg, A. D., Fidler, F., Hilgard, J., Struhl, M. K., Nuijten, M. B., Rohrer, J. M., Romero, F., Scheel, A. M., Scherer, L., Schönbrodt, F., & Vazire, S. (2021). Replicability, Robustness, and Reproducibility in Psychological Science. PsyArXiv. https://doi.org/10.31234/osf.io/ksfvq
-
+Nosek, B. A., Hardwicke, T. E., Moshontz, H., Allard, A., Corker, K. S., Dreber, A., Fidler, F., Hilgard, J., Struhl, M. K., Nuijten, M. B., Rohrer, J. M., Romero, F., Scheel, A. M., Scherer, L. D., Schönbrodt, F. D., & Vazire, S. (2022). Replicability, robustness, and reproducibility in psychological science. Annual Review of Psychology, 73(1), annurev-psych-020821-114157. https://doi.org/10.1146/annurev-psych-020821-114157
 Schriger, D. L., & Altman, D. G. (2010). Inadequate post-publication review of medical research. BMJ, 341. https://doi.org/10.1136/bmj.c3803
-
 Serghiou, S., Contopoulos-Ioannidis, D. G., Boyack, K. W., Riedel, N., Wallach, J. D., & Ioannidis, J. P. A. (2021). Assessment of transparency indicators across the biomedical literature: How open is open? PLOS Biology, 19(3), e3001107. https://doi.org/10.1371/journal.pbio.3001107
-
 Van Calster, B., Wynants, L., Riley, R. D., van Smeden, M., & Collins, G. S. (2021). Methodology over metrics: Current scientific standards are a disservice to patients and society. Journal of Clinical Epidemiology. https://doi.org/10.1016/j.jclinepi.2021.05.018
-
 Von Elm, E., Wandel, S., & Jüni, P. (2009). The role of correspondence sections in post-publication peer review: A bibliometric study of general and internal medicine journals. Scientometrics, 81(3), 747. https://doi.org/10.1007/s11192-009-2236-0
-
 Whitehouse, H., François, P., Savage, P. E., Currie, T. E., Feeney, K. C., Cioni, E., Purcell, R., Ross, R. M., Larson, J., Baines, J., ter Haar, B., Covey, A., & Turchin, P. (2021). Retraction Note: Complex societies precede moralizing gods throughout world history. Nature, 595(7866), 320–320. https://doi.org/10.1038/s41586-021-03656-3
-
 Winker, M. A. (2013). Letters and Comments Published in Response to Research: Whither Postpublication Peer Review? Peer Review Congress. Peer Review Congress, Chicago. https://web.archive.org/web/20211023052251/https://peerreviewcongress.org/2013-abstracts/
-
 Winker, M. A. (2015). The promise of post-publication peer review: How do we get there from here? Learned Publishing, 28(2), 143–145. https://doi.org/10.1087/20150209
 Xie, Y. (2017). Dynamic documents with R and knitr. CRC Press.
 
@@ -1411,6 +1378,18 @@ Xie, Y. (2017). Dynamic documents with R and knitr. CRC Press.
 ```
 
 \endgroup
+
+\newpage
+
+\newpage
+
+
+
+
+\newpage
+
+
+
 
 
 \newpage

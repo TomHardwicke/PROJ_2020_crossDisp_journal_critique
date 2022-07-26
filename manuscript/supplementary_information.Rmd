@@ -1,48 +1,38 @@
-# Supplementary Information D: Harmonizing PPPR names {#si_d}
+# Supplementary Information A. Protocol amendments.
 
-Note how many names were homogenized and any that were more than just grammatical (e.g., correspondence, matters arising).
+The study protocol (rationale, methods, and analysis plan) was pre-registered on February 14th, 2020 (https://osf.io/hjvnw/). Supplementary Table A1 outlines amendments between the pre-registered protocol and final report.
 
-Also discuss the 'other' types. Note that we encountered other examples of articles types called 'news and views' and 'perspectives' (or other variations on 'opinion piece') but we *did not* consider them to meet our operational definition of PPPR because they did not appear allow for critique of articles previously published by the journal. By contrast, the descriptions for the cases below explicitly mention that they can be used for this purpose.
+[see paper (https://doi.org/hc7d) for Supplementary Table A1]
 
-For each PPPR type offered by a journal, we recorded the verbatim name given to it by the journal. Many of these names were very similar but with slightly different naming conventions (e.g., "letters", "letter to the editor", etc.). To address this, I went through all of the verbatim names and reclassified them to a smaller subset of 'harmonized' names as follows:
+# Supplementary Information B. Variables measured in Study One.
 
+2017 Journal Impact Factors were obtained via Clarivate Journal Citation Reports (https://jcr.clarivate.com). Journal discipline classifications were defined by Clarivate Essential Science Indicators (https://perma.cc/MD4V-A5X5). Journal COPE membership status was established by manually searching the members list (https://publicationethics.org/members). All other Study One variables were obtained via the data extraction form completed by coders (https://osf.io/bkvnw/; Supplementary Table B1).
 
-```{r}
-d_policy %>% filter(PPPR_name_harmonized == 'Other') %>%
-  count(PPPR_name, PPPR_description) %>% 
-  arrange(desc(n)) %>% 
-  kable()
-```
+[see paper (https://doi.org/hc7d) for Supplementary Table B1]
 
-# Supplementary Information E: Peer review
+# Supplementary Information C. Document preservation.
 
-Table \@ref(tab:tab-peer-review)
+We used three methods to preserve journal webpages. During our examination of webpages between November, 2019, and January, 2020, we firstly attempted to preserve webpages using the service perma.cc (https://perma.cc). Occasionally, when this tool failed, we made a PDF copy of the webpage which we stored on the OSF (https://osf.io/tzjc6/). Occasionally, we retroactively realised we needed to preserve a journal webpage, in which case we used the Internet Archive’s Wayback Machine tool (https://web.archive.org/) to obtain a copy of the webpage as it existed in November, 2019. Links to the preserved documents are available in a data file on the OSF (https://osf.io/5atjd/). All coding was performed using the copied information to avoid reproducibility problems if journals updated their websites during coding. 
 
-```{r tab-peer-review}
-d_policy %>% 
-  filter(!is.na(PPPR_name)) %>% 
-  count(PPPR_name_harmonized, peerReviewed, .drop=F) %>%
-  group_by(PPPR_name_harmonized) %>%
-  mutate(
-    prop = n/sum(n), # add proportions
-    percent = round(prop*100,0),
-    report_stat = paste0(n, ' (', percent, '%)')) %>%
-  pivot_wider(id_cols = PPPR_name_harmonized, names_from = peerReviewed, values_from = report_stat) %>%
-  mutate(
-    PPPR_name_harmonized = factor(PPPR_name_harmonized, levels = c("Letters", "Commentaries", "Web comments", "Other"))) %>%
-  select(`PPPR type` = PPPR_name_harmonized, Yes = YES, `Editor discretion`, No = NO, `Not stated` = `NOT STATED`) %>%
-  arrange(`PPPR type`) %>%
-  kable(caption = 'Number of different PPPR types that are subject to external peer review. The denominator for percentages is the total number of each PPPR type.')
-```
+# Supplementary Information D. Harmonization and transformation.
 
-# Supplementary Information F. Journal characteristics
+## Harmonization of names
+Prior to data collection, we anticipated that post-publication critique types would mainly fall into three categories: ‘letters’, ‘commentaries’, and ‘web-based comments’. Examination of the data confirmed that most verbatim post-publication critique names matched these expectations, though slightly different naming conventions were used between journals (e.g., "letters", "letter to the editor", “correspondence”, etc.). In such cases, we assigned each post-publication critique to whichever of the above three ‘harmonized’ names we deemed most appropriate. Other than cases involving straightforward grammatical similarity, we note that (1) post-publication critiques identified as “correspondence”, “Discussion Forum”, “Disputes & Debates”, and “Reader Comments” were harmonized as “Letters”; (2) post-publication critiques identified as “Technical Comments”, “Matters Arising”, “Transaction Comments”, and “Comments” (where these referred to articles and not website comments), were harmonized as “Commentaries”; (3) post-publication critiques identified as “Rapid Responses”, “Annotations”, “eLetters”, and “Comments” (where these referred to website comments and not articles), were harmonized as “Web comments”; (4) post-publication critiques identified as “Forum Papers”, “Research Advance”, “Replications and Corrigenda”, and “Update articles”, were classified as “Other”. Note that we also classified one instance of “News and Views” and one instance of “Perspectives” as “Other”, though we typically did not consider articles of this name to be post-publication critique because all but these two examples did not meet our operational definition (Supplementary Information K).
+
+At least two journals (The British Journal of Psychiatry and The BMJ) offered a hybrid type of post-publication critique whereby selected web comments (known as ‘eLetters’ and ‘Rapid Responses’ respectively) were chosen by editors to be subsequently (re-) published in the journal print edition as letters. To avoid double counting this data, we classified them only as web comments. There were no cases where multiple types of post-publication critique offered by the same journal were classified with the same harmonized label.
+
+## Transformation of quantitative limits. 
+
+Quantitative limits were expressed in a variety of different units. To address this, all length limits were converted to ‘word’ units and all time limits were converted to ‘week’ units. We multiplied length limits expressed as ‘pages’ by 500 (i.e., 500 words per page), divided length limits expressed as ‘characters’ by 6 (i.e., 6 characters per word), multiplied time limits expressed as ‘months’ by 4.35 (i.e., 4.35 weeks in a month), and multiplied time limits expressed as ‘years’ by 52 (i.e., 52 weeks in a year). The conversion factors for length limits were derived from estimates based on examination of our own recently published articles.
+
+# Supplementary Information E. Journal characteristics
 
 ```{r journal-characteristics-table}
 journalCharacteristics %>%
   kable(caption = "Characteristics of journals in each of 22 scientific fields (n = 15) and in all fields combined (n = 330).")
 ```
 
-# Supplementary Information G. How many journals offer PPPR? Tabular data.
+# Supplementary Information F. How many journals offer post-publication critique? Tabular data.
 
 ```{r}
 d_policy %>% 
@@ -68,14 +58,14 @@ mutate(
   kable()
 ```
 
-# Supplementary Information H. Journal-level data on PPPR offered
+# Supplementary Information G. Post-publication critique types and limits for each journal
 
 ```{r}
 # journal level data
 journal_level_limits <- d_policy %>% 
   filter(!is.na(PPPR_name)) %>% 
-  mutate(wordLimits = fct_recode(wordLimits, "Not specified" = "NOT STATED", "Unlimited" = "NO"),
-         timeLimits = fct_recode(timeLimits, "Not specified" = "NOT STATED", "Unlimited" = "NO")) %>%
+  mutate(wordLimits = fct_recode(wordLimits, "NS" = "NOT STATED", "QL" = "Qualitative limit", "UL" = "NO"),
+         timeLimits = fct_recode(timeLimits, "NS" = "NOT STATED", "QL" = "Qualitative limit", "UL" = "NO")) %>%
   select(journal,PPPR_name_harmonized,wordLimits,timeLimits) %>%
   pivot_wider(
     id_cols = journal, 
@@ -98,36 +88,34 @@ journal_level_limits %>%
   mutate(journal = str_to_title(journal),
          across(Let_len:Oth_tim, as.character),
          across(Let_len:Oth_tim, ~replace_na(.x, 'x'))) %>%
-  kable()
-
-
-
-  # pack_rows("Agricultural Sciences", 1,15) %>%
-  # pack_rows("Biology & Biochemistry", 16,30) %>%
-  # pack_rows("Chemistry", 31,45) %>%
-  # pack_rows("Clinical Medicine", 46,60) %>%
-  # pack_rows("Computer Science", 61,75) %>%
-  # pack_rows("Economics & Business", 76,90) %>%
-  # pack_rows("Engineering" , 91,105) %>%
-  # pack_rows("Environment & Ecology" , 106,120) %>%
-  # pack_rows("Geosciences", 121,135) %>%
-  # pack_rows("Immunology" , 136,150) %>%
-  # pack_rows("Materials Science", 151,165) %>%
-  # pack_rows("Mathematics" , 166,180) %>%
-  # pack_rows("Microbiology", 181,195) %>%
-  # pack_rows("Molecular Biology & Genetics", 196,220) %>%
-  # pack_rows("Multidisciplinary" , 211,225) %>%
-  # pack_rows("Neuroscience & Behavior", 226,240) %>%
-  # pack_rows("Pharmacology & Toxicology" , 241,255) %>%
-  # pack_rows("Physics", 256,270) %>%
-  # pack_rows("Plant & Animal Science", 271,285) %>%
-  # pack_rows("Psychiatry & Psychology" , 286,300) %>%
-  # pack_rows("Social Sciences" , 301,315) %>%
-  # pack_rows("Space Science" , 316,330)
-
+  kable(caption = "Post-publication critique types (letters, commentaries, web comments, other) and limits (length, time-to-submit) for each journal. Length limits are in words. Time limits are in weeks. x = Post-publication critique type not offered. QL = Qualitative limit. NS = No limit specified. UL = Unlimited (explicitly says there is no limit of this type). Journals are ordered by discipline (alphabetical) and Journal Impact Factor (descending).", longtable = T) %>% column_spec(1, width = "6em") %>% column_spec(2:9, width = "3em")
 ```
 
-# Supplementary Information J: How prevalent is PPPR in practice? Tabular data.
+# Supplementary Information H: Peer review
+
+```{r tab-peer-review}
+d_policy %>% 
+  filter(!is.na(PPPR_name)) %>% 
+  count(PPPR_name_harmonized, peerReviewed, .drop=F) %>%
+  group_by(PPPR_name_harmonized) %>%
+  mutate(
+    prop = n/sum(n), # add proportions
+    percent = round(prop*100,0),
+    report_stat = paste0(n, ' (', percent, '%)')) %>%
+  filter(PPPR_name_harmonized != "Not categorised") %>%
+  pivot_wider(id_cols = PPPR_name_harmonized, names_from = peerReviewed, values_from = report_stat) %>%
+  mutate(
+    PPPR_name_harmonized = factor(PPPR_name_harmonized, levels = c("Letters", "Commentaries", "Web comments", "Other"))) %>%
+  select(`PPPR type` = PPPR_name_harmonized, Yes = YES, `Editor discretion`, No = NO, `Not stated` = `NOT STATED`) %>%
+  arrange(`PPPR type`) %>%
+  kable(caption = 'Number of different PPPR types that are subject to external peer review. The denominator for percentages is the total number of each PPPR type.')
+```
+
+# Supplementary Information I. Variables measured in Study Two.
+
+[see paper (https://doi.org/hc7d) for Supplementary Table I1]
+
+# Supplementary Information J: How prevalent is post-publication critique in practice? Tabular data.
 
 ```{r tab-practice-prev}
 field_prev_all_wide <- field_prev_all %>%
@@ -138,18 +126,18 @@ field_prev %>%
   select(field, primary, secondary) %>%
   arrange(desc(primary), desc(secondary)) %>%
   mutate(field = str_to_title(field)) %>%
-  rename(domain = field) %>%
-  kable(caption = 'Primary and secondary prevalence estimates for the use of PPPR in practice across domains and in all domains combined. Domains are in descending order by primary estimate.')
+  rename(discipline = field) %>%
+  kable(caption = 'Primary and secondary prevalence estimates for the use of post-publication critique in practice across disciplines. Disciplines are in descending order by primary estimate.') %>% kable_styling(latex_options=c("hold_position"))
 ```
 
 ```{r tab-practice-prev-primary-journals}
-d_freq %>% filter(linkedPPPR == T) %>% count(journal, ESI_field) %>% arrange (desc(n)) %>% mutate(journal = str_to_title(journal), ESI_field = str_to_title(ESI_field)) %>% rename(Journal = journal, 'Scientific domain' = ESI_field) %>% kable(caption = 'Number of articles linked to PPPR (n) by journal')
+d_freq %>% filter(linkedPPPR == T) %>% count(journal, ESI_field) %>% arrange (desc(n)) %>% mutate(journal = str_to_title(journal), ESI_field = str_to_title(ESI_field)) %>% rename(Journal = journal, 'Scientific discipline' = ESI_field) %>% kable(caption = 'Number of articles linked to post-publication critique (n) by journal. Journals not shown had zero articles in our sample linked to post-publication critique.') %>% kable_styling(latex_options=c("hold_position")) %>% column_spec(1:2, width = "12em")
 ```
 
 ```{r tab-practice-prev-secondary-journals}
 d_freq_secondary %>% group_by(journal) %>%
   filter(isPPPR == T) %>% count(journal, ESI_field) %>% arrange (desc(n)) %>% 
   mutate(journal = str_to_title(journal), ESI_field = str_to_title(ESI_field)) %>% 
-  rename(Journal = journal, 'Scientific domain' = ESI_field) %>% 
-  kable(caption = 'Number of articles that were classified as PPPR (n) amongst the first ten eligible articles for each journal (six for Wildlife Monographs). Journals not shown had zero articles in our sample classified PPPR.')
+  rename(Journal = journal, 'Scientific discipline' = ESI_field) %>% 
+  kable(caption = 'Number of articles that were classified as post-publication critique (n) amongst the first ten eligible articles for each journal. Journals not shown had zero articles in this sample classified post-publication critique.', booktabs = T, longtable = T) %>% kable_styling(latex_options=c("hold_position")) %>% column_spec(1:2, width = "12em")
 ```
