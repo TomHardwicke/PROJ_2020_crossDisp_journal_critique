@@ -86,10 +86,6 @@ library(patchwork) # for multipanel plot layouts
 library(ggbeeswarm) # for dotplots
 ```
 
-```{r, include=FALSE}
-options(tinytex.verbose = TRUE)
-```
-
 ```{r load-functions}
 source(here('analysis','functions.R')) # load custom functions
 ```
